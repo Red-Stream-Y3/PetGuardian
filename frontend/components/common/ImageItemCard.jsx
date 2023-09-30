@@ -12,6 +12,9 @@ const ImageItemCard = ({
   location,
   style,
   width,
+  vbr,
+  vmb,
+  tmb,
 }) => {
   const { theme } = getThemeContext();
   const imageStyles = {
@@ -19,13 +22,13 @@ const ImageItemCard = ({
       width: '100%',
       height: 150,
       resizeMode: 'cover',
-      borderRadius: 15,
+      borderRadius: vbr || 0,
     },
     side: {
       width: 150,
       height: '100%',
       resizeMode: 'cover',
-      borderRadius: 15,
+      borderRadius: vbr || 0,
     },
   };
 
@@ -51,7 +54,7 @@ const ImageItemCard = ({
         shadowColor: theme.colors.shadow,
         elevation: 3,
         backgroundColor: theme.colors.surface,
-        borderRadius: 15,
+        borderRadius: vbr || 10,
         overflow: 'hidden',
       }}
     >
@@ -80,7 +83,7 @@ const ImageItemCard = ({
         <View
           style={{
             padding: 10,
-            marginBottom: 15,
+            marginBottom: vmb || 0,
             flexDirection: style === 'side' ? 'column' : 'row',
             justifyContent: style === 'side' ? 'center' : 'flex-start',
           }}
@@ -90,7 +93,7 @@ const ImageItemCard = ({
               style={{
                 fontWeight: 'bold',
                 color: theme.colors.text,
-                marginBottom: 5,
+                marginBottom: tmb || 0,
                 alignItems: 'center',
                 justifyContent: 'space-between',
               }}
