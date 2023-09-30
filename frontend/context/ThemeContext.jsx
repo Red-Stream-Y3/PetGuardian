@@ -7,18 +7,26 @@ const LIGHT_THEME = {
     colors : {
         primary: "#6200ee",
         primaryVariant: "#3700b3",
-        ripple: "#bdbdbd",
+        text: "#000000",
+        shadow: "#000000",
+
+        primaryText: "#ffffff",
+        primaryIcon: "#ffffff",
+
+        buttonText: "#ffffff",
+        servicesPrimary: "rgb(0, 137, 123)",
+        lostPrimary: "rgb(107, 127, 215)",
+        homePrimary: "rgb(0, 142, 255)",
+        adoptPrimary: "rgb(225, 82, 95)",
+        playPrimary: "rgb(227, 181, 5)",
+        ripple: "rgba(255, 255, 255, 0.1)",
         icon: "#000000",
+
         secondary: "#03dac6",
         secondaryVariant: "#018786",
         background: "#ffffff",
         surface: "#ffffff",
         error: "#b00020",
-        onPrimary: "#ffffff",
-        onSecondary: "#000000",
-        onBackground: "#000000",
-        onSurface: "#000000",
-        onError: "#ffffff",
     }
 };
 
@@ -27,32 +35,34 @@ const DARK_THEME = {
     colors : {
         primary: "#bb86fc",
         primaryVariant: "#3700b3",
+        text: "#d4d4d4",
+        shadow: "#000000",
+
+        primaryText: "#ffffff",
+        primaryIcon: "#ffffff",
+
+        buttonText: "#ffffff",
+        servicesPrimary: "rgb(0, 137, 123)",
+        lostPrimary: "rgb(107, 127, 215)",
+        homePrimary: "rgb(157, 2, 196)",
+        adoptPrimary: "rgb(225, 82, 95)",
+        playPrimary: "rgb(227, 181, 5)",
+        ripple: "rgba(255, 255, 255, 0.1)",
+        icon: "#ffffff",
+
         secondary: "#03dac6",
         secondaryVariant: "#03dac6",
         background: "#121212",
-        surface: "#121212",
+        surface: "rgba(51, 51, 51, 0.8)",
         error: "#cf6679",
-        onPrimary: "#000000",
-        onSecondary: "#000000",
-        onBackground: "#ffffff",
-        onSurface: "#ffffff",
-        onError: "#000000",
     }
 };
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(LIGHT_THEME);
 
-useEffect(() => {
-    if (theme.mode === "dark") {
-        setTheme(DARK_THEME);
-    } else {
-        setTheme(LIGHT_THEME);
-    }
-}, [theme]);
-
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme.mode === "light" ? "dark" : "light"));
+    setTheme((prevTheme) => (prevTheme.mode === "light" ? DARK_THEME: LIGHT_THEME));
   };
 
   return (

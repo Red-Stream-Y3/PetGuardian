@@ -14,8 +14,8 @@ const RoundIconButton = ({children, padding, name, onPress}) => {
                 onPress={onPress || (()=>{})}
                 android_ripple={{
                     color:theme.colors.ripple,
-                    borderless:true,
-                    radius: 40,
+                    borderless: true,
+                    radius: 35,
                 }}
                 style={{
                     width: '100%',
@@ -24,7 +24,7 @@ const RoundIconButton = ({children, padding, name, onPress}) => {
                     alignItems:'center',
                 }} >
                 {children}
-                <Text style={{fontWeight:'bold'}}>{name}</Text>
+                <Text style={{fontWeight:'bold', color:theme.colors.primaryText}}>{name}</Text>
             </Pressable>
         </View>
     );
