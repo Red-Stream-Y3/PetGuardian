@@ -17,6 +17,18 @@ const App = () => {
   
   const [selectedTab, setSelectedTab] = useState(2);
 
+  const navigationTheme = {
+    dark: false,
+    colors: {
+      primary: '#000000',
+      background: '#ffffff',
+      card: '#ffffff',
+      text: '#000000',
+      border: '#000000',
+      notification: '#000000',
+    },
+  };
+
     return (
         <ThemeProvider>
             <AppContext.Provider value={{ selectedTab, setSelectedTab }} >
@@ -25,11 +37,11 @@ const App = () => {
                     <View style={{ flex: 1 }}>
                         <StatusBar style="auto" />
                         <Stack.Navigator initialRouteName="HOME">
-                                <Stack.Screen name="SERVICES" component={ServicesScreen}/>
-                                <Stack.Screen name="LOST" component={LostAndFoundScreen}/>
-                                <Stack.Screen name="HOME" component={HomeScreen}/>
-                                <Stack.Screen name="ADOPT" component={AdoptionScreen}/>
-                                <Stack.Screen name="PLAY" component={PlayDateScreen}/>
+                                <Stack.Screen name="SERVICES" component={ServicesScreen} options={{headerShown:false}}/>
+                                <Stack.Screen name="LOST" component={LostAndFoundScreen} options={{headerShown:false}}/>
+                                <Stack.Screen name="HOME" component={HomeScreen} options={{headerShown:false}}/>
+                                <Stack.Screen name="ADOPT" component={AdoptionScreen} options={{headerShown:false}}/>
+                                <Stack.Screen name="PLAY" component={PlayDateScreen} options={{headerShown:false}}/>
                         </Stack.Navigator>
                         <BottomBar selected={selectedTab} setSelected={setSelectedTab} />
                     </View>

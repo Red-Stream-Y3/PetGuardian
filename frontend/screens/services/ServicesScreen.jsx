@@ -1,14 +1,25 @@
-import { Text, View } from "react-native";
+import { StatusBar, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import { ThemeButton } from "../../components";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ServicesScreen = () => {
     const { theme } = getThemeContext();
     return (
-        <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-            <Text>Services</Text>
-            <ThemeButton title="Services" />
-        </View>
+        <SafeAreaView
+            style={{ flex: 1, backgroundColor: theme.colors.background }}>
+            <StatusBar
+                barStyle={
+                    theme.mode === "dark" ? "light-content" : "dark-content"
+                }
+                hidden={false}
+            />
+
+            <View>
+                <Text style={{color:theme.colors.text}}>Services</Text>
+                <ThemeButton title="Services" />
+            </View>
+        </SafeAreaView>
     );
 };
 

@@ -44,11 +44,11 @@ const DARK_THEME = {
         buttonText: "#ffffff",
         servicesPrimary: "rgb(0, 137, 123)",
         lostPrimary: "rgb(107, 127, 215)",
-        homePrimary: "rgb(2, 45, 79)",
+        homePrimary: "rgb(157, 2, 196)",
         adoptPrimary: "rgb(225, 82, 95)",
         playPrimary: "rgb(227, 181, 5)",
         ripple: "rgba(255, 255, 255, 0.1)",
-        icon: "#000000",
+        icon: "#ffffff",
 
         secondary: "#03dac6",
         secondaryVariant: "#03dac6",

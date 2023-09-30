@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, Switch, Dimensions, FlatList } from "react-native";
+import { View, Text, ScrollView, Switch, Dimensions, FlatList, StatusBar, SafeAreaView } from "react-native";
 import { ImageItemCard, ThemeButton } from "../../components";
 import getThemeContext from "../../context/ThemeContext";
+import { AntDesign } from '@expo/vector-icons';
 
 const HomeScreen = () => {
     const { theme, toggleTheme } = getThemeContext();
@@ -20,11 +21,16 @@ const HomeScreen = () => {
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToPtWIfv5-l3Q1GRBnlJ0H4jCVK2DEz63oSIx92b7FmYpPfx0FqvG7UVj8JcyPNAAlImE&usqp=CAU"
             }
             body={
-                <View>
-                    <Text style={{ fontWeight: "bold", color:theme.colors.text }}>
-                        Body Example Title
-                    </Text>
-                    <Text style={{ color:theme.colors.text }}>Body</Text>
+                <View style={{flex:1, flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
+                    <View>
+                      <Text style={{ fontWeight: "bold", color:theme.colors.text }}>
+                          Body Example Title
+                      </Text>
+                      <Text style={{ color:theme.colors.text }}>Body</Text>
+                    </View>
+                    <ThemeButton title="Button" onPress={()=>console.debug("Test button")} variant={'clear'}>
+                      <AntDesign name="addfile" size={24} color={theme.colors.icon} />
+                    </ThemeButton>
                 </View>
             }
         />
@@ -49,6 +55,7 @@ const HomeScreen = () => {
                   </Text>
                   <Text style={{ color:theme.colors.text }}>Body</Text>
                   <ThemeButton title="Button" onPress={()=>console.debug("Test button")} />
+                  <ThemeButton title="Button" onPress={()=>console.debug("Test button")} variant={'outlined'} />
               </View>
           }
             style={"side"}
@@ -75,7 +82,9 @@ const HomeScreen = () => {
     };
 
     return (
-        <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <SafeAreaView style={{flex: 1, backgroundColor: theme.colors.background}}>
+        <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} hidden={false} />
+        <View style={{flex: 1, marginTop:StatusBar.currentHeight }}>
             <View
                 style={{
                     flexDirection: "row",
@@ -100,7 +109,7 @@ const HomeScreen = () => {
                 <ScrollView horizontal={true} style={{width:'100%', marginBottom:10}}>
                   {Array(5).fill(smallWidth)}
                 </ScrollView>
-                
+
                 {/* <View style={{width:"100%", height:'auto', alignItems:'center'}}>
                   <FlatList
                     data={[1,2,3,4,5]}
@@ -109,7 +118,7 @@ const HomeScreen = () => {
                 </View> */}
                 
             </ScrollView>
-        </View>
+        </View></SafeAreaView>
     );
 };
 
