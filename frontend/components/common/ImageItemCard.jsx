@@ -1,8 +1,8 @@
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 
-const ImageItemCard = ({ image, uri, onClick, body, title, style }) => {
+const ImageItemCard = ({ image, uri, onClick, body, title, style, width }) => {
     const { theme } = getThemeContext();
     const imageStyles = {
         fill: {
@@ -16,11 +16,28 @@ const ImageItemCard = ({ image, uri, onClick, body, title, style }) => {
             resizeMode: "cover",
         },
     };
+
+    useEffect(() => {
+        if (style === "side") {
+            if (!body) {
+                console.warn(
+                    "ImageItemCard: style=side requires a body element to be provided"
+                );
+            }
+            if (width) {
+                console.warn(
+                    "ImageItemCard: style=side does not support width prop"
+                );
+            }
+        }
+    }, []);
+
     return (
         <View
             style={{
-                width: "90%",
-                margin: "2.5%",
+                width: width || "90%",
+                maxWidth: width || 500,
+                margin: 10,
                 elevation: 1,
                 shadowColor: theme.colors.shadow,
                 elevation: 3,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, Switch } from "react-native";
+import { View, Text, ScrollView, Switch, Dimensions, FlatList } from "react-native";
 import { ImageItemCard, ThemeButton } from "../../components";
 import getThemeContext from "../../context/ThemeContext";
 
@@ -56,6 +56,15 @@ const HomeScreen = () => {
         />
     );
 
+    //example with small width
+    const smallWidth = (
+        <ImageItemCard
+            uri={"https://wallpaperbat.com/img/609256-anime-boy-power-up-wallpaper.jpg"}
+            title={"Example Title"}
+            width={"45%"}
+        />
+    );
+
     const changeTheme = () => {
         try {
           setThemeSwitch(!themeSwitch);
@@ -88,6 +97,17 @@ const HomeScreen = () => {
                 {Array(2).fill(body)}
                 {Array(2).fill(noBody)}
                 {Array(2).fill(side)}
+                <ScrollView horizontal={true} style={{width:'100%', marginBottom:10}}>
+                  {Array(5).fill(smallWidth)}
+                </ScrollView>
+                
+                {/* <View style={{width:"100%", height:'auto', alignItems:'center'}}>
+                  <FlatList
+                    data={[1,2,3,4,5]}
+                    renderItem={(item, i)=>(smallWidth)}
+                    numColumns={2} />
+                </View> */}
+                
             </ScrollView>
         </View>
     );
