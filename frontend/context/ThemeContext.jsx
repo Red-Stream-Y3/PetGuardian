@@ -7,6 +7,13 @@ const LIGHT_THEME = {
     colors : {
         primary: "#6200ee",
         primaryVariant: "#3700b3",
+        primaryText: "#ffffff",
+        primaryIcon: "#ffffff",
+        servicesPrimary: "rgb(0, 137, 123)",
+        lostPrimary: "rgb(107, 127, 215)",
+        homePrimary: "rgb(2, 45, 79)",
+        adoptPrimary: "rgb(225, 82, 95)",
+        playPrimary: "rgb(227, 181, 5)",
         ripple: "#bdbdbd",
         icon: "#000000",
         secondary: "#03dac6",
@@ -14,11 +21,6 @@ const LIGHT_THEME = {
         background: "#ffffff",
         surface: "#ffffff",
         error: "#b00020",
-        onPrimary: "#ffffff",
-        onSecondary: "#000000",
-        onBackground: "#000000",
-        onSurface: "#000000",
-        onError: "#ffffff",
     }
 };
 

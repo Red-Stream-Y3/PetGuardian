@@ -4,14 +4,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ThemeProvider } from './context/ThemeContext';
 import { AdoptionScreen, HomeScreen, LostAndFoundScreen, PlayDateScreen, ServicesScreen } from './screens';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import BottomBar from './components/common/BottomBar';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useState } from 'react';
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
 
 const App = () => {
   
@@ -32,14 +30,6 @@ const App = () => {
                         </Stack.Navigator>
                         <BottomBar selected={selectedTab} setSelected={setSelectedTab} />
                     </View>
-
-                    {/* <Tab.Navigator initialRouteName='HOME'>
-                        <Tab.Screen name="SERVICES" component={ServicesScreen} />
-                        <Tab.Screen name="LOST" component={LostAndFoundScreen} />
-                        <Tab.Screen name="HOME" component={HomeScreen} />
-                        <Tab.Screen name="ADOPT" component={AdoptionScreen} />
-                        <Tab.Screen name="PLAY" component={PlayDateScreen} />
-                    </Tab.Navigator> */}
                 </SafeAreaProvider>
             </NavigationContainer>
         </ThemeProvider>
