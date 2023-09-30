@@ -9,24 +9,14 @@ const BottomBar = ({selected, setSelected}) => {
     const {theme} = getThemeContext();
     const navigation = useNavigation();
     const [barColor, setBarColor] = useState(theme.colors.homePrimary);
-    const [animation, setAnimation] = useState(new Animated.Value(0));
+    const [animation] = useState(new Animated.Value(0));
 
     const PADDING = 8;
     const SIZE_1 = 25;
     const SIZE_2 = 35;
     const ICON_THEME = theme.colors.primaryIcon;
 
-    useEffect(() => {
-        navigation.dispatch(
-            StackActions.replace(buttons[selected].name)
-        )
-        //setBarColor(theme.colors[buttons[selected].name.toLowerCase() + "Primary"]);
-    }, [selected]);
-
-    const handlePress = (index) => {
-        setSelected(index);
-
-        //animate bar color
+    const triggerAnimation = (index) => {
         Animated.timing(animation, {
             toValue: 1,
             duration: 300,
@@ -35,6 +25,23 @@ const BottomBar = ({selected, setSelected}) => {
             setBarColor(theme.colors[buttons[index].name.toLowerCase() + "Primary"]);
             animation.setValue(0);
         });
+    };
+
+    useEffect(() => {
+        navigation.dispatch(
+            StackActions.replace(buttons[selected].name)
+        )
+    }, [selected]);
+
+    useEffect(() => {
+        triggerAnimation(selected);
+    }, [theme]);
+
+    const handlePress = (index) => {
+        setSelected(index);
+
+        //animate bar color
+        triggerAnimation(index);
     };
 
     const buttons = [

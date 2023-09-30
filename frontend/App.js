@@ -7,9 +7,11 @@ import { AdoptionScreen, HomeScreen, LostAndFoundScreen, PlayDateScreen, Service
 import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import BottomBar from './components/common/BottomBar';
-import { useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 const Stack = createStackNavigator();
+const AppContext = createContext();
+export const getAppContext = () => useContext(AppContext);
 
 const App = () => {
   
@@ -17,6 +19,7 @@ const App = () => {
 
     return (
         <ThemeProvider>
+            <AppContext.Provider value={{ selectedTab, setSelectedTab }} >
             <NavigationContainer>
                 <SafeAreaProvider>
                     <View style={{ flex: 1 }}>
@@ -32,6 +35,7 @@ const App = () => {
                     </View>
                 </SafeAreaProvider>
             </NavigationContainer>
+            </AppContext.Provider>
         </ThemeProvider>
     );
 };
