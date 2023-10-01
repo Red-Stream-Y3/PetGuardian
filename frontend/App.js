@@ -15,7 +15,7 @@ const App = () => {
   
   const [selectedTab, setSelectedTab] = useState(2);
 
-  const SERVER_URL = 'http://localhost:9120';
+  const SERVER_URL = 'https://pet-shop-backend-ukkxew3r5q-uc.a.run.app';
 
   const navigationTheme = {
     dark: false,
