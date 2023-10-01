@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-const userSchema = mongoose.Schema(
+export const userSchema = mongoose.Schema(
   {
     username: {
       type: String,
@@ -50,10 +50,10 @@ const userSchema = mongoose.Schema(
     //   enum: ['regular', 'contributor', 'moderator', 'admin'],
     //   default: 'regular',
     // },
-    request: {
-      type: String,
-      default: '',
-    },
+    // request: {
+    //   type: String,
+    //   default: '',
+    // },
     services: {
       serviceTypes: [String],
       petTypes: [String],
@@ -76,6 +76,12 @@ const userSchema = mongoose.Schema(
   {
     timestamps: true,
   }
+);
+
+//create compound index for service providers
+userSchema.index(
+  { _id: 1, firstName: 1, lastName: 1, services: 1 },
+  { partialFilterExpression: { services: { $exists: true } } }
 );
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
