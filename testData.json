@@ -1,0 +1,217 @@
+[
+    {
+        "username": "MarkEdward",
+        "firstName": "Mark",
+        "lastName": "Edward",
+        "email": "mark@example.com",
+        "password": "password123",
+        "address": {
+            "street": "123 Oak St",
+            "city": "San Francisco",
+            "state": "California",
+            "zip": "94101",
+            "country": "USA"
+        },
+        "phone": "555-777-8888"
+    },
+    {
+        "username": "LillySimmons",
+        "firstName": "Lilly",
+        "lastName": "Simmons",
+        "email": "lilly@example.com",
+        "password": "password123",
+        "address": {
+            "street": "456 Elm St",
+            "city": "Los Angeles",
+            "state": "California",
+            "zip": "90001",
+            "country": "USA"
+        },
+        "phone": "555-222-3333"
+    },
+    {
+        "username": "SeanGarde",
+        "firstName": "Sean",
+        "lastName": "Garde",
+        "email": "sean@example.com",
+        "password": "password123",
+        "address": {
+            "street": "789 Maple St",
+            "city": "New York",
+            "state": "New York",
+            "zip": "10005",
+            "country": "USA"
+        },
+        "phone": "555-444-5555"
+    },
+    {
+        "username": "AnnieHubert",
+        "firstName": "Annie",
+        "lastName": "Hubert",
+        "email": "annie@example.com",
+        "password": "password123",
+        "address": {
+            "street": "321 Pine St",
+            "city": "Los Angeles",
+            "state": "California",
+            "zip": "90005",
+            "country": "USA"
+        },
+        "phone": "555-666-7777"
+    },
+    {
+        "username": "RyanWilliams",
+        "firstName": "Ryan",
+        "lastName": "Williams",
+        "email": "ryan@example.com",
+        "password": "password123",
+        "address": {
+            "street": "987 Cedar St",
+            "city": "San Francisco",
+            "state": "California",
+            "zip": "94102",
+            "country": "USA"
+        },
+        "phone": "555-999-0000"
+    },
+    {
+        "username": "DekomoriSanae",
+        "firstName": "Dekomori",
+        "lastName": "Sanae",
+        "email": "dekomori@example.com",
+        "password": "password123",
+        "address": {
+            "street": "123 Main St",
+            "city": "New York",
+            "state": "New York",
+            "zip": "10001",
+            "country": "USA"
+        },
+        "phone": "555-123-4567",
+        "services": {
+            "serviceTypes": ["Walking", "Grooming"],
+            "petTypes": ["Dogs", "Cats"],
+            "description": "Professional pet care services.",
+            "workDays": ["Monday", "Wednesday", "Friday"],
+            "businessPhone": "555-999-8888",
+            "activeCities": ["New York", "Jersey City"],
+            "fees": [
+                { "tag": "ONE_TIME", "price": 3 },
+                { "tag": "DAILY", "price": 2 },
+                { "tag": "WEEKLY", "price": 1 }
+            ]
+        }
+    },
+    {
+        "username": "AmandaWalter",
+        "firstName": "Amanda",
+        "lastName": "Walter",
+        "email": "amanda@example.com",
+        "password": "password123",
+        "address": {
+            "street": "456 Elm St",
+            "city": "Los Angeles",
+            "state": "California",
+            "zip": "90001",
+            "country": "USA"
+        },
+        "phone": "555-987-6543",
+        "services": {
+            "serviceTypes": ["Sitting", "Training"],
+            "petTypes": ["Dogs", "Guinea Pigs"],
+            "description": "Experienced pet sitter and trainer.",
+            "workDays": ["Tuesday", "Thursday", "Saturday"],
+            "businessPhone": "555-777-6666",
+            "activeCities": ["Los Angeles", "Santa Monica"],
+            "fees": [
+                { "tag": "ONE_TIME", "price": 3 },
+                { "tag": "DAILY", "price": 2 },
+                { "tag": "WEEKLY", "price": 1 }
+            ]
+        }
+    },
+    {
+        "username": "DavidSwanson",
+        "firstName": "David",
+        "lastName": "Swanson",
+        "email": "david@example.com",
+        "password": "password123",
+        "address": {
+            "street": "789 Oak St",
+            "city": "San Francisco",
+            "state": "California",
+            "zip": "94101",
+            "country": "USA"
+        },
+        "phone": "555-111-2222",
+        "services": {
+            "serviceTypes": ["Walking", "Grooming", "Training"],
+            "petTypes": ["Cats", "Rabbits"],
+            "description": "Passionate about pet care.",
+            "workDays": ["Monday", "Wednesday", "Friday", "Sunday"],
+            "businessPhone": "555-444-3333",
+            "activeCities": ["San Francisco", "Oakland"],
+            "fees": [
+                { "tag": "ONE_TIME", "price": 3 },
+                { "tag": "DAILY", "price": 2 },
+                { "tag": "WEEKLY", "price": 1 }
+            ]
+        }
+    },
+    {
+        "username": "KimikoKuronagi",
+        "firstName": "Kimiko",
+        "lastName": "Kuronagi",
+        "email": "kimiko@example.com",
+        "password": "password123",
+        "address": {
+            "street": "321 Maple St",
+            "city": "New York",
+            "state": "New York",
+            "zip": "10005",
+            "country": "USA"
+        },
+        "phone": "555-333-4444",
+        "services": {
+            "serviceTypes": ["Grooming", "Training"],
+            "petTypes": ["Dogs", "Cats", "Rabbits"],
+            "description": "Loving care for your pets.",
+            "workDays": ["Tuesday", "Thursday", "Saturday", "Sunday"],
+            "businessPhone": "555-666-7777",
+            "activeCities": ["New York", "Brooklyn"],
+            "fees": [
+                { "tag": "ONE_TIME", "price": 3 },
+                { "tag": "DAILY", "price": 2 },
+                { "tag": "WEEKLY", "price": 1 }
+            ]
+        }
+    },
+    {
+        "username": "MaryJane",
+        "firstName": "Mary",
+        "lastName": "Jane",
+        "email": "mary@example.com",
+        "password": "password123",
+        "address": {
+            "street": "987 Pine St",
+            "city": "Los Angeles",
+            "state": "California",
+            "zip": "90005",
+            "country": "USA"
+        },
+        "phone": "555-555-5555",
+        "services": {
+            "serviceTypes": ["Walking", "Sitting"],
+            "petTypes": ["Dogs", "Rabbits", "Guinea Pigs"],
+            "description": "Caring for your pets like family.",
+            "workDays": ["Monday", "Wednesday", "Thursday"],
+            "businessPhone": "555-888-9999",
+            "activeCities": ["Los Angeles", "Beverly Hills"],
+            "fees": [
+                { "tag": "ONE_TIME", "price": 3 },
+                { "tag": "DAILY", "price": 2 },
+                { "tag": "WEEKLY", "price": 1 }
+            ]
+        }
+    }
+]
