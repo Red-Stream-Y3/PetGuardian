@@ -19,7 +19,7 @@ const LIGHT_THEME = {
     homePrimary: 'rgb(0, 142, 255)',
     adoptPrimary: 'rgb(225, 82, 95)',
     playPrimary: 'rgb(227, 181, 5)',
-    ripple: 'rgba(255, 255, 255, 0.1)',
+    ripple: 'rgba(0, 0, 0, 0.1)',
     icon: '#000000',
 
     secondary: '#03dac6',

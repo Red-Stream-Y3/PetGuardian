@@ -1,6 +1,6 @@
 import { Animated, Pressable, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
-import { getAppContext } from "../../App";
+import { getAppContext } from '../../context/AppContext';
 import { useEffect, useState } from "react";
 
 const ThemeButton = ({ children, onPress, title, padding, variant }) => {

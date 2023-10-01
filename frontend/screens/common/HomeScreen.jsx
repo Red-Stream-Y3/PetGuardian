@@ -15,8 +15,9 @@ const HomeScreen = () => {
     //example with a body element
     //can provide local image or uri
     //local image has precedence over uri if both are provided
-    const body = (
+    const body = (i) => (
         <ImageItemCard
+            key={i}
             uri={
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToPtWIfv5-l3Q1GRBnlJ0H4jCVK2DEz63oSIx92b7FmYpPfx0FqvG7UVj8JcyPNAAlImE&usqp=CAU"
             }
@@ -37,16 +38,20 @@ const HomeScreen = () => {
     );
 
     //example with no body element
-    const noBody = (
+    const noBody = (i) => (
         <ImageItemCard
+            key={i}
             uri={"https://wallpapercave.com/wp/wp4928162.jpg"}
             title={"Example Title"}
+            subtitle={"Example Subtitle"}
+            tag={"Example Tag"}
         />
     );
 
     //example with style=side
-    const side = (
+    const side = (i) => (
         <ImageItemCard
+            key={i}
             uri={"https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg"}
             body={
               <View>
@@ -64,11 +69,15 @@ const HomeScreen = () => {
     );
 
     //example with small width
-    const smallWidth = (
+    const smallWidth = (i) => (
         <ImageItemCard
+            key={i}
             uri={"https://wallpaperbat.com/img/609256-anime-boy-power-up-wallpaper.jpg"}
             title={"Example Title"}
             width={"45%"}
+            subtitle={"Example Subtitle"}
+            tag={"Tag"}
+            borderRadius={15}
         />
     );
 
@@ -82,43 +91,68 @@ const HomeScreen = () => {
     };
 
     return (
-      <SafeAreaView style={{flex: 1, backgroundColor: theme.colors.background}}>
-        <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} hidden={false} />
-        <View style={{flex: 1, marginTop:StatusBar.currentHeight }}>
-            <View
-                style={{
-                    flexDirection: "row",
-                    width: "100%",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    paddingHorizontal: '5%',
-                }}>
-                <Text style={{ color: theme.colors.text }}>Feed</Text>
-                <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-                    <Text style={{ color: theme.colors.text }}>Dark Mode</Text>
-                    <Switch onValueChange={changeTheme} value={themeSwitch} />
+        <SafeAreaView
+            style={{ flex: 1, backgroundColor: theme.colors.background }}>
+            <StatusBar
+                barStyle={
+                    theme.mode === "dark" ? "light-content" : "dark-content"
+                }
+                hidden={false}
+            />
+            <View style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        width: "100%",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        paddingHorizontal: "5%",
+                    }}>
+                    <Text style={{ color: theme.colors.text }}>Feed</Text>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}>
+                        <Text style={{ color: theme.colors.text }}>
+                            Dark Mode
+                        </Text>
+                        <Switch
+                            onValueChange={changeTheme}
+                            value={themeSwitch}
+                        />
+                    </View>
                 </View>
-                
-            </View>
-            <ScrollView
-                style={{ width: "100%" }}
-                contentContainerStyle={{ alignItems: "center" }}>
-                {Array(2).fill(body)}
-                {Array(2).fill(noBody)}
-                {Array(2).fill(side)}
-                <ScrollView horizontal={true} style={{width:'100%', marginBottom:10}}>
-                  {Array(5).fill(smallWidth)}
-                </ScrollView>
+                <ScrollView
+                    style={{ width: "100%" }}
+                    contentContainerStyle={{ alignItems: "center" }}>
+                    {Array(2)
+                        .fill(0)
+                        .map((_, i) => body(i))}
+                    {Array(2)
+                        .fill(0)
+                        .map((_, i) => noBody(i))}
+                    {Array(2)
+                        .fill(0)
+                        .map((_, i) => side(i))}
+                    <ScrollView
+                        horizontal={true}
+                        contentContainerStyle={{ alignItems: "center" }}
+                        style={{ marginBottom: 10, width:Dimensions.get('screen').width }}>
+                        {Array(5)
+                            .fill(0)
+                            .map((_, i) => smallWidth(i))}
+                    </ScrollView>
 
-                {/* <View style={{width:"100%", height:'auto', alignItems:'center'}}>
-                  <FlatList
-                    data={[1,2,3,4,5]}
-                    renderItem={(item, i)=>(smallWidth)}
-                    numColumns={2} />
-                </View> */}
-                
-            </ScrollView>
-        </View></SafeAreaView>
+                    {/* <FlatList
+                        data={[1, 2, 3, 4, 5]}
+                        renderItem={(item, i) => smallWidth(i)}
+                        numColumns={2}
+                    /> */}
+                </ScrollView>
+            </View>
+        </SafeAreaView>
     );
 };
 
