@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 import HireRequest from "../models/hireRequestModel.js";
 import asyncHandler from "express-async-handler";
+import mongoose from "mongoose";
 
 // @desc    Get all service providers
 // @route   GET /api/v1/services/
@@ -26,7 +27,7 @@ const getProviderById = asyncHandler(async (req, res) => {
     const provider = await User.aggregate([
         {
             $match: {
-                _id: req.params.id,
+                _id: new mongoose.Types.ObjectId(req.params.id),
             }
         },{
             $project: {
