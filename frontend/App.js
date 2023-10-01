@@ -15,6 +15,8 @@ const App = () => {
   
   const [selectedTab, setSelectedTab] = useState(2);
 
+  const SERVER_URL = 'http://localhost:9120';
+
   const navigationTheme = {
     dark: false,
     colors: {
@@ -29,7 +31,7 @@ const App = () => {
 
     return (
         <ThemeProvider>
-            <AppContextProvider value={{ selectedTab, setSelectedTab }}>
+            <AppContextProvider value={{ selectedTab, setSelectedTab, SERVER_URL }}>
                 <NavigationContainer>
                     <SafeAreaProvider>
                         <View style={{ flex: 1 }}>

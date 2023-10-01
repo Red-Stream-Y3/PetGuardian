@@ -1,6 +1,6 @@
 import { StatusBar, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
-import { ThemeButton } from "../../components";
+import { ServicesHome, ThemeButton } from "../../components";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ServicesScreen = () => {
@@ -14,11 +14,7 @@ const ServicesScreen = () => {
                 }
                 hidden={false}
             />
-
-            <View>
-                <Text style={{color:theme.colors.text}}>Services</Text>
-                <ThemeButton title="Services" />
-            </View>
+            <ServicesHome />
         </SafeAreaView>
     );
 };
