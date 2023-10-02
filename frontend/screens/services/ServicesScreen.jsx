@@ -1,7 +1,10 @@
 import { StatusBar, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
-import { ThemeButton } from "../../components";
+import { ServiceDetails, ServicesHome, ThemeButton } from "../../components";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const ServiceNavigator = createNativeStackNavigator();
 
 const ServicesScreen = () => {
     const { theme } = getThemeContext();
@@ -14,11 +17,11 @@ const ServicesScreen = () => {
                 }
                 hidden={false}
             />
+            <ServiceNavigator.Navigator initialRouteName="Services">
+                <ServiceNavigator.Screen name="Services" component={ServicesHome} options={{headerShown:false}} />
+                <ServiceNavigator.Screen name="ServiceDetails" component={ServiceDetails} options={{headerShown:false}} />
+            </ServiceNavigator.Navigator>
 
-            <View>
-                <Text style={{color:theme.colors.text}}>Services</Text>
-                <ThemeButton title="Services" />
-            </View>
         </SafeAreaView>
     );
 };

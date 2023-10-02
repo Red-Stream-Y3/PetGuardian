@@ -1,9 +1,17 @@
 import { Animated, Pressable, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
-import { getAppContext } from "../../App";
+import { getAppContext } from '../../context/AppContext';
 import { useEffect, useState } from "react";
 
-const ThemeButton = ({ children, onPress, title, padding, variant }) => {
+const ThemeButton = ({
+    children,
+    onPress,
+    title,
+    padding,
+    variant,
+    textSize,
+    borderRadius,
+}) => {
     const { theme } = getThemeContext();
     const { selectedTab } = getAppContext();
 
@@ -27,7 +35,8 @@ const ThemeButton = ({ children, onPress, title, padding, variant }) => {
         switch (selectedTab) {
             case 0: {
                 color = theme.colors.servicesPrimary;
-                break;}
+                break;
+            }
             case 1: {
                 color = theme.colors.lostPrimary;
                 break;
@@ -56,25 +65,25 @@ const ThemeButton = ({ children, onPress, title, padding, variant }) => {
 
     const styles = {
         filled: {
-            backgroundColor:bgColor,
-            overflow:'hidden',
-            borderRadius: 5,
+            backgroundColor: bgColor,
+            overflow: "hidden",
+            borderRadius: borderRadius || 5,
             elevation: 3,
             margin: 5,
         },
         outlined: {
-            borderColor:bgColor,
-            borderWidth:1,
-            overflow:'hidden',
-            borderRadius: 5,
+            borderColor: bgColor,
+            borderWidth: 1,
+            overflow: "hidden",
+            borderRadius: borderRadius || 5,
             margin: 5,
         },
         clear: {
-            overflow:'hidden',
-            borderRadius: 5,
+            overflow: "hidden",
+            borderRadius: borderRadius || 5,
             margin: 5,
         },
-    }
+    };
 
     return (
         <Animated.View
@@ -104,6 +113,7 @@ const ThemeButton = ({ children, onPress, title, padding, variant }) => {
                 {title && (
                     <Text
                         style={{
+                            fontSize: textSize || 14,
                             marginHorizontal: 2,
                             fontWeight: "bold",
                             color:

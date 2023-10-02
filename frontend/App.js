@@ -7,15 +7,15 @@ import { AdoptionScreen, HomeScreen, LostAndFoundScreen, PlayDateScreen, Service
 import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import BottomBar from './components/common/BottomBar';
-import { createContext, useContext, useState } from 'react';
+import { useState } from 'react';
+import { AppContextProvider } from './context/AppContext';
 
 const Stack = createStackNavigator();
-const AppContext = createContext();
-export const getAppContext = () => useContext(AppContext);
-
 const App = () => {
   
   const [selectedTab, setSelectedTab] = useState(2);
+
+  const SERVER_URL = 'https://pet-shop-backend-ukkxew3r5q-uc.a.run.app';
 
   const navigationTheme = {
     dark: false,
@@ -31,23 +31,46 @@ const App = () => {
 
     return (
         <ThemeProvider>
-            <AppContext.Provider value={{ selectedTab, setSelectedTab }} >
-            <NavigationContainer>
-                <SafeAreaProvider>
-                    <View style={{ flex: 1 }}>
-                        <StatusBar style="auto" />
-                        <Stack.Navigator initialRouteName="HOME">
-                                <Stack.Screen name="SERVICES" component={ServicesScreen} options={{headerShown:false}}/>
-                                <Stack.Screen name="LOST" component={LostAndFoundScreen} options={{headerShown:false}}/>
-                                <Stack.Screen name="HOME" component={HomeScreen} options={{headerShown:false}}/>
-                                <Stack.Screen name="ADOPT" component={AdoptionScreen} options={{headerShown:false}}/>
-                                <Stack.Screen name="PLAY" component={PlayDateScreen} options={{headerShown:false}}/>
-                        </Stack.Navigator>
-                        <BottomBar selected={selectedTab} setSelected={setSelectedTab} />
-                    </View>
-                </SafeAreaProvider>
-            </NavigationContainer>
-            </AppContext.Provider>
+            <AppContextProvider value={{ selectedTab, setSelectedTab, SERVER_URL }}>
+                <NavigationContainer>
+                    <SafeAreaProvider>
+                        <View style={{ flex: 1 }}>
+                            <StatusBar style="auto" />
+                            <Stack.Navigator initialRouteName="HOME">
+                                <Stack.Screen
+                                    name="SERVICES"
+                                    component={ServicesScreen}
+                                    options={{ headerShown: false }}
+                                />
+                                <Stack.Screen
+                                    name="LOST"
+                                    component={LostAndFoundScreen}
+                                    options={{ headerShown: false }}
+                                />
+                                <Stack.Screen
+                                    name="HOME"
+                                    component={HomeScreen}
+                                    options={{ headerShown: false }}
+                                />
+                                <Stack.Screen
+                                    name="ADOPT"
+                                    component={AdoptionScreen}
+                                    options={{ headerShown: false }}
+                                />
+                                <Stack.Screen
+                                    name="PLAY"
+                                    component={PlayDateScreen}
+                                    options={{ headerShown: false }}
+                                />
+                            </Stack.Navigator>
+                            <BottomBar
+                                selected={selectedTab}
+                                setSelected={setSelectedTab}
+                            />
+                        </View>
+                    </SafeAreaProvider>
+                </NavigationContainer>
+            </AppContextProvider>
         </ThemeProvider>
     );
 };

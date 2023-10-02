@@ -9,33 +9,40 @@ import ImageItemCard from '../common/ImageItemCard';
 
 const HomeContainer = ({ Header, Pairs }) => {
   return (
-    <View style={styles.sectionContainer}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.sectionHeader}>{Header}</Text>
-        <TouchableOpacity style={styles.seeAllButton}>
-          <Text style={styles.seeAllText}>See All</Text>
-        </TouchableOpacity>
-      </View>
-      <ScrollView style={styles.cardContainer}>
-        {Pairs?.map((pair, index) => (
-          <View style={styles.rowContainer} key={index}>
-            {pair.map((item) => (
-              <ImageItemCard
-                key={item._id}
-                uri={item.uri}
-                title={item.title}
-                width="45%"
-                age={item.age}
-                location={item.location}
-                vbr={15}
-                vmb={15}
-                tmb={5}
-              />
-            ))}
+      <View style={styles.sectionContainer}>
+          <View style={styles.headerContainer}>
+              <Text style={styles.sectionHeader}>{Header}</Text>
+              <TouchableOpacity style={styles.seeAllButton}>
+                  <Text style={styles.seeAllText}>See All</Text>
+              </TouchableOpacity>
           </View>
-        ))}
-      </ScrollView>
-    </View>
+          <ScrollView style={styles.cardContainer}>
+              {Pairs?.map((pair, index) => (
+                  <View style={styles.rowContainer} key={index}>
+                      {pair.map((item) => (
+                          <ImageItemCard
+                              key={item._id}
+                              uri={item.uri}
+                              title={item.title}
+                              width="45%"
+                              tag={item.age}
+                              subtitle={
+                                  item.location.split(" ").length > 4
+                                      ? `${item.location
+                                            .split(" ")
+                                            .slice(0, 3)
+                                            .join(" ")} ...`
+                                      : item.location
+                              }
+                              borderRadius={15}
+                              viewMarginBottom={15}
+                              textMarginBottom={5}
+                          />
+                      ))}
+                  </View>
+              ))}
+          </ScrollView>
+      </View>
   );
 };
 
