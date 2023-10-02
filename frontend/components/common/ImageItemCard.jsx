@@ -1,7 +1,7 @@
 import { Suspense, useEffect } from 'react';
 import { ActivityIndicator, Image, Pressable, Text, View } from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
-import Animated from "react-native-reanimated";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 const ImageItemCard = ({
   image,
@@ -17,6 +17,7 @@ const ImageItemCard = ({
   viewMarginBottom,
   textMarginBottom,
   animationTag,
+  index,
 }) => {
   const { theme } = getThemeContext();
   const imageStyles = {
@@ -48,17 +49,19 @@ const ImageItemCard = ({
   }, []);
 
   return (
-      <View
-          style={{
-              width: width || "90%",
-              maxWidth: width || 500,
-              margin: 10,
-              shadowColor: theme.colors.shadow,
-              elevation: 3,
-              backgroundColor: theme.colors.surface,
-              borderRadius: borderRadius || 10,
-              overflow: "hidden",
-          }}>
+      <Animated.View
+            style={{
+                width: width || "90%",
+                maxWidth: width || 500,
+                margin: 10,
+                shadowColor: theme.colors.shadow,
+                elevation: 3,
+                backgroundColor: theme.colors.surface,
+                borderRadius: borderRadius || 10,
+                overflow: "hidden",
+            }}
+            entering={FadeInDown.delay(index ? (index * 100) : 0)}
+          >
           <Pressable
               android_ripple={{
                   color: theme.colors.ripple,
@@ -134,7 +137,7 @@ const ImageItemCard = ({
                   {body ? body : null}
               </View>
           </Pressable>
-      </View>
+      </Animated.View>
   );
 };
 

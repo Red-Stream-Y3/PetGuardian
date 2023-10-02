@@ -59,11 +59,11 @@ export const userSchema = mongoose.Schema(
       petTypes: [String],
       description: {type: String},
       workDays: [String],
-      businessPhone: {
+      businessPhone: [{
         type: String,
         default: '',
         pattern: '^[0-9]*$',
-      },
+      }],
       activeCities: [String],
       fees: [
         {
