@@ -1,4 +1,12 @@
-import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+    ActivityIndicator,
+    Dimensions,
+    FlatList,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 import Search from "../common/Search";
 import getThemeContext from "../../context/ThemeContext";
 import { getAppContext } from "../../context/AppContext";
@@ -7,10 +15,10 @@ import axios from "axios";
 import ImageItemCard from "../common/ImageItemCard";
 import ThemeChip from "../common/ThemeChip";
 
-const ServicesHome = () => {
+const ServicesHome = ({navigation}) => {
     const { theme } = getThemeContext();
     const { SERVER_URL } = getAppContext();
-    const [ providers, setProviders ] = useState([]);
+    const [providers, setProviders] = useState([]);
 
     const getProviders = async () => {
         try {
@@ -22,7 +30,7 @@ const ServicesHome = () => {
     };
 
     useState(() => {
-        if(providers.length === 0) getProviders();
+        if (providers.length === 0) getProviders();
     }, []);
 
     const chips = [
@@ -46,55 +54,114 @@ const ServicesHome = () => {
     return (
         <View style={styles.container}>
             <Search />
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {chips.map((chip, i) => (
-                    <ThemeChip key={i} clickable text={chip.text} />
-                ))}
-            </ScrollView>
+            <View
+                style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    paddingHorizontal: 20,
+                    paddingVertical: 5,
+                }}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    {chips.map((chip, i) => (
+                        <ThemeChip key={i} clickable text={chip.text} />
+                    ))}
+                </ScrollView>
             </View>
             <Suspense fallback={<ActivityIndicator />}>
-                {/* <FlatList
+                <FlatList
                     data={providers}
-                    renderItem={(item, i) => (
-                        <ImageItemCard 
-                            key={i} 
-                            uri={"https://wallpaperbat.com/img/609256-anime-boy-power-up-wallpaper.jpg"}
-                            style="side" 
+                    style={{ width: "100%"}}
+                    contentContainerStyle={{ alignItems: "center" }}
+                    renderItem={(provider, i) => {
+                        return <ImageItemCard
+                            key={i}
+                            width={Dimensions.get("window").width * 0.9}
+                            onClick={() => {navigation?.navigate("ServiceDetails", {service: provider.item})}}
+                            uri={
+                                "https://wallpapercave.com/wp/wp4928162.jpg"
+                            }
+                            style="side"
+                            animationTag={provider.item._id}
                             body={
                                 <View>
-                                    <Text style={{ fontWeight: "bold", color:theme.colors.text }}>
-                                        {item.firstName}
+                                    <Text
+                                        style={{
+                                            fontSize: 18,
+                                            fontWeight: "bold",
+                                            color: theme.colors.text,
+                                        }}>
+                                        {provider.item.firstName}
                                     </Text>
-                                    <Text style={{ color:theme.colors.text }}>
-                                        {item.services?.serviceTypes?.map((serviceType) => serviceType).join(", ")}
+                                    <Text
+                                        style={{
+                                            fontSize: 14,
+                                            fontWeight: "bold",
+                                            color: theme.colors.text,
+                                        }}>
+                                        {provider.item.services?.serviceTypes
+                                            ?.map((serviceType) => serviceType)
+                                            .join(", ")}
+                                    </Text>
+                                    <Text
+                                        style={{
+                                            marginTop: 5,
+                                            color: theme.colors.text,
+                                        }}>
+                                        {provider.item.services?.activeCities
+                                            ?.map((city) => city)
+                                            .join(", ")}
                                     </Text>
                                 </View>
-                            } />
-                    )} /> */}
-                    <ScrollView
+                            }
+                        />
+                    }} />
+                {/* <ScrollView
                     style={{ width: "100%" }}
                     contentContainerStyle={{ alignItems: "center" }}>
-                        {providers.map((provider, i) => (
-                            <ImageItemCard 
-                            key={i} 
-                            uri={"https://wallpaperbat.com/img/609256-anime-boy-power-up-wallpaper.jpg"}
+                    {providers.map((provider, i) => (
+                        <ImageItemCard
+                            key={i}
+                            onClick={() => {navigation?.navigate("ServiceDetails", {service: provider})}}
+                            uri={
+                                "https://wallpapercave.com/wp/wp4928162.jpg"
+                            }
                             style="side"
+                            animationTag={provider._id}
                             body={
                                 <View>
-                                    <Text style={{ fontSize:18, fontWeight: "bold", color:theme.colors.text }}>
+                                    <Text
+                                        style={{
+                                            fontSize: 18,
+                                            fontWeight: "bold",
+                                            color: theme.colors.text,
+                                        }}>
                                         {provider.firstName}
                                     </Text>
-                                    <Text style={{ fontSize:14, fontWeight: "bold", color:theme.colors.text }}>
-                                        {provider.services?.serviceTypes?.map((serviceType) => serviceType).join(", ")}
+                                    <Text
+                                        style={{
+                                            fontSize: 14,
+                                            fontWeight: "bold",
+                                            color: theme.colors.text,
+                                        }}>
+                                        {provider.services?.serviceTypes
+                                            ?.map((serviceType) => serviceType)
+                                            .join(", ")}
                                     </Text>
-                                    <Text style={{ marginTop:5, color:theme.colors.text }}>
-                                        {provider.services?.activeCities?.map((city) => city).join(", ")}
+                                    <Text
+                                        style={{
+                                            marginTop: 5,
+                                            color: theme.colors.text,
+                                        }}>
+                                        {provider.services?.activeCities
+                                            ?.map((city) => city)
+                                            .join(", ")}
                                     </Text>
                                 </View>
-                            } />
-                        ))}
-                    </ScrollView>
+                            }
+                        />
+                    ))}
+                </ScrollView> */}
             </Suspense>
         </View>
     );

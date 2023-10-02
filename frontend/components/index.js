@@ -10,3 +10,4 @@ export { default as HomeContainer } from './lost/HomeContainer';
 
 //services
 export { default as ServicesHome } from './services/ServicesHome';
+export { default as ServiceDetails } from './services/ServiceDetails';
