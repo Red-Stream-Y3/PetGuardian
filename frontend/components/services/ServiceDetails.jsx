@@ -1,7 +1,10 @@
 import { Image, View } from "react-native";
 import Animated from "react-native-reanimated";
 
-const ServiceDetails = ({ service }) => {
+const ServiceDetails = ({ navigation, route }) => {
+
+    const { service } = route.params;
+    
     return (
         <View style={{flex:1}}>
             <Animated.Image 
@@ -10,7 +13,7 @@ const ServiceDetails = ({ service }) => {
                     height: '30%',
                 }} 
                 source={{ uri: service?.image || 'https://wallpapercave.com/wp/wp4928162.jpg' }}
-                sharedTransitionTag="providerImg" />
+                sharedTransitionTag={service?._id} />
         </View>
     );
 };
