@@ -1,6 +1,7 @@
 import { Suspense, useEffect } from 'react';
 import { ActivityIndicator, Image, Pressable, Text, View } from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
+import Animated from "react-native-reanimated";
 
 const ImageItemCard = ({
   image,
@@ -15,6 +16,7 @@ const ImageItemCard = ({
   borderRadius,
   viewMarginBottom,
   textMarginBottom,
+  animationTag,
 }) => {
   const { theme } = getThemeContext();
   const imageStyles = {
@@ -39,9 +41,9 @@ const ImageItemCard = ({
           'ImageItemCard: style=side requires a body element to be provided'
         );
       }
-      if (width) {
-        console.warn('ImageItemCard: style=side does not support width prop');
-      }
+    //   if (width) {
+    //     console.warn('ImageItemCard: style=side does not support width prop');
+    //   }
     }
   }, []);
 
@@ -67,7 +69,7 @@ const ImageItemCard = ({
               }}
               onPress={onClick || null}>
               <Suspense fallback={<ActivityIndicator />}>
-                  <Image
+                  <Animated.Image
                       style={
                           style === "side" ? imageStyles.side : imageStyles.fill
                       }
@@ -78,6 +80,7 @@ const ImageItemCard = ({
                                   "https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png",
                           }
                       }
+                      sharedTransitionTag={animationTag || null}
                   />
               </Suspense>
               <View
