@@ -15,7 +15,7 @@ import axios from "axios";
 import ImageItemCard from "../common/ImageItemCard";
 import ThemeChip from "../common/ThemeChip";
 
-const ServicesHome = ({navigation}) => {
+const ServicesHome = ({ navigation }) => {
     const { theme } = getThemeContext();
     const { SERVER_URL } = getAppContext();
     const [providers, setProviders] = useState([]);
@@ -52,7 +52,11 @@ const ServicesHome = ({navigation}) => {
     ];
 
     return (
-        <View style={styles.container}>
+        <View
+            style={{
+                ...styles.container,
+                backgroundColor: theme.colors.background,
+            }}>
             <Search />
             <View
                 style={{
@@ -69,99 +73,117 @@ const ServicesHome = ({navigation}) => {
                 </ScrollView>
             </View>
             <Suspense fallback={<ActivityIndicator />}>
-                <FlatList
+                {/* <FlatList
                     data={providers}
-                    style={{ width: "100%"}}
+                    style={{ width: "100%" }}
                     contentContainerStyle={{ alignItems: "center" }}
                     renderItem={(provider, i) => {
-                        return <ImageItemCard
-                            key={i}
-                            width={Dimensions.get("window").width * 0.9}
-                            onClick={() => {navigation?.navigate("ServiceDetails", {service: provider.item})}}
-                            uri={
-                                "https://wallpapercave.com/wp/wp4928162.jpg"
-                            }
-                            style="side"
-                            animationTag={provider.item._id}
-                            body={
-                                <View>
-                                    <Text
-                                        style={{
-                                            fontSize: 18,
-                                            fontWeight: "bold",
-                                            color: theme.colors.text,
-                                        }}>
-                                        {provider.item.firstName}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            fontSize: 14,
-                                            fontWeight: "bold",
-                                            color: theme.colors.text,
-                                        }}>
-                                        {provider.item.services?.serviceTypes
-                                            ?.map((serviceType) => serviceType)
-                                            .join(", ")}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            marginTop: 5,
-                                            color: theme.colors.text,
-                                        }}>
-                                        {provider.item.services?.activeCities
-                                            ?.map((city) => city)
-                                            .join(", ")}
-                                    </Text>
-                                </View>
-                            }
-                        />
-                    }} />
-                {/* <ScrollView
+                        return (
+                            <ImageItemCard
+                                key={i}
+                                index={i}
+                                width={Dimensions.get("window").width * 0.9}
+                                onClick={() => {
+                                    navigation?.navigate("ServiceDetails", {
+                                        service: provider.item,
+                                    });
+                                }}
+                                uri={
+                                    "https://wallpapercave.com/wp/wp4928162.jpg"
+                                }
+                                style="side"
+                                animationTag={provider.item._id}
+                                body={
+                                    <View>
+                                        <Text
+                                            style={{
+                                                fontSize: 18,
+                                                fontWeight: "bold",
+                                                color: theme.colors.text,
+                                            }}>
+                                            {provider.item.firstName}
+                                        </Text>
+                                        <Text
+                                            style={{
+                                                fontSize: 14,
+                                                fontWeight: "bold",
+                                                color: theme.colors.text,
+                                            }}>
+                                            {provider.item.services?.serviceTypes
+                                                ?.map(
+                                                    (serviceType) => serviceType
+                                                )
+                                                .join(", ")}
+                                        </Text>
+                                        <Text
+                                            style={{
+                                                marginTop: 5,
+                                                color: theme.colors.text,
+                                            }}>
+                                            {provider.item.services?.activeCities
+                                                ?.map((city) => city)
+                                                .join(", ")}
+                                        </Text>
+                                    </View>
+                                }
+                            />
+                        );
+                    }}
+                /> */}
+                <ScrollView
                     style={{ width: "100%" }}
                     contentContainerStyle={{ alignItems: "center" }}>
                     {providers.map((provider, i) => (
                         <ImageItemCard
-                            key={i}
-                            onClick={() => {navigation?.navigate("ServiceDetails", {service: provider})}}
-                            uri={
-                                "https://wallpapercave.com/wp/wp4928162.jpg"
-                            }
-                            style="side"
-                            animationTag={provider._id}
-                            body={
-                                <View>
-                                    <Text
-                                        style={{
-                                            fontSize: 18,
-                                            fontWeight: "bold",
-                                            color: theme.colors.text,
-                                        }}>
-                                        {provider.firstName}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            fontSize: 14,
-                                            fontWeight: "bold",
-                                            color: theme.colors.text,
-                                        }}>
-                                        {provider.services?.serviceTypes
-                                            ?.map((serviceType) => serviceType)
-                                            .join(", ")}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            marginTop: 5,
-                                            color: theme.colors.text,
-                                        }}>
-                                        {provider.services?.activeCities
-                                            ?.map((city) => city)
-                                            .join(", ")}
-                                    </Text>
-                                </View>
-                            }
-                        />
+                                key={i}
+                                index={i}
+                                width={Dimensions.get("window").width * 0.9}
+                                onClick={() => {
+                                    navigation?.navigate("ServiceDetails", {
+                                        service: provider,
+                                    });
+                                }}
+                                uri={
+                                    "https://wallpapercave.com/wp/wp4928162.jpg"
+                                }
+                                style="side"
+                                animationTag={provider._id}
+                                body={
+                                    <View>
+                                        <Text
+                                            style={{
+                                                fontSize: 18,
+                                                fontWeight: "bold",
+                                                color: theme.colors.text,
+                                            }}>
+                                            {provider.firstName}
+                                        </Text>
+                                        <Text
+                                            style={{
+                                                fontSize: 14,
+                                                fontWeight: "bold",
+                                                color: theme.colors.text,
+                                            }}>
+                                            {provider.services?.serviceTypes
+                                                ?.map(
+                                                    (serviceType) => serviceType
+                                                )
+                                                .join(", ")}
+                                        </Text>
+                                        <Text
+                                            style={{
+                                                marginTop: 5,
+                                                color: theme.colors.text,
+                                            }}>
+                                            {provider.services?.activeCities
+                                                ?.map((city) => city)
+                                                .join(", ")}
+                                        </Text>
+                                    </View>
+                                }
+                            />
                     ))}
-                </ScrollView> */}
+                </ScrollView>
             </Suspense>
         </View>
     );

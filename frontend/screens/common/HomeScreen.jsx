@@ -18,6 +18,7 @@ const HomeScreen = () => {
     const body = (i) => (
         <ImageItemCard
             key={i}
+            index={i}
             uri={
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToPtWIfv5-l3Q1GRBnlJ0H4jCVK2DEz63oSIx92b7FmYpPfx0FqvG7UVj8JcyPNAAlImE&usqp=CAU"
             }
@@ -41,6 +42,7 @@ const HomeScreen = () => {
     const noBody = (i) => (
         <ImageItemCard
             key={i}
+            index={i}
             uri={"https://wallpapercave.com/wp/wp4928162.jpg"}
             title={"Example Title"}
             subtitle={"Example Subtitle"}
@@ -52,6 +54,7 @@ const HomeScreen = () => {
     const side = (i) => (
         <ImageItemCard
             key={i}
+            index={i}
             uri={"https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg"}
             body={
               <View>
@@ -127,15 +130,11 @@ const HomeScreen = () => {
                 <ScrollView
                     style={{ width: "100%" }}
                     contentContainerStyle={{ alignItems: "center" }}>
-                    {Array(2)
-                        .fill(0)
-                        .map((_, i) => body(i))}
-                    {Array(2)
-                        .fill(0)
-                        .map((_, i) => noBody(i))}
-                    {Array(2)
-                        .fill(0)
-                        .map((_, i) => side(i))}
+                    {Array(8)
+                        .fill((i) => body(i),0,2)
+                        .fill((i) => noBody(i),3,5)
+                        .fill((i) => side(i),6,8)
+                        .map((func, i) => func(i))}
                     <ScrollView
                         horizontal={true}
                         contentContainerStyle={{ alignItems: "center" }}
