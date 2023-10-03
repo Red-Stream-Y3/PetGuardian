@@ -1,18 +1,23 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import {
   ActivityIndicator,
+  TouchableOpacity,
   View,
   Text,
   Image,
   StyleSheet,
   ScrollView,
 } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 import getThemeContext from '../../../context/ThemeContext';
 import Header from '../../common/Header';
+import UserBox from '../../common/UserBox';
 
 const Post = ({ route }) => {
   const { theme } = getThemeContext();
   const { petData } = route.params;
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const petImages = petData.images.map((image) => image.uri);
 
   const formatDate = (dateStr) => {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -25,6 +30,12 @@ const Post = ({ route }) => {
     return colors[randomIndex];
   };
 
+  const goToNextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === petImages.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <Header title={petData.title} />
@@ -32,10 +43,20 @@ const Post = ({ route }) => {
       <Suspense fallback={<ActivityIndicator />}>
         <ScrollView>
           <View style={styles.container}>
-            <Image
-              source={{ uri: petData.images[0].uri }}
-              style={styles.image}
-            />
+            <View style={styles.imageContainer}>
+              <Image
+                source={{ uri: petImages[currentImageIndex] }}
+                style={styles.image}
+              />
+              {petImages.length > 1 && (
+                <TouchableOpacity
+                  style={styles.carouselIcon}
+                  onPress={goToNextImage}
+                >
+                  <FontAwesome name="angle-right" size={24} color="white" />
+                </TouchableOpacity>
+              )}
+            </View>
             <View style={styles.detailsContainer}>
               <View style={styles.detailsRow}>
                 <Text
@@ -76,6 +97,7 @@ const Post = ({ route }) => {
               >
                 {petData.description}
               </Text>
+              <UserBox />
             </View>
           </View>
         </ScrollView>
@@ -115,6 +137,18 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     padding: 10,
     borderRadius: 15,
+  },
+  imageContainer: {
+    position: 'relative',
+  },
+  carouselIcon: {
+    position: 'absolute',
+    bottom: 12,
+    right: 15,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 2,
   },
 });
 
