@@ -13,6 +13,7 @@ export { default as PetFilter } from './common/PetFilter';
 // Lost and Found
 export { default as LostFoundHome } from './laf/LostFoundHome';
 export { default as HomeContainer } from './laf/common/HomeContainer';
+export { default as AllPets } from './laf/common/AllPets';
 export { default as Post } from './laf/common/Post';
 export { default as FoundHome } from './laf/Found/FoundHome';
 export { default as LostHome } from './laf/Lost/LostHome';

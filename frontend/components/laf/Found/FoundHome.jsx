@@ -1,10 +1,14 @@
-import { View, Text } from 'react-native';
-import React from 'react';
+import { View } from 'react-native';
+import getThemeContext from '../../../context/ThemeContext';
+import AllPets from '../common/AllPets';
+import { lostPetsData } from '../pets';
 
 const FoundHome = () => {
+  const { theme } = getThemeContext();
+
   return (
-    <View>
-      <Text>FoundHome</Text>
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <AllPets title="Found Pets" data={lostPetsData} />
     </View>
   );
 };
