@@ -13,7 +13,7 @@ const ThemeButton = ({
     borderRadius,
 }) => {
     const { theme } = getThemeContext();
-    const { selectedTab } = getAppContext();
+    const { selectedTab, tabColor } = getAppContext();
 
     const [animation] = useState(new Animated.Value(0));
     const [currentColor, setCurrentColor] = useState(theme.colors.homePrimary);
@@ -31,31 +31,8 @@ const ThemeButton = ({
     };
 
     useEffect(() => {
-        let color;
-        switch (selectedTab) {
-            case 0: {
-                color = theme.colors.servicesPrimary;
-                break;
-            }
-            case 1: {
-                color = theme.colors.lostPrimary;
-                break;
-            }
-            case 2: {
-                color = theme.colors.homePrimary;
-                break;
-            }
-            case 3: {
-                color = theme.colors.adoptPrimary;
-                break;
-            }
-            case 4: {
-                color = theme.colors.playPrimary;
-                break;
-            }
-        }
-        setNextColor(color);
-        triggerAnimation(color);
+        setNextColor(tabColor);
+        triggerAnimation(tabColor);
     }, [selectedTab, theme]);
 
     let bgColor = animation.interpolate({

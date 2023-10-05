@@ -7,31 +7,14 @@ import { AdoptionScreen, HomeScreen, LostAndFoundScreen, PlayDateScreen, Service
 import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import BottomBar from './components/common/BottomBar';
-import { useState } from 'react';
 import { AppContextProvider } from './context/AppContext';
 
 const Stack = createStackNavigator();
 const App = () => {
-  
-  const [selectedTab, setSelectedTab] = useState(2);
-
-  const SERVER_URL = 'https://pet-shop-backend-ukkxew3r5q-uc.a.run.app';
-
-  const navigationTheme = {
-    dark: false,
-    colors: {
-      primary: '#000000',
-      background: '#ffffff',
-      card: '#ffffff',
-      text: '#000000',
-      border: '#000000',
-      notification: '#000000',
-    },
-  };
 
     return (
         <ThemeProvider>
-            <AppContextProvider value={{ selectedTab, setSelectedTab, SERVER_URL }}>
+            <AppContextProvider>
                 <NavigationContainer>
                     <SafeAreaProvider>
                         <View style={{ flex: 1 }}>
@@ -63,10 +46,7 @@ const App = () => {
                                     options={{ headerShown: false }}
                                 />
                             </Stack.Navigator>
-                            <BottomBar
-                                selected={selectedTab}
-                                setSelected={setSelectedTab}
-                            />
+                            <BottomBar />
                         </View>
                     </SafeAreaProvider>
                 </NavigationContainer>

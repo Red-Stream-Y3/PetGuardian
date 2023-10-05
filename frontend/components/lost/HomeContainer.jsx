@@ -25,7 +25,7 @@ const HomeContainer = ({ Header, Pairs }) => {
                               uri={item.uri}
                               title={item.title}
                               width="45%"
-                              tag={item.age}
+                              sideTag={item.age}
                               subtitle={
                                   item.location.split(" ").length > 4
                                       ? `${item.location

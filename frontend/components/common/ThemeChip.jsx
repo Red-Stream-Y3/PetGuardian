@@ -1,10 +1,36 @@
-import { Pressable, Text, View } from "react-native";
+import { Animated, Pressable, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
-import { useState } from "react";
+import { getAppContext } from '../../context/AppContext';
+import { useEffect, useState } from "react";
 
-const ThemeChip = ({ children, clickable, onClick, text, disableRipple, filled }) => {
+const ThemeChip = ({ children, clickable, onClick, text, disableRipple, filled, color, active }) => {
     const { theme } = getThemeContext();
-    const [clicked, setClicked] = useState(filled ? true : false);
+    const { selectedTab, tabColor } = getAppContext();
+
+    // const [animation] = useState(new Animated.Value(0));
+    // const [currentColor, setCurrentColor] = useState(theme.colors.homePrimary);
+    // const [nextColor, setNextColor] = useState(theme.colors.homePrimary);
+
+    // const triggerAnimation = (color) => {
+    //     Animated.timing(animation, {
+    //         toValue: 1,
+    //         duration: 300,
+    //         useNativeDriver: false,
+    //     }).start(() => {
+    //         setCurrentColor(color);
+    //         animation.setValue(0);
+    //     });
+    // };
+
+    // let bgColor = animation.interpolate({
+    //     inputRange: [0, 1],
+    //     outputRange: [currentColor, nextColor],
+    // });
+    
+    // useEffect(() => {
+    //     setNextColor(tabColor);
+    //     triggerAnimation(tabColor);
+    // }, [selectedTab, theme]);
 
     return (
         <View
@@ -13,7 +39,7 @@ const ThemeChip = ({ children, clickable, onClick, text, disableRipple, filled }
                 borderRadius: 20,
                 borderWidth: 1,
                 marginHorizontal: 1,
-                borderColor: theme.colors.servicesPrimary,
+                borderColor: tabColor,
             }}>
             <Pressable
                 android_ripple={{
@@ -22,15 +48,13 @@ const ThemeChip = ({ children, clickable, onClick, text, disableRipple, filled }
                 style={{
                     paddingHorizontal: 10,
                     paddingVertical: 5,
-                    backgroundColor: clicked
-                        ? theme.colors.servicesPrimary
+                    backgroundColor: active
+                        ? (color || tabColor)
                         : theme.colors.surface,
-                    borderColor: theme.colors.primary,
                     alignItems: "center",
                 }}
                 onPress={() => {
                     if (clickable) {
-                        setClicked(!clicked);
                         if (onClick) onClick();
                     }
                 }}>
@@ -39,7 +63,7 @@ const ThemeChip = ({ children, clickable, onClick, text, disableRipple, filled }
                 <Text
                     style={{
                         fontWeight: "bold",
-                        color: clicked
+                        color: active
                             ? theme.colors.primaryText
                             : theme.colors.text,
                         paddingHorizontal: 5,

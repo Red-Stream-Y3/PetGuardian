@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -9,6 +9,13 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.0.0-0",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0-0",
+    "@babel/plugin-transform-arrow-functions": "^7.0.0-0",
+    "@babel/plugin-transform-shorthand-properties": "^7.0.0-0",
+    "@babel/plugin-transform-template-literals": "^7.0.0-0",
+    "@babel/preset-env": "^7.1.6",
+    "@react-native-community/datetimepicker": "7.2.0",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.14",
     "@react-navigation/stack": "^6.3.17",
