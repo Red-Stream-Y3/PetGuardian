@@ -11,7 +11,12 @@ const ThemeTextInput = ({
     icon,
     placeholder,
     textSize,
+    width,
     keyboardType,
+    editable,
+    multiline,
+    numOfLines,
+    maxLength,
 }) => {
     const { theme } = getThemeContext();
     const { tabColor } = getAppContext();
@@ -24,9 +29,10 @@ const ThemeTextInput = ({
         },
         textBody: {
             color: theme.colors.text,
-            fontSize: 16,
+            fontSize: textSize || 16,
             width: "100%",
             flex:1,
+            textAlignVertical: multiline ? "top" : "center",
             fontWeight: "normal",
             paddingVertical:10,
             paddingHorizontal: 10,
@@ -36,8 +42,9 @@ const ThemeTextInput = ({
         input: {
             backgroundColor: theme.colors.surface,
             borderRadius: 5,
-            marginVertical: 15,
-            width: "100%",
+            marginTop: title? 15 : 5,
+            marginBottom: 5,
+            width: width || "100%",
             borderWidth: 1,
             borderColor: tabColor,
             flexDirection: "row",
@@ -65,6 +72,11 @@ const ThemeTextInput = ({
                 value={value}
                 placeholder={placeholder}
                 keyboardType={keyboardType || null}
+                editable={editable || true}
+                multiline={multiline || false}
+                numberOfLines={numOfLines || 1}
+                maxLength={maxLength || null}
+                onChange={onChange}
                 style={styles.textBody}
             />
             {icon ? (

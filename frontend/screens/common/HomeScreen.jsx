@@ -115,7 +115,7 @@ const HomeScreen = () => {
                     <View
                         style={{
                             flexDirection: "row",
-                            justifyContent: "center",
+                            justifyContent: "space-between",
                             alignItems: "center",
                         }}>
                         <Text style={{ color: theme.colors.text }}>

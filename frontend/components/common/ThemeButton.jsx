@@ -92,6 +92,7 @@ const ThemeButton = ({
                         style={{
                             fontSize: textSize || 14,
                             marginHorizontal: 2,
+                            marginStart: children ? 5 : 2,
                             fontWeight: "bold",
                             color:
                                 variant === "clear" || variant === "outlined"

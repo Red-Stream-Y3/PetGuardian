@@ -211,8 +211,9 @@ const ServiceDetails = ({ navigation, route }) => {
                         style={{
                             flexDirection: "row",
                             justifyContent: "center",
+                            marginTop: 15,
                         }}>
-                        <ThemeButton title="Book Now" onPress={handleBookingPress} />
+                        <ThemeButton textSize={16} title="Book Now" onPress={handleBookingPress} />
                         <ThemeButton>
                             <Entypo
                                 name="calendar"
