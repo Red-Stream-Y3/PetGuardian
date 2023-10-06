@@ -1,26 +1,37 @@
 import React from 'react';
 import {
-  TextInput,
   View,
+  TextInput,
   Image,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons';
 
-const Search = ({ image }) => {
+const Search = ({ profile, image }) => {
   return (
     <View style={styles.header}>
-      <TextInput placeholder="Search" style={styles.searchBar} />
-      <TouchableOpacity>
-        <Image
-          style={styles.userProfileImage}
-          source={{
-            uri: image
-              ? uri
-              : 'https://wallpaperbat.com/img/609256-anime-boy-power-up-wallpaper.jpg',
-          }}
+      <View style={styles.inputContainer}>
+        <FontAwesome5
+          name="search"
+          size={17}
+          color="grey"
+          style={styles.searchIcon}
         />
-      </TouchableOpacity>
+        <TextInput placeholder="Search" style={styles.searchBar} />
+      </View>
+      {profile ? (
+        <TouchableOpacity>
+          <Image
+            style={styles.userProfileImage}
+            source={{
+              uri: image
+                ? uri
+                : 'https://wallpaperbat.com/img/609256-anime-boy-power-up-wallpaper.jpg',
+            }}
+          />
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 };
@@ -34,12 +45,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 2,
   },
-  searchBar: {
+  inputContainer: {
     flex: 1,
-    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#F2F2F2',
     borderRadius: 10,
     paddingHorizontal: 16,
+  },
+  searchIcon: {
+    marginRight: 15,
+  },
+  searchBar: {
+    flex: 1,
+    height: 40,
+    paddingVertical: 0,
   },
   userProfileImage: {
     width: 40,
