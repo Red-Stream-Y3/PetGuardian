@@ -2,8 +2,8 @@ import React, { Suspense } from 'react';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
 
-import HomeContainer from './common/HomeContainer';
 import Search from '../common/Search';
+import PetsContainer from '../common/PetsContainer';
 import { lostPetsData } from './pets';
 
 const LostFoundHome = () => {
@@ -24,18 +24,24 @@ const LostFoundHome = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      <Search />
+      <Search profile={true} />
       <Suspense fallback={<ActivityIndicator />}>
         <ScrollView>
-          <HomeContainer
-            Header="Lost Pets"
-            Pairs={lostPetsPairs}
-            Page="LostHome"
+          <PetsContainer
+            header="Lost Pets"
+            btnText="See All"
+            pairs={lostPetsPairs}
+            component="LostHome"
+            screen="Post"
+            fontSize={16}
           />
-          <HomeContainer
-            Header="Found Pets"
-            Pairs={foundPetsPairs}
-            Page="FoundHome"
+          <PetsContainer
+            header="Found Pets"
+            btnText="See All"
+            pairs={foundPetsPairs}
+            component="FoundHome"
+            screen="Post"
+            fontSize={16}
           />
         </ScrollView>
       </Suspense>
