@@ -39,6 +39,7 @@ const ThemeChip = ({ children, clickable, onClick, text, disableRipple, filled, 
                 borderRadius: 20,
                 borderWidth: 1,
                 marginHorizontal: 1,
+                marginVertical: 2,
                 borderColor: tabColor,
             }}>
             <Pressable

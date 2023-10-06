@@ -5,7 +5,8 @@ import { getAppContext } from "../../context/AppContext";
 
 const ThemeTextInput = ({
     title, 
-    value, 
+    value,
+    textColor,
     onPressIcon, 
     onChange, 
     icon,
@@ -14,6 +15,7 @@ const ThemeTextInput = ({
     width,
     keyboardType,
     editable,
+    disabled,
     multiline,
     numOfLines,
     maxLength,
@@ -28,7 +30,7 @@ const ThemeTextInput = ({
             fontWeight: "bold",
         },
         textBody: {
-            color: theme.colors.text,
+            color: textColor || disabled ? "#888" : theme.colors.text,
             fontSize: textSize || 16,
             width: "100%",
             flex:1,
@@ -72,7 +74,7 @@ const ThemeTextInput = ({
                 value={value}
                 placeholder={placeholder}
                 keyboardType={keyboardType || null}
-                editable={editable || true}
+                editable={(editable===false ? false : true) && !disabled}
                 multiline={multiline || false}
                 numberOfLines={numOfLines || 1}
                 maxLength={maxLength || null}
@@ -82,7 +84,7 @@ const ThemeTextInput = ({
             {icon ? (
                 <View>
                     <Pressable
-                        android_ripple={{ 
+                        android_ripple={disabled ? null : { 
                             color: theme.colors.ripple,
                             borderless: true,
                             radius: 40,
@@ -90,7 +92,7 @@ const ThemeTextInput = ({
                          style={{
                             padding:10,
                         }}
-                        onPress={onPressIcon}>
+                        onPress={!disabled ? onPressIcon : ()=>{}}>
                         {icon}
                     </Pressable>
                 </View>

@@ -1,17 +1,23 @@
-import { ScrollView, StyleSheet, Switch, Text, TextInput, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import ThemebackButton from "../common/ThemeBackButton";
 import { useState } from "react";
 import ThemeChipList from "../common/ThemeChipList";
-import RNDateTimePicker, {
-    DateTimePickerAndroid,
-} from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { getAppContext } from "../../context/AppContext";
-import ThemeTextInput from "../common/ThemeTextInput";
-import { Entypo } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
 import ThemeButton from "../common/ThemeButton";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
+import OneTimeBooking from "./OneTimeBooking";
+import Animated, {
+    FadeInDown,
+    FadeOutDown,
+    SlideInLeft,
+    SlideInRight,
+    SlideOutLeft,
+    SlideOutRight,
+} from "react-native-reanimated";
+import DailyBooking from "./DailyBooking";
+import WeeklyBooking from "./WeeklyBooking";
 
 const BOOKING_TYPES = ["ONE_TIME", "DAILY", "WEEKLY"];
 
@@ -20,6 +26,15 @@ const ServiceBooking = ({ navigation, route }) => {
     const { tabColor } = getAppContext();
     const { service } = route.params;
     const [bookingType, setBookingType] = useState(BOOKING_TYPES[0]);
+    const [prevType, setPrevType] = useState(BOOKING_TYPES[0]); //for animation [0,1,2]
+    const [allDay, setAllDay] = useState(false);
+    const [oneDay, setOneDay] = useState(false);
+    const [datePicker, setDatePicker] = useState({
+        show: false,
+        mode: "date",
+        date: new Date(Date.now()),
+        inputCallback: () => {},
+    });
 
     //input data
     const [input, setInput] = useState({
@@ -30,6 +45,7 @@ const ServiceBooking = ({ navigation, route }) => {
         pets: [],
         paymentMethod: null,
         notes: "",
+        days: new Array(7).fill(false),
     });
 
     const styles = StyleSheet.create({
@@ -54,18 +70,23 @@ const ServiceBooking = ({ navigation, route }) => {
         },
     });
 
+    const chipOnPress = (index) => {
+        setPrevType(bookingType);
+        setBookingType(BOOKING_TYPES[index]);
+    };
+
     const chipList = [
         {
             text: "One Time",
-            onClick: () => setBookingType(BOOKING_TYPES[0]),
+            onClick: () => chipOnPress(0),
         },
         {
             text: "Daily",
-            onClick: () => setBookingType(BOOKING_TYPES[1]),
+            onClick: () => chipOnPress(1),
         },
         {
             text: "Weekly",
-            onClick: () => setBookingType(BOOKING_TYPES[2]),
+            onClick: () => chipOnPress(2),
         },
     ];
 
@@ -94,95 +115,61 @@ const ServiceBooking = ({ navigation, route }) => {
                 contentContainerStyle={{
                     alignItems: "center",
                 }}>
-                <View
-                    style={{
-                        width: "100%",
-                        paddingHorizontal: 20,
-                    }}>
-                    <Text style={styles.textH1}>{"Date"}</Text>
-                    <ThemeTextInput
-                        title="From"
-                        value={input.startDate.toLocaleDateString()}
-                        icon={
-                            <Entypo
-                                name="calendar"
-                                size={24}
-                                color={theme.colors.icon}
-                            />
-                        }
-                    />
-                    <ThemeTextInput
-                        title="To"
-                        value={input.endDate.toLocaleDateString()}
-                        icon={
-                            <Entypo
-                                name="calendar"
-                                size={24}
-                                color={theme.colors.icon}
-                            />
-                        }
-                    />
-
-                    <View
-                        style={{ flexDirection: "row", alignItems: "center" }}>
-                        <Text style={styles.textBody}>{"One Day"}</Text>
-                        <Switch value={false} onChange={() => {}} />
-                    </View>
-
-                    <Text style={styles.textH1}>{"Time"}</Text>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                        }}>
-                        <ThemeTextInput
-                            title="From"
-                            value={input.startTime.toLocaleTimeString()}
-                            width={"45%"}
-                            icon={
-                                <FontAwesome5
-                                    name="clock"
-                                    size={24}
-                                    color={theme.colors.icon}
-                                />
-                            }
+                {bookingType === BOOKING_TYPES[0] && (
+                    <Animated.View
+                        entering={SlideInLeft}
+                        exiting={SlideOutLeft}>
+                        <OneTimeBooking
+                            styles={styles}
+                            setDatePicker={setDatePicker}
+                            input={input}
+                            setInput={setInput}
+                            allDay={allDay}
+                            setAllDay={setAllDay}
+                            theme={theme}
                         />
-                        <Text style={styles.textBody}>{" _ "}</Text>
-                        <ThemeTextInput
-                            title="To"
-                            width={"45%"}
-                            value={input.endTime.toLocaleTimeString()}
-                            icon={
-                                <FontAwesome5
-                                    name="clock"
-                                    size={24}
-                                    color={theme.colors.icon}
-                                />
-                            }
+                    </Animated.View>
+                )}
+
+                {bookingType === BOOKING_TYPES[1] && (
+                    <Animated.View
+                        entering={prevType===BOOKING_TYPES[2] ? SlideInLeft : SlideInRight}
+                        exiting={prevType===BOOKING_TYPES[0] ? SlideOutLeft : SlideOutRight}>
+                        <DailyBooking
+                            styles={styles}
+                            setDatePicker={setDatePicker}
+                            input={input}
+                            setInput={setInput}
+                            oneDay={oneDay}
+                            setOneDay={setOneDay}
+                            allDay={allDay}
+                            setAllDay={setAllDay}
+                            theme={theme}
                         />
-                    </View>
-                    <View
-                        style={{ flexDirection: "row", alignItems: "center" }}>
-                        <Text style={styles.textBody}>{"All Day"}</Text>
-                        <Switch value={false} onChange={() => {}} />
-                    </View>
+                    </Animated.View>
+                )}
 
-                    <Text style={styles.textH1}>{"Pets"}</Text>
+                {bookingType === BOOKING_TYPES[2] && (
+                    <Animated.View
+                        entering={SlideInRight}
+                        exiting={SlideOutRight}>
+                        <WeeklyBooking
+                            styles={styles}
+                            setDatePicker={setDatePicker}
+                            input={input}
+                            setInput={setInput}
+                            allDay={allDay}
+                            setAllDay={setAllDay}
+                            theme={theme}
+                        />
+                    </Animated.View>
+                )}
+            </ScrollView>
 
-                    <Text style={styles.textH1}>{"Notes"}</Text>
-                    <ThemeTextInput
-                        placeholder={"Special notes..."}
-                        value={input.notes}
-                        multiline={true}
-                        numOfLines={5}
-                        maxLength={200}
-                        onChange={(e) => {
-                            setInput({ ...input, notes: e.target.value });
-                        }}
-                    />
-                </View>
-
+            <Animated.View
+                entering={FadeInDown}
+                exiting={FadeOutDown}
+                style={{marginBottom:10}}>
                 <ThemeButton title={"Hire"} textSize={16}>
                     <Ionicons
                         name="add-circle-outline"
@@ -190,14 +177,19 @@ const ServiceBooking = ({ navigation, route }) => {
                         color={theme.colors.primaryIcon}
                     />
                 </ThemeButton>
+            </Animated.View>
 
-                {/* <RNDateTimePicker 
-                    testID="dateTimePicker"
-                    value={input.startDate}
-                    mode="date"
-                    is24Hour={false}
-                    onChange={(e, date)=>{setInput({...input, startDate: date})}} /> */}
-            </ScrollView>
+            <DateTimePickerModal
+                isVisible={datePicker.show}
+                mode={datePicker.mode}
+                themeVariant={theme.mode}
+                onConfirm={(date) => {
+                    datePicker.inputCallback(date);
+                    setDatePicker({ ...datePicker, show: false });
+                }}
+                date={datePicker.date}
+                onCancel={() => setDatePicker({ ...datePicker, show: false })}
+            />
         </View>
     );
 };
