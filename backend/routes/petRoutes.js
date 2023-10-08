@@ -10,7 +10,8 @@ import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.route('/').get(getPetsByUser).post(createPet, protect);
-router.route('/:id').get(getPetById).patch(updatePet, protect).delete(deletePet, protect);
+router.route('/').post(createPet);
+router.route('/:id').get(getPetById).patch(updatePet).delete(deletePet);
+router.route('/user/:id').get(getPetsByUser);
 
 export default router;

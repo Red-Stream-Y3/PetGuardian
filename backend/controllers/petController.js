@@ -1,8 +1,9 @@
+import e from "express";
 import Pet from "../models/petModel.js";
 import asyncHandler from "express-async-handler";
 
 // @desc    Fetch all pets by user
-// @route   GET /api/pets
+// @route   GET /api/pets/user/:id
 // @access  Public
 
 const getPetsByUser = asyncHandler(async (req, res) => {
@@ -36,7 +37,9 @@ const getPetById = asyncHandler(async (req, res) => {
 // @access  Private
 
 const createPet = asyncHandler(async (req, res) => {
-    const {name, type, breed, age, weight, description, image} = req.body;
+    console.log(req.body);
+    const {name, type, breed, age, weight, description, image, user} = req.body;
+
     try{
         const pet = await Pet.create({
             name,
@@ -46,13 +49,13 @@ const createPet = asyncHandler(async (req, res) => {
             weight,
             description,
             image,
-            user: req.user._id,
+            user
         });
         res.status(201).json(pet);
     }
     catch(error){
         res.status(400);
-        throw new Error('Invalid pet data');
+        throw new Error(error);
     }
 });
 

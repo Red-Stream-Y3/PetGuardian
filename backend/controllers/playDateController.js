@@ -51,7 +51,7 @@ const getPlaydatesByUser = asyncHandler(async (req, res) => {
 // @access  Private
 
 const createPlaydate = asyncHandler(async (req, res) => {
-    const {date, time, location, description, pets} = req.body;
+    const {date, time, location, description, pets, user} = req.body;
     try{
         const playdate = await Playdate.create({
             date,
@@ -59,7 +59,7 @@ const createPlaydate = asyncHandler(async (req, res) => {
             location,
             description,
             pets,
-            user: req.user._id,
+            user
         });
         res.status(201).json(playdate);
     }
@@ -103,11 +103,9 @@ const updatePlaydate = asyncHandler(async (req, res) => {
 
 const deletePlaydate = asyncHandler(async (req, res) => {
     try{
-        const playdate = await Playdate.findById(req.params.id);
-        if(playdate){
-            await playdate.remove();
-            res.json({message: 'Playdate removed'});
-        }
+        const playdate = await Playdate.findByIdAndDelete(req.params.id);
+        if(playdate)
+            res.json({ message: 'Playdate removed' });
         else{
             res.status(404);
             throw new Error('Playdate not found');
@@ -115,7 +113,7 @@ const deletePlaydate = asyncHandler(async (req, res) => {
     }
     catch(error){
         res.status(400);
-        throw new Error('Invalid playdate data');
+        throw new Error(error);
     }
 });
 
