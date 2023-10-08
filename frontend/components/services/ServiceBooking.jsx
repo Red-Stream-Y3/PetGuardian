@@ -114,8 +114,8 @@ const ServiceBooking = ({ navigation, route }) => {
             user: USER._id,
             serviceProvider: service._id,
             involvedPets: [], //TODO: input.pets.map((pet) => pet._id),
-            startDate: input.startDateTime.toISOString(),
-            endDate: input.endDateTime.toISOString(),
+            startDate: input.startDateTime.toISOString().split("T")[0],
+            endDate: input.endDateTime.toISOString().split("T")[0],
             startTime: allDay
                 ? "12:00:00 AM"
                 : input.startDateTime.toISOString().split("T")[1],
@@ -137,6 +137,7 @@ const ServiceBooking = ({ navigation, route }) => {
                 `${SERVER_URL}/api/v1/services/hire`,
                 reqData
             );
+            
             setLoading(false);
 
             if (response.status === 201) {

@@ -10,6 +10,9 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
 import utilRoutes from './routes/utilRoutes.js';
 import servicesRoutes from './routes/servicesRoutes.js';
+import playDateRoutes from './routes/playDateRoutes.js';
+import petRoutes from './routes/petRoutes.js';
+
 
 let dbUri;
 
@@ -28,6 +31,8 @@ app.use(bodyParser.json());
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/util', utilRoutes);
 app.use('/api/v1/services', servicesRoutes);
+app.use('/api/v1/playdates', playDateRoutes);
+app.use('/api/v1/pets', petRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
