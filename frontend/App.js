@@ -3,7 +3,13 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ThemeProvider } from './context/ThemeContext';
-import { AdoptionScreen, HomeScreen, LostAndFoundScreen, PlayDateScreen, ServicesScreen } from './screens';
+import {
+  AdoptionScreen,
+  HomeScreen,
+  LostAndFoundScreen,
+  PlayDateScreen,
+  ServicesScreen,
+} from './screens';
 import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import BottomBar from './components/common/BottomBar';
