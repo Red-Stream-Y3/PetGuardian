@@ -46,7 +46,7 @@ const HomeScreen = () => {
             uri={"https://wallpapercave.com/wp/wp4928162.jpg"}
             title={"Example Title"}
             subtitle={"Example Subtitle"}
-            tag={"Example Tag"}
+            sideTag={"Example sideTag"}
         />
     );
 
@@ -79,7 +79,7 @@ const HomeScreen = () => {
             title={"Example Title"}
             width={"45%"}
             subtitle={"Example Subtitle"}
-            tag={"Tag"}
+            sideTag={"sideTag"}
             borderRadius={15}
         />
     );
@@ -115,7 +115,7 @@ const HomeScreen = () => {
                     <View
                         style={{
                             flexDirection: "row",
-                            justifyContent: "center",
+                            justifyContent: "space-between",
                             alignItems: "center",
                         }}>
                         <Text style={{ color: theme.colors.text }}>
