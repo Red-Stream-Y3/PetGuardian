@@ -114,16 +114,14 @@ const ServiceBooking = ({ navigation, route }) => {
             user: USER._id,
             serviceProvider: service._id,
             involvedPets: [], //TODO: input.pets.map((pet) => pet._id),
-            startDate: input.startDateTime.toLocaleDateString(),
-            endDate: oneDay
-                ? "continuous"
-                : input.endDateTime.toLocaleDateString(),
+            startDate: input.startDateTime.toISOString(),
+            endDate: input.endDateTime.toISOString(),
             startTime: allDay
                 ? "12:00:00 AM"
-                : input.startDateTime.toLocaleTimeString(),
+                : input.startDateTime.toISOString().split("T")[1],
             endTime: allDay
                 ? "11:59:59 PM"
-                : input.endDateTime.toLocaleTimeString(),
+                : input.endDateTime.toISOString().split("T")[1],
             daily: bookingType === BOOKING_TYPES[1],
             weekly: bookingType === BOOKING_TYPES[2],
             days: input.days,

@@ -82,8 +82,8 @@ const hireProvider = asyncHandler(async (req, res) => {
         status: "pending",
         startDate: new Date(startDate),
         endDate: new Date(endDate),
-        startTime: new Date(startDate + " " + startTime),
-        endTime: new Date(endDate + " " + endTime),
+        startTime: new Date(startDate + "T" + startTime),
+        endTime: new Date(startDate + "T" + endTime),
         daily,
         weekly,
         days,
@@ -99,7 +99,7 @@ const hireProvider = asyncHandler(async (req, res) => {
         const createdHireRequest = await hireRequest.save();
         res.status(201).json({message:'Hire request created'});
     } catch (error) {
-        res.status(400).send({error:error.message});
+        res.json({error:error.message});
     }
 });
 
