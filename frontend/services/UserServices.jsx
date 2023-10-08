@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localost:9120';
+const BASE_URL = process.env.BASE_URL;
 
 const UserServices = {
   getAllTasks: async () => {
