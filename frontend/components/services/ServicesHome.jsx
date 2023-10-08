@@ -18,15 +18,18 @@ import ThemeChip from "../common/ThemeChip";
 const ServicesHome = ({ navigation }) => {
     const { theme } = getThemeContext();
     const { SERVER_URL } = getAppContext();
-    const [providers, setProviders] = useState([]);
+    const [ providers, setProviders ] = useState([]);
+    const [ loading, setLoading ] = useState(false);
 
     const getProviders = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(`${SERVER_URL}/api/v1/services`);
             setProviders(response.data);
         } catch (error) {
             console.error(error);
         }
+        setLoading(false);
     };
 
     useState(() => {
@@ -133,6 +136,7 @@ const ServicesHome = ({ navigation }) => {
                 <ScrollView
                     style={{ width: "100%" }}
                     contentContainerStyle={{ alignItems: "center" }}>
+                    {loading && <ActivityIndicator size={50} color={theme.colors.servicesPrimary} />}
                     {providers.map((provider, i) => (
                         <ImageItemCard
                                 key={i}

@@ -1,6 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import * as Location from 'expo-location';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 
@@ -100,28 +106,30 @@ const MapLocation = ({ onMarkerChange }) => {
     <View style={styles.container}>
       <Text style={styles.sectionHeader}>Location</Text>
       <View style={styles.mapContainer}>
-        <MapView ref={mapViewRef} style={styles.map} region={mapRegion}>
-          {markerCoordinate && (
-            <Marker
-              coordinate={markerCoordinate}
-              title={markerTitle}
-              draggable={true}
-              onDragEnd={handleMarkerDragEnd}
-            />
-          )}
-        </MapView>
-        <View style={styles.gpsButtonContainer}>
-          <TouchableOpacity
-            style={styles.gpsButton}
-            onPress={handleLocateButtonPress}
-          >
-            <MaterialCommunityIcons
-              name="crosshairs-gps"
-              size={22}
-              color="#3c74c2"
-            />
-          </TouchableOpacity>
-        </View>
+        <Suspense fallback={<ActivityIndicator />}>
+          <MapView ref={mapViewRef} style={styles.map} region={mapRegion}>
+            {markerCoordinate && (
+              <Marker
+                coordinate={markerCoordinate}
+                title={markerTitle}
+                draggable={true}
+                onDragEnd={handleMarkerDragEnd}
+              />
+            )}
+          </MapView>
+          <View style={styles.gpsButtonContainer}>
+            <TouchableOpacity
+              style={styles.gpsButton}
+              onPress={handleLocateButtonPress}
+            >
+              <MaterialCommunityIcons
+                name="crosshairs-gps"
+                size={22}
+                color="#3c74c2"
+              />
+            </TouchableOpacity>
+          </View>
+        </Suspense>
       </View>
     </View>
   );

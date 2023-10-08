@@ -31,11 +31,11 @@ const hireRequestSchema = new mongoose.Schema(
             required: true,
         },
         startTime: {
-            type: String,
+            type: Date,
             required: true,
         },
         endTime: {
-            type: String,
+            type: Date,
             required: true,
         },
         daily: {
@@ -48,6 +48,14 @@ const hireRequestSchema = new mongoose.Schema(
         },
         days: {
             type: [String],
+        },
+        oneDay: {
+            type: Boolean,
+            required: true,
+        },
+        continous: {
+            type: Boolean,
+            required: true,
         },
         totalFee: {
             type: Number,
@@ -64,7 +72,7 @@ const hireRequestSchema = new mongoose.Schema(
         },
         paymentStatus: {
             type: String,
-            enum: ['pending', 'paid'],
+            enum: ['pending', 'paid', 'cancelled'],
             default: 'pending',
         },
         review: {
@@ -73,13 +81,18 @@ const hireRequestSchema = new mongoose.Schema(
         },
         rating: {
             type: Number,
-            required: true,
         },
     },
     {
         timestamps: true,
     }
 );
+
+//indexes for getting a user's hire requests
+hireRequestSchema.index({ user: 1, serviceProvider: 1 });
+
+//index for getting hire requests for a user
+hireRequestSchema.index({ serviceProvider: 1, startDate: 1, endDate: 1, startTime: 1, endTime: 1 });
 
 const HireRequest = mongoose.model('HireRequest', hireRequestSchema);
 
