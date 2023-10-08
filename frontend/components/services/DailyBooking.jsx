@@ -29,12 +29,12 @@ const DailyBooking = ({
                         show: true,
                         mode: "date",
                         inputCallback: (date) => {
-                            setInput({ ...input, startDate: date });
+                            setInput({ ...input, startDateTime: date });
                         },
-                        date: input.startDate,
+                        date: input.startDateTime,
                     });
                 }}
-                value={input.startDate.toLocaleDateString()}
+                value={input.startDateTime.toLocaleDateString()}
                 icon={
                     <Entypo
                         name="calendar"
@@ -51,15 +51,15 @@ const DailyBooking = ({
                         show: true,
                         mode: "date",
                         inputCallback: (date) => {
-                            setInput({ ...input, endDate: date });
+                            setInput({ ...input, endDateTime: date });
                         },
-                        date: input.endDate,
+                        date: input.endDateTime,
                     });
                 }}
                 value={
                     oneDay
-                        ? input.startDate.toLocaleDateString()
-                        : input.endDate.toLocaleDateString()
+                        ? input.startDateTime.toLocaleDateString()
+                        : input.endDateTime.toLocaleDateString()
                 }
                 disabled={oneDay}
                 icon={
@@ -81,7 +81,7 @@ const DailyBooking = ({
                 />
             </View>
 
-            <Text style={styles.textH1}>{"Time"}</Text>
+            <Text style={styles.textH1}>{"Time (Every Day)"}</Text>
             <View
                 style={{
                     flexDirection: "row",
@@ -95,15 +95,15 @@ const DailyBooking = ({
                             show: true,
                             mode: "time",
                             inputCallback: (date) => {
-                                setInput({ ...input, startTime: date });
+                                setInput({ ...input, startDateTime: date });
                             },
-                            date: input.startTime,
+                            date: input.startDateTime,
                         });
                     }}
                     value={
                         allDay
                             ? "12:00:00 AM"
-                            : input.startTime.toLocaleTimeString()
+                            : input.startDateTime.toLocaleTimeString()
                     }
                     width={"45%"}
                     editable={false}
@@ -127,15 +127,15 @@ const DailyBooking = ({
                             show: true,
                             mode: "time",
                             inputCallback: (date) => {
-                                setInput({ ...input, endTime: date });
+                                setInput({ ...input, endDateTime: date });
                             },
-                            date: input.endTime,
+                            date: input.endDateTime,
                         });
                     }}
                     value={
                         allDay
                             ? "11:59:59 PM"
-                            : input.endTime.toLocaleTimeString()
+                            : input.endDateTime.toLocaleTimeString()
                     }
                     icon={
                         <FontAwesome5
