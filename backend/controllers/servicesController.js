@@ -99,7 +99,7 @@ const hireProvider = asyncHandler(async (req, res) => {
         const createdHireRequest = await hireRequest.save();
         res.status(201).json({message:'Hire request created'});
     } catch (error) {
-        res.status(400).send({error:'Invalid hire request data'});
+        res.status(400).send({error:error.message});
     }
 });
 
