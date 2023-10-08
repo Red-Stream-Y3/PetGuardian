@@ -1,6 +1,6 @@
 import { StatusBar, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
-import { ServiceDetails, ServicesHome, ThemeButton } from "../../components";
+import { ServiceBooking, ServiceDetails, ServicesHome, ThemeButton } from "../../components";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -20,6 +20,7 @@ const ServicesScreen = () => {
             <ServiceNavigator.Navigator initialRouteName="Services">
                 <ServiceNavigator.Screen name="Services" component={ServicesHome} options={{headerShown:false}} />
                 <ServiceNavigator.Screen name="ServiceDetails" component={ServiceDetails} options={{headerShown:false}} />
+                <ServiceNavigator.Screen name="Booking" component={ServiceBooking} options={{headerShown:false}} />
             </ServiceNavigator.Navigator>
 
         </SafeAreaView>
