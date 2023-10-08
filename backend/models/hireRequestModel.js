@@ -53,7 +53,7 @@ const hireRequestSchema = new mongoose.Schema(
             type: Boolean,
             required: true,
         },
-        continous: {
+        continuous: {
             type: Boolean,
             required: true,
         },

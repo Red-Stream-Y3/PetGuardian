@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import ThemebackButton from "../common/ThemeBackButton";
 import { useState } from "react";
@@ -30,6 +30,7 @@ const ServiceBooking = ({ navigation, route }) => {
     const { theme } = getThemeContext();
     const { service } = route.params;
     const { SERVER_URL } = getAppContext();
+    const [loading, setLoading] = useState(false);
     const [bookingType, setBookingType] = useState(BOOKING_TYPES[0]);
     const [prevType, setPrevType] = useState(BOOKING_TYPES[0]); //for animation [0,1,2]
     const [allDay, setAllDay] = useState(false);
@@ -95,6 +96,7 @@ const ServiceBooking = ({ navigation, route }) => {
     ];
 
     const handleHirePress = async () => {
+        setLoading(true);
         //calculate fees
         const fee = service.services.fees.find(
             (fee) => fee.tag === bookingType
@@ -112,16 +114,14 @@ const ServiceBooking = ({ navigation, route }) => {
             user: USER._id,
             serviceProvider: service._id,
             involvedPets: [], //TODO: input.pets.map((pet) => pet._id),
-            startDate: input.startDateTime.toLocaleDateString(),
-            endDate: oneDay
-                ? "continuous"
-                : input.endDateTime.toLocaleDateString(),
+            startDate: input.startDateTime.toISOString().split("T")[0],
+            endDate: input.endDateTime.toISOString().split("T")[0],
             startTime: allDay
                 ? "12:00:00 AM"
-                : input.startDateTime.toLocaleTimeString(),
+                : input.startDateTime.toISOString().split("T")[1],
             endTime: allDay
                 ? "11:59:59 PM"
-                : input.endDateTime.toLocaleTimeString(),
+                : input.endDateTime.toISOString().split("T")[1],
             daily: bookingType === BOOKING_TYPES[1],
             weekly: bookingType === BOOKING_TYPES[2],
             days: input.days,
@@ -131,8 +131,26 @@ const ServiceBooking = ({ navigation, route }) => {
             notes: input.notes,
             paymentMethod: input.paymentMethod,
         };
+
+        try {
+            const response = await axios.post(
+                `${SERVER_URL}/api/v1/services/hire`,
+                reqData
+            );
+            
+            setLoading(false);
+
+            if (response.status === 201) {
+                navigation.goBack();
+                // response.data.message;
+            } else {
+                console.log(response.data.error);
+            }
+        } catch (error) {
+            console.debug(error);
+            setLoading(false);
+        }
         
-        //const response = await axios.post(`${SERVER_URL}/api/v1/hire`, reqData);
     };
 
     return (
@@ -226,14 +244,21 @@ const ServiceBooking = ({ navigation, route }) => {
                 exiting={FadeOutDown}
                 style={{ marginBottom: 10 }}>
                 <ThemeButton
-                    title={"Hire"}
+                    title={loading ? null : "Hire"}
                     textSize={16}
                     onPress={handleHirePress}>
-                    <Ionicons
-                        name="add-circle-outline"
-                        size={24}
-                        color={theme.colors.primaryIcon}
-                    />
+                    {loading ? (
+                        <ActivityIndicator
+                            size={24}
+                            color={theme.colors.primaryIcon}
+                        />
+                    ) : (
+                        <Ionicons
+                            name="add-circle-outline"
+                            size={24}
+                            color={theme.colors.primaryIcon}
+                        />
+                    )}
                 </ThemeButton>
             </Animated.View>
 
