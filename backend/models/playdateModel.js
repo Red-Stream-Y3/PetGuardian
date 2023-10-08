@@ -7,7 +7,7 @@ const requestSchema = mongoose.Schema(
             required: true,
             ref: 'User',
         },
-        pet:[
+        pets:[
             {
                 type: mongoose.Schema.Types.ObjectId,
                 required: true,
@@ -21,6 +21,10 @@ const requestSchema = mongoose.Schema(
         },
         description:{
             type: String,
+        },
+        contactNo:{
+            type: String,
+            required: true,
         },
     },
     {

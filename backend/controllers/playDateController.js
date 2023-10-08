@@ -119,5 +119,95 @@ const deletePlaydate = asyncHandler(async (req, res) => {
     }
 });
 
-export {getPlaydates, getPlaydateById, getPlaydatesByUser, createPlaydate, updatePlaydate, deletePlaydate};
+//@desc     Create a request
+//@route    POST /api/playdates/:id/request
+//@access   Private
+
+const createRequest = asyncHandler(async (req, res) => {
+    const {user, pets, status, description, contactNo} = req.body;
+    try{
+        const playdate = await Playdate.findById(req.params.id);
+        if(playdate){
+            const request = {
+                user,
+                pets,
+                status,
+                description,
+                contactNo,
+            };
+            playdate.requests.push(request);
+            const updatedPlaydate = await playdate.save();
+            res.status(201).json(updatedPlaydate);
+        }
+        else{
+            res.status(404);
+            throw new Error('Playdate not found');
+        }
+    }
+    catch(error){
+        res.status(400);
+        throw new Error('Invalid request data');
+    }
+});
+
+//@desc     Update a request
+//@route    PATCH /api/playdates/:id/request/:requestId
+//@access   Private
+
+const updateRequest = asyncHandler(async (req, res) => {
+    const {user, pets, status, description, contactNo} = req.body;
+    try{
+        const playdate = await Playdate.findById(req.params.id);
+        if(playdate){
+            const request = playdate.requests.find(request => request._id == req.params.requestId);
+            if(request){
+                request.user = user || request.user;
+                request.pets = pets || request.pets;
+                request.status = status || request.status;
+                request.description = description || request.description;
+                request.contactNo = contactNo || request.contactNo;
+                const updatedPlaydate = await playdate.save();
+                res.json(updatedPlaydate);
+            }
+            else{
+                res.status(404);
+                throw new Error('Request not found');
+            }
+        }
+        else{
+            res.status(404);
+            throw new Error('Playdate not found');
+        }
+    }
+    catch(error){
+        res.status(400);
+        throw new Error('Invalid request data');
+    }
+});
+
+//@desc     Delete a request
+//@route    DELETE /api/playdates/:id/request/:requestId
+//@access   Private
+
+const deleteRequest = asyncHandler(async (req, res) => {
+    try{
+        const playdate = await Playdate.findById(req.params.id);
+        if(playdate){
+            playdate.requests = playdate.requests.filter(request => request._id != req.params.requestId);
+            const updatedPlaydate = await playdate.save();
+            res.json(updatedPlaydate);
+        }
+        else{
+            res.status(404);
+            throw new Error('Playdate not found');
+        }
+    }
+    catch(error){
+        res.status(400);
+        throw new Error('Invalid request data');
+    }
+});
+  
+
+export {getPlaydates, getPlaydateById, getPlaydatesByUser, createPlaydate, updatePlaydate, deletePlaydate, createRequest, updateRequest, deleteRequest};
 
