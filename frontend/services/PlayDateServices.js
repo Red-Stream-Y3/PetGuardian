@@ -56,6 +56,33 @@ const PlayDateServices = {
         catch(error){
             throw new Error('Error deleting playdate');
         }
+    },
+    createRequest: async (id, request) => {
+        try{
+            const response = await axios.post(`${BASE_URL}/api/v1/playdates/${id}/request`, request);
+            return response.data;
+        }
+        catch(error){
+            throw new Error('Error creating request');
+        }
+    },
+    updateRequest: async (id, requestId, request) => {
+        try{
+            const response = await axios.patch(`${BASE_URL}/api/v1/playdates/${id}/request/${requestId}`, request);
+            return response.data;
+        }
+        catch(error){
+            throw new Error('Error updating request');
+        }
+    },
+    deleteRequest: async (id, requestId) => {
+        try{
+            const response = await axios.delete(`${BASE_URL}/api/v1/playdates/${id}/request/${requestId}`);
+            return response.data;
+        }
+        catch(error){
+            throw new Error('Error deleting request');
+        }
     }
 }
 
