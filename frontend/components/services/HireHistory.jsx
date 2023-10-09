@@ -1,9 +1,10 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator, Dimensions, StyleSheet } from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
 import { getAppContext } from '../../context/AppContext';
 import axios from 'axios';
 import ImageItemCard from '../common/ImageItemCard';
+import Animated from 'react-native-reanimated';
 
 const FlatList = lazy(() => import('react-native/Libraries/Lists/FlatList'));
 
@@ -15,35 +16,95 @@ const HireHistory = ({navigation}) => {
 
     const getHireHistory = async () => {
         try {
-            const results = axios.get(`${SERVER_URL}/api/v1/services/hire/${USER._id}`);
-            
-            if(results.data) setHistory(results.data);
-            console.debug(results.data);
+            const response = await axios.get(`${SERVER_URL}/api/v1/services/hire/${USER._id}`);
+
+            if(response.data) setHistory(response.data);
         } catch (error) {
-            console.error(error);
+            console.error(error); 
         }
     };
 
     useEffect(() => {
-        if (history.length === 0) getHireHistory();
+        getHireHistory();
     }, []);
 
+    const styles = StyleSheet.create({
+        textTitle: {
+            fontSize: 16,
+            fontWeight: 'bold',
+            color: theme.colors.text,
+            marginBottom: 5,
+        },
+        textSubtitle: {
+            fontSize: 14,
+            fontWeight: 'bold',
+            color: theme.colors.text,
+        },
+        textBody: {
+            fontSize: 14,
+            color: theme.colors.text,
+        },
+        textHighlight: {
+            fontSize: 18,
+            color: theme.colors.servicesPrimary,
+        },
+        textHighlightBold: {
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: theme.colors.servicesPrimary,
+        },
+    });
+
     return (
-        <View style={{flex:1, alignItems:'center', width:'100%'}}>
-            <Text>Hire History</Text>
+        <View style={{ flex: 1, alignItems: "center", width: "100%" }}>
+            <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                Hire History
+            </Text>
 
             <Suspense fallback={<ActivityIndicator />}>
                 <FlatList
                     data={history}
                     keyExtractor={(item) => item._id}
-                    renderItem={({item}) => (
-                        <ImageItemCard>
-                            <View>
-                                <Text>Title</Text>
-                                <Text>Body</Text>
-                            </View>
-                        </ImageItemCard>
-                    )} />
+                    style={{ width: "100%" }}
+                    renderItem={({ item }) => (
+                        <Animated.View
+                            style={{ width: "100%", alignItems: "center" }}>
+                            <ImageItemCard
+                                style={"side"}
+                                onClick={()=>{}}
+                                uri={
+                                    item.serviceProvider.profilePic ||
+                                    "https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg"
+                                }
+                                body={
+                                    <View>
+                                        <Text style={styles.textTitle}>
+                                            {item.serviceProvider.firstName}{" "}
+                                            {item.serviceProvider.lastName}
+                                        </Text>
+                                        <Text style={styles.textBody}>
+                                            {new Date(item.startDate).toLocaleDateString()} {item.oneDay ? "" : ` to ${new Date(item.endDate).toLocaleDateString()}`}
+                                        </Text>
+                                        <Text style={styles.textBody}>
+                                            {new Date(item.startTime).toLocaleTimeString()} {` to ${new Date(item.endTime).toLocaleTimeString()}`}
+                                        </Text>
+                                        <View style={{ flexDirection: "row", marginTop: 5 }}>
+                                            <Text style={styles.textHighlight}>
+                                                STATUS :{" "}
+                                            </Text>
+                                            <Text
+                                                style={
+                                                    styles.textHighlightBold
+                                                }>
+                                                {item.status}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                }
+                            />
+                        </Animated.View>
+                    )}
+                />
             </Suspense>
         </View>
     );

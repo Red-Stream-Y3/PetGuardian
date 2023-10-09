@@ -125,7 +125,8 @@ const getHireRequests = asyncHandler(async (req, res) => {
                 }
             },{
                 $unwind: "$serviceProvider",
-            },{
+            },
+            {
                 $project: {
                     _id: 1,
                     status: 1,
@@ -133,6 +134,7 @@ const getHireRequests = asyncHandler(async (req, res) => {
                     endDate: 1,
                     startTime: 1,
                     endTime: 1,
+                    oneDay: 1,
                     //totalFee: 1,
                     serviceProvider: {
                         _id: 1,
