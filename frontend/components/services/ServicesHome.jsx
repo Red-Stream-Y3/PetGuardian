@@ -60,7 +60,7 @@ const ServicesHome = ({ navigation }) => {
                 ...styles.container,
                 backgroundColor: theme.colors.background,
             }}>
-            <Search />
+            <Search navigation={navigation} />
             <View
                 style={{
                     flexDirection: "row",

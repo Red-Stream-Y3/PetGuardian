@@ -12,3 +12,9 @@ export { default as AdoptionScreen } from './adopt/AdoptionScreen';
 
 //play
 export { default as PlayDateScreen } from './play/PlayDateScreen';
+
+//profile
+export { default as ProfileScreen } from './common/ProfileScreen';
+
+//drawer
+export { default as DrawerNavigator } from './common/DrawerNavigator';

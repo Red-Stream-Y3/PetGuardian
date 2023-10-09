@@ -21,15 +21,11 @@ import WeeklyBooking from "./WeeklyBooking";
 import axios from "axios";
 
 const BOOKING_TYPES = ["ONE_TIME", "DAILY", "WEEKLY"];
-//TODO: remove temp user
-const USER = {
-    _id: "6519178b1a22eacde138ed61",
-};
 
 const ServiceBooking = ({ navigation, route }) => {
     const { theme } = getThemeContext();
     const { service } = route.params;
-    const { SERVER_URL } = getAppContext();
+    const { SERVER_URL, USER } = getAppContext();
     const [loading, setLoading] = useState(false);
     const [bookingType, setBookingType] = useState(BOOKING_TYPES[0]);
     const [prevType, setPrevType] = useState(BOOKING_TYPES[0]); //for animation [0,1,2]

@@ -15,6 +15,7 @@ const getProviders = asyncHandler(async (req, res) => {
                     firstName: 1,
                     lastName: 1,
                     services: 1,
+                    profilePic: 1,
                 },
             },
         ]).hint({ _id: 1, firstName: 1, lastName: 1, services: 1 });
@@ -40,6 +41,7 @@ const getProviderById = asyncHandler(async (req, res) => {
                     firstName: 1,
                     lastName: 1,
                     services: 1,
+                    profilePic: 1,
                 },
             },
         ]).hint({ _id: 1, firstName: 1, lastName: 1, services: 1 });
@@ -103,7 +105,7 @@ const hireProvider = asyncHandler(async (req, res) => {
     }
 });
 
-// @desc    Get user's hire requests
+// @desc    Get hire requests made by a user
 // @route   GET /api/v1/hire/:id
 // @access  Public
 const getHireRequests = asyncHandler(async (req, res) => {
@@ -111,33 +113,18 @@ const getHireRequests = asyncHandler(async (req, res) => {
         const hireRequests = await HireRequest.aggregate([
             {
                 $match: {
-                    serviceProvider: req.params.id,
+                    user: new mongoose.Types.ObjectId(req.params.id),
                 }
-            },{
+            },
+            {
                 $lookup: {
                     from: "users",
-                    let: { user: "$user" },
-                    pipeline: [
-                        {
-                            $match: {
-                                $expr: {
-                                    $eq: ["$_id", "$$user"],
-                                },
-                            },
-                        },
-                        {
-                            $project: {
-                                _id: 1,
-                                firstName: 1,
-                                lastName: 1,
-                                profilePic: 1,
-                            },
-                        }
-                    ],
-                    as: "customer",
+                    localField: "serviceProvider",
+                    foreignField: "_id",
+                    as: "serviceProvider",
                 }
             },{
-                $unwind: "$customer",
+                $unwind: "$serviceProvider",
             },{
                 $project: {
                     _id: 1,
@@ -147,7 +134,7 @@ const getHireRequests = asyncHandler(async (req, res) => {
                     startTime: 1,
                     endTime: 1,
                     //totalFee: 1,
-                    customer: {
+                    serviceProvider: {
                         _id: 1,
                         firstName: 1,
                         lastName: 1,
@@ -158,11 +145,11 @@ const getHireRequests = asyncHandler(async (req, res) => {
         ]);
         res.json(hireRequests);
     } catch (error) {
-        res.status(404).send({error:"No hire requests found"});
+        res.json({error:error.message});
     }
 });
 
-// @desc    Get service provider's hire requests
+// @desc    Get hire requests recieved by a service provider
 // @route   GET /api/v1/myhire/:id
 // @access  Public
 const getMyHireRequests = asyncHandler(async (req, res) => {
@@ -170,29 +157,13 @@ const getMyHireRequests = asyncHandler(async (req, res) => {
         const hireRequests = await HireRequest.aggregate([
             {
                 $match: {
-                    serviceProvider: req.params.id,
+                    serviceProvider: new mongoose.Types.ObjectId(req.params.id),
                 }
             },{
                 $lookup: {
                     from: "users",
-                    let: { user: "$user" },
-                    pipeline: [
-                        {
-                            $match: {
-                                $expr: {
-                                    $eq: ["$_id", "$$user"],
-                                },
-                            },
-                        },
-                        {
-                            $project: {
-                                _id: 1,
-                                firstName: 1,
-                                lastName: 1,
-                                profilePic: 1,
-                            },
-                        }
-                    ],
+                    localField: "user",
+                    foreignField: "_id",
                     as: "user",
                 }
             },{
@@ -217,7 +188,7 @@ const getMyHireRequests = asyncHandler(async (req, res) => {
         ]);
         res.json(hireRequests);
     } catch (error) {
-        res.status(404).send({error:"No hire requests found"});
+        res.json({error:error.message});
     }
 });
 
@@ -246,7 +217,7 @@ const checkHireRequests = asyncHandler(async (req, res) => {
         ]).hint({ serviceProvider: 1, startDate: 1, endDate: 1, startTime: 1, endTime: 1 });
         res.json(hireRequests);
     } catch (error) {
-        res.status(404).send({error:"No hire requests found"});
+        res.json({error:error.message});
     }
 });
 
