@@ -125,7 +125,8 @@ const getHireRequests = asyncHandler(async (req, res) => {
                 }
             },{
                 $unwind: "$serviceProvider",
-            },{
+            },
+            {
                 $project: {
                     _id: 1,
                     status: 1,
@@ -133,6 +134,7 @@ const getHireRequests = asyncHandler(async (req, res) => {
                     endDate: 1,
                     startTime: 1,
                     endTime: 1,
+                    oneDay: 1,
                     //totalFee: 1,
                     serviceProvider: {
                         _id: 1,
@@ -142,7 +144,7 @@ const getHireRequests = asyncHandler(async (req, res) => {
                     },
                 },
             }
-        ]);
+        ]).hint({ user: 1, serviceProvider: 1 });
         res.json(hireRequests);
     } catch (error) {
         res.json({error:error.message});
@@ -185,7 +187,7 @@ const getMyHireRequests = asyncHandler(async (req, res) => {
                     },
                 },
             }
-        ]);
+        ]).hint({ user: 1, serviceProvider: 1 })
         res.json(hireRequests);
     } catch (error) {
         res.json({error:error.message});
@@ -202,8 +204,10 @@ const checkHireRequests = asyncHandler(async (req, res) => {
             {
                 $match: {
                     serviceProvider: req.params.id,
-                    startDate: { $gte: startDate },
-                    endDate: { $lte: endDate },
+                    startDate: { $gte: new Date(startDate) },
+                    endDate: { $lte: new Date(endDate) },
+                    startTime: { $gte: new Date(startDate + "T" + startTime) },
+                    endTime: { $lte: new Date(startDate + "T" + endTime) },
                 }
             },{
                 $project: {

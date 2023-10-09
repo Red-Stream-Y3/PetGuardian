@@ -10,7 +10,7 @@ export const AppContextProvider = ({ children, value }) => {
     const SERVER_URL = "https://pet-shop-backend-ukkxew3r5q-uc.a.run.app";
     //TODO: remove temp user
     const USER = {
-        _id: "6519178b1a22eacde138ed61",
+        _id: "6522eb801e769f489af3d727",
     };
 
     useEffect(() => {

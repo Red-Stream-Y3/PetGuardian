@@ -113,10 +113,10 @@ const ServiceBooking = ({ navigation, route }) => {
             startDate: input.startDateTime.toISOString().split("T")[0],
             endDate: input.endDateTime.toISOString().split("T")[0],
             startTime: allDay
-                ? "12:00:00 AM"
+                ? new Date(input.startDateTime.toISOString().split('T')[0]+" 12:00:00").toISOString().split("T")[1]
                 : input.startDateTime.toISOString().split("T")[1],
             endTime: allDay
-                ? "11:59:59 PM"
+                ? new Date(input.startDateTime.toISOString().split('T')[0]+" 23:59:59").toISOString().split("T")[1]
                 : input.endDateTime.toISOString().split("T")[1],
             daily: bookingType === BOOKING_TYPES[1],
             weekly: bookingType === BOOKING_TYPES[2],
