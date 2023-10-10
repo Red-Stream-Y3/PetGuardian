@@ -65,6 +65,28 @@ const HireHistory = ({navigation}) => {
         },
     });
 
+    const onPressCancelBooking = async (id) => {
+        setLoading(true);
+        try {
+            const response = await axios.put(`${SERVER_URL}/api/v1/services/hire`, { _id:id, status: 'cancelled' });
+
+            if(response.data) {
+                Toast.show({
+                    type: 'success',
+                    text1: 'Booking Cancelled',
+                });
+                getHireHistory();
+                setShowSelected(false);
+                setSelected(null);
+            }
+            
+            setLoading(false);
+        } catch (error) {
+            console.error(error); 
+            setLoading(false);
+        }
+    };
+
     return (
         <View style={{ flex: 1, alignItems: "center", width: "100%" }}>
 
@@ -76,12 +98,7 @@ const HireHistory = ({navigation}) => {
                         setSelected(null);
                     }}
                     actionTitle={'Cancel Booking'}
-                    actionCallback={()=>{
-                        Toast.show({
-                            type: 'success',
-                            text1: 'Booking Cancelled',
-                        });
-                    }} />    
+                    actionCallback={()=>{onPressCancelBooking(selected._id)}} />    
             </ThemeOverlay>
 
             <View style={{ width: "100%", alignItems: "center" }}>

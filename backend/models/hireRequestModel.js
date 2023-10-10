@@ -13,7 +13,7 @@ const hireRequestSchema = new mongoose.Schema(
             required: true,
         },
         involvedPets: [{
-            type: [mongoose.Schema.Types.ObjectId],
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Pet",
             required: true,
         }],
