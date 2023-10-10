@@ -288,7 +288,20 @@ const updateHireRequest = asyncHandler(async (req, res) => {
 // @access  Private
 const getHireRequestById = asyncHandler(async (req, res) => {
     try {
-        const hireRequest = await HireRequest.findById(req.params.id);
+        const hireRequest = await HireRequest.aggregate([
+            {
+                $match: {_id: new mongoose.Types.ObjectId(req.params.id)}
+            },
+            {
+                $lookup: {
+                    from: "pets",
+                    localField: "involvedPets",
+                    foreignField: "_id",
+                    as: "involvedPets",
+                }
+            }
+        ]);
+
         if (hireRequest) {
             res.json(hireRequest);
         } else {
