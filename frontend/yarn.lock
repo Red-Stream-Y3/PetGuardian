@@ -7509,6 +7509,11 @@ react-native-shared-element@^0.8.8:
   resolved "https://registry.yarnpkg.com/react-native-shared-element/-/react-native-shared-element-0.8.8.tgz#1a86ff54d7a96e22d270254d3e642869c7cb3ff3"
   integrity sha512-ZjnsI9IXckzX5CFl2lbVX8Izn93zBfYw6knUtW41NZ/HAPVq6wlFuSxAhvFNJ4HRZ3FX6b8gUMDYuUfX7djj0A==
 
+react-native-toast-message@^2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-2.1.6.tgz#322827c66901fa22cb3db614c7383cc717f5bbe2"
+  integrity sha512-VctXuq20vmRa9AE13acaNZhrLcS3FaBS2zEevS3+vhBsnVZYG0FIlWIis9tVnpnNxUb3ART+BWtwQjzSttXTng==
+
 react-native-vector-icons@^10.0.0:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-10.0.0.tgz#0f031f7717f76f0a397f725de9b5a47ec87862e9"

@@ -19,6 +19,7 @@ import Animated, {
 import DailyBooking from "./DailyBooking";
 import WeeklyBooking from "./WeeklyBooking";
 import axios from "axios";
+import Toast from "react-native-toast-message";
 
 const BOOKING_TYPES = ["ONE_TIME", "DAILY", "WEEKLY"];
 
@@ -129,6 +130,19 @@ const ServiceBooking = ({ navigation, route }) => {
         };
 
         try {
+            //check if booking time is available
+            const checkResponse = await axios.post(`${SERVER_URL}/api/v1/services/hire/check`, reqData);
+
+            if (checkResponse.data?.length > 0) {
+                setLoading(false);
+                Toast.show({
+                    type: "error",
+                    text1: "Booking time not available",
+                    text2: "Please choose another time",
+                })
+                return;
+            }
+            //add booking
             const response = await axios.post(
                 `${SERVER_URL}/api/v1/services/hire`,
                 reqData

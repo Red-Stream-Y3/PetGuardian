@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import BottomBar from './components/common/BottomBar';
 import { AppContextProvider } from './context/AppContext';
 import { DrawerNavigator } from './screens';
+import Toast from 'react-native-toast-message';
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
                             <StatusBar style="auto" />
                             <DrawerNavigator />
                             <BottomBar />
+                            <Toast />
                         </View>
                     </SafeAreaProvider>
                 </NavigationContainer>

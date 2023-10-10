@@ -56,7 +56,7 @@ const getProviderById = asyncHandler(async (req, res) => {
 });
 
 // @desc    Hire a service provider
-// @route   POST /api/v1/hire
+// @route   POST /api/v1/services/hire
 // @access  Private
 const hireProvider = asyncHandler(async (req, res) => {
     const {
@@ -106,7 +106,7 @@ const hireProvider = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get hire requests made by a user
-// @route   GET /api/v1/hire/:id
+// @route   GET /api/v1/services/hire/:id
 // @access  Public
 const getHireRequests = asyncHandler(async (req, res) => {
     try {
@@ -152,7 +152,7 @@ const getHireRequests = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get hire requests recieved by a service provider
-// @route   GET /api/v1/myhire/:id
+// @route   GET /api/v1/services/myhire/:id
 // @access  Public
 const getMyHireRequests = asyncHandler(async (req, res) => {
     try {
@@ -195,7 +195,7 @@ const getMyHireRequests = asyncHandler(async (req, res) => {
 });
 
 // @desc    Check if provider is already hired for a given time range
-// @route   POST /api/v1/hire/check
+// @route   POST /api/v1/services/hire/check
 // @access  Public
 const checkHireRequests = asyncHandler(async (req, res) => {
     const { serviceProvider, startDate, endDate, startTime, endTime } = req.body;
@@ -204,9 +204,31 @@ const checkHireRequests = asyncHandler(async (req, res) => {
             {
                 $match: {
                     serviceProvider: new mongoose.Types.ObjectId(serviceProvider),
-                    startDate: { $lte: new Date(startDate) },
-                    endDate: { $gte: new Date(endDate) },
                 }
+            },
+            {
+                $match: {
+                    $or: [
+                        {
+                            $and: [
+                                { startDate: { $gte: new Date(startDate) } },
+                                { startDate: { $lte: new Date(endDate) } },
+                            ],
+                        },
+                        {
+                            $and: [
+                                { endDate: { $gte: new Date(startDate) } },
+                                { endDate: { $lte: new Date(endDate) } },
+                            ],
+                        },
+                        {
+                            $and: [
+                                { startDate: { $lte: new Date(startDate) } },
+                                { endDate: { $gte: new Date(endDate) } },
+                            ],
+                        },
+                    ],
+                },
             },
             {
                 $project: {
@@ -239,6 +261,44 @@ const checkHireRequests = asyncHandler(async (req, res) => {
     }
 });
 
+// @desc    Update hire request status
+// @route   PUT /api/v1/services/hire
+// @access  Private
+const updateHireRequest = asyncHandler(async (req, res) => {
+    try {
+        const { status, _id } = req.body;
+
+        const result = await HireRequest.findOne({ _id: _id });
+
+        if (result) {
+            result.status = status;
+            result.save();
+            res.json({message:'Hire request updated'});
+        } else {
+            throw new Error("Hire request not found");
+        }
+
+    } catch (error) {
+        res.status(404).json({error:error.message});
+    }
+});
+
+// @desc    get hire request by id
+// @route   GET /api/v1/services/hire/getbyid/:id
+// @access  Private
+const getHireRequestById = asyncHandler(async (req, res) => {
+    try {
+        const hireRequest = await HireRequest.findById(req.params.id);
+        if (hireRequest) {
+            res.json(hireRequest);
+        } else {
+            res.json({error:"Hire request not found"});
+        }
+    } catch (error) {
+        res.status(404).json({error:error.message});
+    }
+});
+
 export {
     getProviders,
     getProviderById,
@@ -246,4 +306,6 @@ export {
     getHireRequests,
     getMyHireRequests,
     checkHireRequests,
+    updateHireRequest,
+    getHireRequestById,
 };
