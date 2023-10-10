@@ -195,21 +195,20 @@ const getMyHireRequests = asyncHandler(async (req, res) => {
 });
 
 // @desc    Check if provider is already hired for a given time range
-// @route   GET /api/v1/hire/check/:id
+// @route   POST /api/v1/hire/check
 // @access  Public
 const checkHireRequests = asyncHandler(async (req, res) => {
-    const { startDate, endDate, startTime, endTime } = req.body;
+    const { serviceProvider, startDate, endDate, startTime, endTime } = req.body;
     try {
         const hireRequests = await HireRequest.aggregate([
             {
                 $match: {
-                    serviceProvider: req.params.id,
-                    startDate: { $gte: new Date(startDate) },
-                    endDate: { $lte: new Date(endDate) },
-                    startTime: { $gte: new Date(startDate + "T" + startTime) },
-                    endTime: { $lte: new Date(startDate + "T" + endTime) },
+                    serviceProvider: new mongoose.Types.ObjectId(serviceProvider),
+                    startDate: { $lte: new Date(startDate) },
+                    endDate: { $gte: new Date(endDate) },
                 }
-            },{
+            },
+            {
                 $project: {
                     _id: 1,
                     startDate: 1,
@@ -219,7 +218,22 @@ const checkHireRequests = asyncHandler(async (req, res) => {
                 },
             }
         ]).hint({ serviceProvider: 1, startDate: 1, endDate: 1, startTime: 1, endTime: 1 });
-        res.json(hireRequests);
+        
+        const hireRequestsFiltered = hireRequests.filter((hireRequest) => {
+            const hireRequestStartTime = new Date(startDate + "T" + new Date(hireRequest.startTime).toISOString().split("T")[1]);
+            const hireRequestEndTime = new Date(startDate + "T" + new Date(hireRequest.endTime).toISOString().split("T")[1]);
+            const startTimeDate = new Date(startDate + "T" + startTime);
+            const endTimeDate = new Date(endDate + "T" + endTime);
+
+            return (
+                (hireRequestStartTime >= startTimeDate &&
+                    hireRequestStartTime < endTimeDate) ||
+                (hireRequestEndTime > startTimeDate &&
+                    hireRequestEndTime <= endTimeDate)
+            );
+        });
+        
+        res.json(hireRequestsFiltered);
     } catch (error) {
         res.json({error:error.message});
     }

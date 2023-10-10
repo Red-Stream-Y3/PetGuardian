@@ -22,6 +22,6 @@ router.route('/hire/:id')
 router.route('/myhire/:id')
     .get(getMyHireRequests);
 
-router.route('/hire/check/:id').get(checkHireRequests);
+router.route('/hire/check').post(checkHireRequests);
 
 export default router;
