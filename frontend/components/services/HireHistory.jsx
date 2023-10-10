@@ -5,6 +5,7 @@ import { getAppContext } from '../../context/AppContext';
 import axios from 'axios';
 import ImageItemCard from '../common/ImageItemCard';
 import Animated from 'react-native-reanimated';
+import ThemeBackButton from '../common/ThemeBackButton';
 
 const FlatList = lazy(() => import('react-native/Libraries/Lists/FlatList'));
 
@@ -12,15 +13,19 @@ const HireHistory = ({navigation}) => {
     const { theme } = getThemeContext();
     const { SERVER_URL, USER } = getAppContext();
     const [history, setHistory] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const getHireHistory = async () => {
+        setLoading(true);
         try {
             const response = await axios.get(`${SERVER_URL}/api/v1/services/hire/${USER._id}`);
 
             if(response.data) setHistory(response.data);
+            
+            setLoading(false);
         } catch (error) {
             console.error(error); 
+            setLoading(false);
         }
     };
 
@@ -57,20 +62,24 @@ const HireHistory = ({navigation}) => {
 
     return (
         <View style={{ flex: 1, alignItems: "center", width: "100%" }}>
-            <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                Hire History
-            </Text>
-
+            <View style={{ width: "100%", alignItems: "center" }}>
+                <ThemeBackButton navigation={navigation} />
+                <Text style={styles.textTitle}>
+                    Hire History
+                </Text>
+            </View>
+            {loading && <ActivityIndicator size={50} color={theme.colors.servicesPrimary} />}
             <Suspense fallback={<ActivityIndicator />}>
                 <FlatList
                     data={history}
                     keyExtractor={(item) => item._id}
                     style={{ width: "100%" }}
-                    renderItem={({ item }) => (
+                    renderItem={({ item, i }) => (
                         <Animated.View
                             style={{ width: "100%", alignItems: "center" }}>
                             <ImageItemCard
                                 style={"side"}
+                                index={i}
                                 onClick={()=>{}}
                                 uri={
                                     item.serviceProvider.profilePic ||

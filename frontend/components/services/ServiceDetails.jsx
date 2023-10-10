@@ -41,8 +41,23 @@ const ServiceDetails = ({ navigation, route }) => {
         navigation.navigate("Booking", { service: details });
     };
 
+    const styles = StyleSheet.create({
+        textContainer: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 10,
+            borderWidth: 1,
+            borderRadius: 10,
+        },
+        title: {
+            fontSize: 16,
+            color: theme.colors.text,
+        },
+    });
+
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor:theme.colors.background }}>
             <ThemebackButton navigation={navigation} />
 
             <ScrollView style={{ width: "100%", flex: 1 }}>
@@ -228,19 +243,5 @@ const ServiceDetails = ({ navigation, route }) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    textContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderRadius: 10,
-    },
-    title: {
-        fontSize: 16,
-    },
-});
 
 export default ServiceDetails;

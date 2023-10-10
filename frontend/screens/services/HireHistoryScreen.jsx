@@ -3,7 +3,7 @@ import { SafeAreaView, Text, View, StatusBar } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import { HireHistoy } from "../../components";
 
-const HireHistoryScreen = () => {
+const HireHistoryScreen = ({navigation}) => {
     const { theme } = getThemeContext();
 
     return (
@@ -16,7 +16,7 @@ const HireHistoryScreen = () => {
                 hidden={false}
             />
             <View style={{flex:1, marginTop:StatusBar.currentHeight }}>
-                <HireHistoy />
+                <HireHistoy navigation={navigation} />
             </View>
 
         </SafeAreaView>

@@ -55,7 +55,7 @@ const DARK_THEME = {
     secondary: '#03dac6',
     secondaryVariant: '#03dac6',
     background: '#121212',
-    surface: 'rgba(51, 51, 51, 0.8)',
+    surface: 'rgba(40, 40, 40, 0.8)',
     error: '#cf6679',
   },
 };

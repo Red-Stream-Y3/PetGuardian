@@ -12,7 +12,7 @@ const ThemebackButton = ({ navigation }) => {
             top: 10,
             left: 10,
             zIndex: 100,
-            elevation: 5,
+            elevation: 50,
         }}
         entering={FadeInLeft.delay(700).springify()}
         exiting={FadeOutLeft.delay(100).springify()}
