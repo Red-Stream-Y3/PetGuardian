@@ -204,9 +204,31 @@ const checkHireRequests = asyncHandler(async (req, res) => {
             {
                 $match: {
                     serviceProvider: new mongoose.Types.ObjectId(serviceProvider),
-                    startDate: { $lte: new Date(startDate) },
-                    endDate: { $gte: new Date(endDate) },
                 }
+            },
+            {
+                $match: {
+                    $or: [
+                        {
+                            $and: [
+                                { startDate: { $gte: new Date(startDate) } },
+                                { startDate: { $lte: new Date(endDate) } },
+                            ],
+                        },
+                        {
+                            $and: [
+                                { endDate: { $gte: new Date(startDate) } },
+                                { endDate: { $lte: new Date(endDate) } },
+                            ],
+                        },
+                        {
+                            $and: [
+                                { startDate: { $lte: new Date(startDate) } },
+                                { endDate: { $gte: new Date(endDate) } },
+                            ],
+                        },
+                    ],
+                },
             },
             {
                 $project: {
