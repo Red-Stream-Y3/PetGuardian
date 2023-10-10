@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import ThemeChip from "../common/ThemeChip";
 import ThemeButton from "../common/ThemeButton";
 import { Entypo } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons';
 import ThemebackButton from "../common/ThemeBackButton";
 
 const ServiceDetails = ({ navigation, route }) => {
@@ -21,6 +22,7 @@ const ServiceDetails = ({ navigation, route }) => {
     const { theme } = getThemeContext();
     const [ details, setDetails ] = useState(null);
     const [ loading, setLoading ] = useState(true);
+    const [ rating, setRating ] = useState(null);
 
     const { service } = route.params;
 
@@ -33,8 +35,21 @@ const ServiceDetails = ({ navigation, route }) => {
         setLoading(false);
     };
 
+    const fetchRating = async () => {
+        try {
+            const result = await axios.get(
+                `${SERVER_URL}/api/v1/ratings/${service._id}`
+            );
+            setDetails(result.data[0]);
+            setLoading(false);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
         if (!details?._id) getServiceDetails();
+        if (!rating?.averageRating) fetchRating();
     }, []);
 
     const handleBookingPress = () => {
@@ -57,7 +72,7 @@ const ServiceDetails = ({ navigation, route }) => {
     });
 
     return (
-        <View style={{ flex: 1, backgroundColor:theme.colors.background }}>
+        <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
             <ThemebackButton navigation={navigation} />
 
             <ScrollView style={{ width: "100%", flex: 1 }}>
@@ -121,7 +136,26 @@ const ServiceDetails = ({ navigation, route }) => {
                             </Text>
                         </View>
                         <View>
-                            <Text>Rating</Text>
+                            {rating && (
+                                <Animated.View>
+                                    <View style={{ flexDirection: "row" }}>
+                                        <Ionicons
+                                            name="paw"
+                                            size={24}
+                                            color={theme.colors.servicesPrimary}
+                                        />
+                                        <Text
+                                            style={{
+                                                color: theme.colors.text,
+                                            }}>
+                                            {rating?.averageRating}
+                                        </Text>
+                                    </View>
+                                    <Text style={{ color: theme.colors.text }}>
+                                        {rating?.count || 'No'} Ratings
+                                    </Text>
+                                </Animated.View>
+                            )}
                         </View>
                     </View>
 
@@ -228,7 +262,11 @@ const ServiceDetails = ({ navigation, route }) => {
                             justifyContent: "center",
                             marginTop: 15,
                         }}>
-                        <ThemeButton textSize={16} title="Book Now" onPress={handleBookingPress} />
+                        <ThemeButton
+                            textSize={16}
+                            title="Book Now"
+                            onPress={handleBookingPress}
+                        />
                         <ThemeButton>
                             <Entypo
                                 name="calendar"
