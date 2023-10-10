@@ -6,6 +6,9 @@ import axios from 'axios';
 import ImageItemCard from '../common/ImageItemCard';
 import Animated from 'react-native-reanimated';
 import ThemeBackButton from '../common/ThemeBackButton';
+import ThemeOverlay from '../common/ThemeOverlay';
+import BookingSummary from './BookingSummary';
+import Toast from 'react-native-toast-message';
 
 const FlatList = lazy(() => import('react-native/Libraries/Lists/FlatList'));
 
@@ -14,6 +17,8 @@ const HireHistory = ({navigation}) => {
     const { SERVER_URL, USER } = getAppContext();
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [showSelected, setShowSelected] = useState(false);
+    const [selected, setSelected] = useState(null);
 
     const getHireHistory = async () => {
         setLoading(true);
@@ -62,6 +67,23 @@ const HireHistory = ({navigation}) => {
 
     return (
         <View style={{ flex: 1, alignItems: "center", width: "100%" }}>
+
+            <ThemeOverlay visible={showSelected} onPressBg={() => setShowSelected(false)}>
+                <BookingSummary    
+                    booking={selected}
+                    closeActionCallback={()=>{
+                        setShowSelected(false);
+                        setSelected(null);
+                    }}
+                    actionTitle={'Cancel Booking'}
+                    actionCallback={()=>{
+                        Toast.show({
+                            type: 'success',
+                            text1: 'Booking Cancelled',
+                        });
+                    }} />    
+            </ThemeOverlay>
+
             <View style={{ width: "100%", alignItems: "center" }}>
                 <ThemeBackButton navigation={navigation} />
                 <Text style={styles.textTitle}>
@@ -80,7 +102,10 @@ const HireHistory = ({navigation}) => {
                             <ImageItemCard
                                 style={"side"}
                                 index={i}
-                                onClick={()=>{}}
+                                onClick={()=>{
+                                    setSelected(item);
+                                    setShowSelected(true);
+                                }}
                                 uri={
                                     item.serviceProvider.profilePic ||
                                     "https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg"
