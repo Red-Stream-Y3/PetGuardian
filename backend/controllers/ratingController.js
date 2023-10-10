@@ -1,4 +1,4 @@
-import Rating from "../models/ratingModel";
+import Rating from "../models/ratingModel.js";
 import asyncHandler from "express-async-handler";
 
 // @desc    Get all ratings for a service provider

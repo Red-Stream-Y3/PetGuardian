@@ -12,6 +12,7 @@ import utilRoutes from './routes/utilRoutes.js';
 import servicesRoutes from './routes/servicesRoutes.js';
 import playDateRoutes from './routes/playDateRoutes.js';
 import petRoutes from './routes/petRoutes.js';
+import ratingRoutes from './routes/ratingRoutes.js';
 
 
 let dbUri;
@@ -33,6 +34,7 @@ app.use('/api/v1/util', utilRoutes);
 app.use('/api/v1/services', servicesRoutes);
 app.use('/api/v1/playdates', playDateRoutes);
 app.use('/api/v1/pets', petRoutes);
+app.use('api/v1/ratings', ratingRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
