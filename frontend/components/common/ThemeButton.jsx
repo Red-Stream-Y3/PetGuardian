@@ -1,7 +1,6 @@
 import { Animated, Pressable, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import { getAppContext } from '../../context/AppContext';
-import { useEffect, useState } from "react";
 
 const ThemeButton = ({
     children,
@@ -13,43 +12,18 @@ const ThemeButton = ({
     borderRadius,
 }) => {
     const { theme } = getThemeContext();
-    const { selectedTab, tabColor } = getAppContext();
-
-    const [animation] = useState(new Animated.Value(0));
-    const [currentColor, setCurrentColor] = useState(theme.colors.homePrimary);
-    const [nextColor, setNextColor] = useState(theme.colors.homePrimary);
-
-    const triggerAnimation = (color) => {
-        Animated.timing(animation, {
-            toValue: 1,
-            duration: 300,
-            useNativeDriver: false,
-        }).start(() => {
-            setCurrentColor(color);
-            animation.setValue(0);
-        });
-    };
-
-    useEffect(() => {
-        setNextColor(tabColor);
-        triggerAnimation(tabColor);
-    }, [selectedTab, theme]);
-
-    let bgColor = animation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [currentColor, nextColor],
-    });
+    const { tabColor } = getAppContext();
 
     const styles = {
         filled: {
-            backgroundColor: bgColor,
+            backgroundColor: tabColor,
             overflow: "hidden",
             borderRadius: borderRadius || 5,
             elevation: 3,
             margin: 5,
         },
         outlined: {
-            borderColor: bgColor,
+            borderColor: tabColor,
             borderWidth: 1,
             overflow: "hidden",
             borderRadius: borderRadius || 5,
@@ -75,7 +49,7 @@ const ThemeButton = ({
                 android_ripple={{
                     color:
                         variant === "clear" || variant === "outlined"
-                            ? currentColor
+                            ? tabColor
                             : theme.colors.ripple,
                 }}
                 style={{

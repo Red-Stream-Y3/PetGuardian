@@ -7,7 +7,7 @@ import {
     Text,
     View,
 } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import Animated, { FadeInDown, FadeInLeft } from "react-native-reanimated";
 import { getAppContext } from "../../context/AppContext";
 import getThemeContext from "../../context/ThemeContext";
 import { useEffect, useState } from "react";
@@ -22,6 +22,7 @@ const ServiceDetails = ({ navigation, route }) => {
     const { theme } = getThemeContext();
     const [ details, setDetails ] = useState(null);
     const [ loading, setLoading ] = useState(true);
+    const [ showRating, setShowRating] = useState(false);
     const [ rating, setRating ] = useState(null);
 
     const { service } = route.params;
@@ -36,14 +37,17 @@ const ServiceDetails = ({ navigation, route }) => {
     };
 
     const fetchRating = async () => {
+        setShowRating(false);
         try {
             const result = await axios.get(
                 `${SERVER_URL}/api/v1/ratings/${service._id}`
             );
-            setDetails(result.data[0]);
-            setLoading(false);
+
+            if (result.data && result.data.length > 0) setRating(result.data[0]);
+            setShowRating(true);
         } catch (error) {
             console.error(error);
+            setShowRating(true);
         }
     };
 
@@ -136,9 +140,9 @@ const ServiceDetails = ({ navigation, route }) => {
                             </Text>
                         </View>
                         <View>
-                            {rating && (
-                                <Animated.View>
-                                    <View style={{ flexDirection: "row" }}>
+                            {showRating && (
+                                <Animated.View entering={FadeInLeft}>
+                                    <View style={{ flexDirection: "row", justifyContent:'flex-end' }}>
                                         <Ionicons
                                             name="paw"
                                             size={24}

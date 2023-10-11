@@ -1,5 +1,6 @@
 import Rating from "../models/ratingModel.js";
 import asyncHandler from "express-async-handler";
+import mongoose from "mongoose";
 
 // @desc    Get all ratings for a service provider
 // @route   GET /api/v1/ratings/:id
@@ -80,7 +81,7 @@ const getRatingByServiceProvider = asyncHandler(async (req, res) => {
     try {
         const ratings = await Rating.aggregate([
             {
-                $match: { serviceProvider: serviceProvider }
+                $match: { serviceProvider: new mongoose.Types.ObjectId(serviceProvider) }
             },
             {
                 $group: {
