@@ -1,5 +1,6 @@
 //common
 export { default as HomeScreen } from './common/HomeScreen';
+export { default as NavigationComponent } from './common/NavigationComponent';
 
 //services
 export { default as ServicesScreen } from './services/ServicesScreen';

@@ -10,6 +10,7 @@ import ThemeOverlay from '../common/ThemeOverlay';
 import BookingSummary from './BookingSummary';
 import Toast from 'react-native-toast-message';
 import ThemeButton from '../common/ThemeButton';
+import RateService from './RateService';
 
 const FlatList = lazy(() => import('react-native/Libraries/Lists/FlatList'));
 
@@ -20,6 +21,7 @@ const HireHistory = ({navigation}) => {
     const [loading, setLoading] = useState(false);
     const [showSelected, setShowSelected] = useState(false);
     const [selected, setSelected] = useState(null);
+    const [showRating, setShowRating] = useState(false);
 
     const getHireHistory = async () => {
         setLoading(true);
@@ -88,12 +90,20 @@ const HireHistory = ({navigation}) => {
         }
     };
 
-    const handleRatingClick = async (sid) => {
-        
+    const handleRatingClick = async (item) => {
+        if (!showRating) {
+            setSelected(item);
+            setShowRating(true);
+            return;
+        }
     };
 
     return (
         <View style={{ flex: 1, alignItems: "center", width: "100%" }}>
+
+            <ThemeOverlay visible={showRating} onPressBg={() => setShowRating(false)}>
+                <RateService provider={selected} handleClose={() => setShowRating(false)} />
+            </ThemeOverlay>
 
             <ThemeOverlay visible={showSelected} onPressBg={() => setShowSelected(false)}>
                 <BookingSummary    
@@ -156,7 +166,7 @@ const HireHistory = ({navigation}) => {
                                             </Text>
                                         </View>
 
-                                        {item.status!=='pending' && <ThemeButton title={'Rate Service'} onPress={()=>handleRatingClick(item.serviceProvider._id)} />}
+                                        {item.status!=='pending' && <ThemeButton title={'Rate Service'} onPress={()=>handleRatingClick(item)} />}
                                     </View>
                                 }
                             />

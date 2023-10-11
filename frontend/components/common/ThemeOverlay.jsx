@@ -1,13 +1,22 @@
 import React from 'react';
 import { StyleSheet, View, Modal, Pressable } from 'react-native';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
-const ThemeOverlay = ({ visible, children, onPressBg }) => {
+const ThemeOverlay = ({ visible, children, onPressBg, transparent }) => {
+    
+    const styles = StyleSheet.create({
+        overlay: {
+            flex: 1,
+            backgroundColor: !transparent ? 'rgba(0, 0, 0, 0.5)' : null,
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+    });
+    
     return (
         <Modal 
             visible={visible} 
             animationType='fade'
-            transparent 
+            transparent
             onRequestClose={onPressBg}>
             <Pressable style={styles.overlay} onPressOut={onPressBg}>
                 <View>
@@ -17,14 +26,5 @@ const ThemeOverlay = ({ visible, children, onPressBg }) => {
         </Modal>
     );
 };
-
-const styles = StyleSheet.create({
-    overlay: {
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-});
 
 export default ThemeOverlay;

@@ -78,7 +78,7 @@ const ThemeTextInput = ({
                 multiline={multiline || false}
                 numberOfLines={numOfLines || 1}
                 maxLength={maxLength || null}
-                onChange={onChange}
+                onChangeText={onChange}
                 style={styles.textBody}
             />
             {icon ? (
