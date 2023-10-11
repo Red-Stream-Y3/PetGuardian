@@ -7,13 +7,14 @@ import {
     Text,
     View,
 } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import Animated, { FadeInDown, FadeInLeft } from "react-native-reanimated";
 import { getAppContext } from "../../context/AppContext";
 import getThemeContext from "../../context/ThemeContext";
 import { useEffect, useState } from "react";
 import ThemeChip from "../common/ThemeChip";
 import ThemeButton from "../common/ThemeButton";
 import { Entypo } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons';
 import ThemebackButton from "../common/ThemeBackButton";
 
 const ServiceDetails = ({ navigation, route }) => {
@@ -21,6 +22,8 @@ const ServiceDetails = ({ navigation, route }) => {
     const { theme } = getThemeContext();
     const [ details, setDetails ] = useState(null);
     const [ loading, setLoading ] = useState(true);
+    const [ showRating, setShowRating] = useState(false);
+    const [ rating, setRating ] = useState(null);
 
     const { service } = route.params;
 
@@ -33,16 +36,47 @@ const ServiceDetails = ({ navigation, route }) => {
         setLoading(false);
     };
 
+    const fetchRating = async () => {
+        setShowRating(false);
+        try {
+            const result = await axios.get(
+                `${SERVER_URL}/api/v1/ratings/${service._id}`
+            );
+
+            if (result.data && result.data.length > 0) setRating(result.data[0]);
+            setShowRating(true);
+        } catch (error) {
+            console.error(error);
+            setShowRating(true);
+        }
+    };
+
     useEffect(() => {
         if (!details?._id) getServiceDetails();
+        if (!rating?.averageRating) fetchRating();
     }, []);
 
     const handleBookingPress = () => {
         navigation.navigate("Booking", { service: details });
     };
 
+    const styles = StyleSheet.create({
+        textContainer: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 10,
+            borderWidth: 1,
+            borderRadius: 10,
+        },
+        title: {
+            fontSize: 16,
+            color: theme.colors.text,
+        },
+    });
+
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
             <ThemebackButton navigation={navigation} />
 
             <ScrollView style={{ width: "100%", flex: 1 }}>
@@ -106,7 +140,26 @@ const ServiceDetails = ({ navigation, route }) => {
                             </Text>
                         </View>
                         <View>
-                            <Text>Rating</Text>
+                            {showRating && (
+                                <Animated.View entering={FadeInLeft}>
+                                    <View style={{ flexDirection: "row", justifyContent:'flex-end' }}>
+                                        <Ionicons
+                                            name="paw"
+                                            size={24}
+                                            color={theme.colors.servicesPrimary}
+                                        />
+                                        <Text
+                                            style={{
+                                                color: theme.colors.text,
+                                            }}>
+                                            {rating?.averageRating}
+                                        </Text>
+                                    </View>
+                                    <Text style={{ color: theme.colors.text }}>
+                                        {rating?.count || 'No'} Ratings
+                                    </Text>
+                                </Animated.View>
+                            )}
                         </View>
                     </View>
 
@@ -213,7 +266,11 @@ const ServiceDetails = ({ navigation, route }) => {
                             justifyContent: "center",
                             marginTop: 15,
                         }}>
-                        <ThemeButton textSize={16} title="Book Now" onPress={handleBookingPress} />
+                        <ThemeButton
+                            textSize={16}
+                            title="Book Now"
+                            onPress={handleBookingPress}
+                        />
                         <ThemeButton>
                             <Entypo
                                 name="calendar"
@@ -228,19 +285,5 @@ const ServiceDetails = ({ navigation, route }) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    textContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderRadius: 10,
-    },
-    title: {
-        fontSize: 16,
-    },
-});
 
 export default ServiceDetails;

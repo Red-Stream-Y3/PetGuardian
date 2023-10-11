@@ -19,17 +19,14 @@ import Animated, {
 import DailyBooking from "./DailyBooking";
 import WeeklyBooking from "./WeeklyBooking";
 import axios from "axios";
+import Toast from "react-native-toast-message";
 
 const BOOKING_TYPES = ["ONE_TIME", "DAILY", "WEEKLY"];
-//TODO: remove temp user
-const USER = {
-    _id: "6519178b1a22eacde138ed61",
-};
 
 const ServiceBooking = ({ navigation, route }) => {
     const { theme } = getThemeContext();
     const { service } = route.params;
-    const { SERVER_URL } = getAppContext();
+    const { SERVER_URL, USER } = getAppContext();
     const [loading, setLoading] = useState(false);
     const [bookingType, setBookingType] = useState(BOOKING_TYPES[0]);
     const [prevType, setPrevType] = useState(BOOKING_TYPES[0]); //for animation [0,1,2]
@@ -117,10 +114,10 @@ const ServiceBooking = ({ navigation, route }) => {
             startDate: input.startDateTime.toISOString().split("T")[0],
             endDate: input.endDateTime.toISOString().split("T")[0],
             startTime: allDay
-                ? "12:00:00 AM"
+                ? new Date(input.startDateTime.toISOString().split('T')[0]+" 12:00:00").toISOString().split("T")[1]
                 : input.startDateTime.toISOString().split("T")[1],
             endTime: allDay
-                ? "11:59:59 PM"
+                ? new Date(input.startDateTime.toISOString().split('T')[0]+" 23:59:59").toISOString().split("T")[1]
                 : input.endDateTime.toISOString().split("T")[1],
             daily: bookingType === BOOKING_TYPES[1],
             weekly: bookingType === BOOKING_TYPES[2],
@@ -133,6 +130,19 @@ const ServiceBooking = ({ navigation, route }) => {
         };
 
         try {
+            //check if booking time is available
+            const checkResponse = await axios.post(`${SERVER_URL}/api/v1/services/hire/check`, reqData);
+
+            if (checkResponse.data?.length > 0) {
+                setLoading(false);
+                Toast.show({
+                    type: "error",
+                    text1: "Booking time not available",
+                    text2: "Please choose another time",
+                })
+                return;
+            }
+            //add booking
             const response = await axios.post(
                 `${SERVER_URL}/api/v1/services/hire`,
                 reqData

@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const Search = ({ image }) => {
+const Search = ({ navigation, image }) => {
   return (
     <View style={styles.header}>
       <TextInput placeholder="Search" style={styles.searchBar} />
-      <TouchableOpacity>
+      <TouchableOpacity onPress={()=>navigation.getParent().getParent().openDrawer()}>
         <Image
           style={styles.userProfileImage}
           source={{

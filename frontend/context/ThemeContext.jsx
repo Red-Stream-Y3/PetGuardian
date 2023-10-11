@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react';
+import { Appearance } from 'react-native';
 
 const ThemeContext = createContext();
 
@@ -27,8 +28,6 @@ const LIGHT_THEME = {
     background: '#ffffff',
     surface: '#ffffff',
     error: '#b00020',
-
-    itemCardText: '#808080',
   },
 };
 
@@ -55,13 +54,22 @@ const DARK_THEME = {
     secondary: '#03dac6',
     secondaryVariant: '#03dac6',
     background: '#121212',
-    surface: 'rgba(51, 51, 51, 0.8)',
+    surface: 'rgb(40, 40, 40)',
     error: '#cf6679',
   },
 };
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(LIGHT_THEME);
+  const systemTheme = Appearance.getColorScheme();
+
+  useEffect(() => {
+    if (systemTheme === 'dark') {
+      setTheme(DARK_THEME);
+    } else {
+      setTheme(LIGHT_THEME);
+    }
+  }, []);
 
   const toggleTheme = () => {
     setTheme((prevTheme) =>

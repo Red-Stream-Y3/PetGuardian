@@ -13,13 +13,13 @@ const hireRequestSchema = new mongoose.Schema(
             required: true,
         },
         involvedPets: [{
-            type: [mongoose.Schema.Types.ObjectId],
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Pet",
             required: true,
         }],
         status: {
             type: String,
-            enum: ['pending', 'accepted', 'rejected', 'completed'],
+            enum: ['pending', 'accepted', 'rejected', 'completed', 'cancelled'],
             default: 'pending',
         },
         startDate: {
