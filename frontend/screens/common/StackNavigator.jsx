@@ -9,29 +9,14 @@ const Stack = createStackNavigator();
 
 const StackNavigator = () => {
     return (
-        <Stack.Navigator 
-            initialRouteName="HOME" 
+        <Stack.Navigator
+            initialRouteName='HOME'
             screenOptions={{ headerShown: false }}>
-            <Stack.Screen
-                name="SERVICES"
-                component={ServicesScreen}
-            />
-            <Stack.Screen
-                name="LOST"
-                component={LostAndFoundScreen}
-            />
-            <Stack.Screen
-                name="HOME"
-                component={HomeScreen}
-            />
-            <Stack.Screen
-                name="ADOPT"
-                component={AdoptionScreen}
-            />
-            <Stack.Screen
-                name="PLAY"
-                component={PlayDateScreen}
-            />
+            <Stack.Screen name='SERVICES' component={ServicesScreen} />
+            <Stack.Screen name='LOST' component={LostAndFoundScreen} />
+            <Stack.Screen name='HOME' component={HomeScreen} />
+            <Stack.Screen name='ADOPT' component={AdoptionScreen} />
+            <Stack.Screen name='PLAY' component={PlayDateScreen} />
         </Stack.Navigator>
     );
 };
