@@ -15,9 +15,29 @@ const RateService = ({provider, handleClose}) => {
     const [review, setReview] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [action, setAction] = useState('NEW'); // ['NEW', 'UPDATE']
+    
+    const fetchRating = async () => {
+        setLoading(true);
+
+        try {
+            const response = await axios.get(`${SERVER_URL}/api/v1/ratings/user/${USER._id}/${provider.serviceProvider._id}`);
+
+            if(response.data) {
+                setRating(`${response.data.rating}`);
+                setReview(response.data.review);
+                setAction('UPDATE');
+            }
+
+            setLoading(false);
+        } catch (error) {
+            setError(error.message);
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        //console.log(provider);
+        fetchRating();
     }, []);
 
     const styles = StyleSheet.create({
@@ -91,7 +111,14 @@ const RateService = ({provider, handleClose}) => {
                 serviceProvider: provider.serviceProvider._id
             };
 
-            const response = await axios.post(`${SERVER_URL}/api/v1/ratings/`, data);
+            let response;
+
+            if(action === 'UPDATE') {
+                response = await axios.put(`${SERVER_URL}/api/v1/ratings/user/${USER._id}/${provider.serviceProvider._id}`, data);
+            } else {
+                response = await axios.post(`${SERVER_URL}/api/v1/ratings/`, data);
+            }
+
             if(response.data) {
                 Toast.show({
                     type: 'success',
