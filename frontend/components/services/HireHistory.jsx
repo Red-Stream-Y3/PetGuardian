@@ -1,20 +1,25 @@
-import React, { Suspense, lazy, useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, Dimensions, StyleSheet } from 'react-native';
-import getThemeContext from '../../context/ThemeContext';
-import { getAppContext } from '../../context/AppContext';
-import axios from 'axios';
-import ImageItemCard from '../common/ImageItemCard';
-import Animated from 'react-native-reanimated';
-import ThemeBackButton from '../common/ThemeBackButton';
-import ThemeOverlay from '../common/ThemeOverlay';
-import BookingSummary from './BookingSummary';
-import Toast from 'react-native-toast-message';
-import ThemeButton from '../common/ThemeButton';
-import RateService from './RateService';
+import React, { Suspense, lazy, useEffect, useState } from "react";
+import {
+    View,
+    Text,
+    ActivityIndicator,
+    StyleSheet,
+} from "react-native";
+import getThemeContext from "../../context/ThemeContext";
+import { getAppContext } from "../../context/AppContext";
+import axios from "axios";
+import ImageItemCard from "../common/ImageItemCard";
+import Animated from "react-native-reanimated";
+import ThemeBackButton from "../common/ThemeBackButton";
+import ThemeOverlay from "../common/ThemeOverlay";
+import BookingSummary from "./BookingSummary";
+import Toast from "react-native-toast-message";
+import ThemeButton from "../common/ThemeButton";
+import RateService from "./RateService";
 
-const FlatList = lazy(() => import('react-native/Libraries/Lists/FlatList'));
+const FlatList = lazy(() => import("react-native/Libraries/Lists/FlatList"));
 
-const HireHistory = ({navigation}) => {
+const HireHistory = ({ navigation }) => {
     const { theme } = getThemeContext();
     const { SERVER_URL, USER } = getAppContext();
     const [history, setHistory] = useState([]);
@@ -26,13 +31,15 @@ const HireHistory = ({navigation}) => {
     const getHireHistory = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${SERVER_URL}/api/v1/services/hire/${USER._id}`);
+            const response = await axios.get(
+                `${SERVER_URL}/api/v1/services/hire/${USER._id}`
+            );
 
-            if(response.data) setHistory(response.data);
-            
+            if (response.data) setHistory(response.data);
+
             setLoading(false);
         } catch (error) {
-            console.error(error); 
+            console.error(error);
             setLoading(false);
         }
     };
@@ -42,15 +49,20 @@ const HireHistory = ({navigation}) => {
     }, []);
 
     const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            alignItems: "center",
+            width: "100%",
+        },
         textTitle: {
             fontSize: 16,
-            fontWeight: 'bold',
+            fontWeight: "bold",
             color: theme.colors.text,
             marginBottom: 5,
         },
         textSubtitle: {
             fontSize: 14,
-            fontWeight: 'bold',
+            fontWeight: "bold",
             color: theme.colors.text,
         },
         textBody: {
@@ -63,29 +75,36 @@ const HireHistory = ({navigation}) => {
         },
         textHighlightBold: {
             fontSize: 18,
-            fontWeight: 'bold',
+            fontWeight: "bold",
             color: theme.colors.servicesPrimary,
+        },
+        titleContainer: {
+            width: "100%",
+            alignItems: "center",
         },
     });
 
     const onPressCancelBooking = async (id) => {
         setLoading(true);
         try {
-            const response = await axios.put(`${SERVER_URL}/api/v1/services/hire`, { _id:id, status: 'cancelled' });
+            const response = await axios.put(
+                `${SERVER_URL}/api/v1/services/hire`,
+                { _id: id, status: "cancelled" }
+            );
 
-            if(response.data) {
+            if (response.data) {
                 Toast.show({
-                    type: 'success',
-                    text1: 'Booking Cancelled',
+                    type: "success",
+                    text1: "Booking Cancelled",
                 });
                 getHireHistory();
                 setShowSelected(false);
                 setSelected(null);
             }
-            
+
             setLoading(false);
         } catch (error) {
-            console.error(error); 
+            console.error(error);
             setLoading(false);
         }
     };
@@ -99,42 +118,53 @@ const HireHistory = ({navigation}) => {
     };
 
     return (
-        <View style={{ flex: 1, alignItems: "center", width: "100%" }}>
-
-            <ThemeOverlay visible={showRating} onPressBg={() => setShowRating(false)}>
-                <RateService provider={selected} handleClose={() => setShowRating(false)} />
+        <View style={styles.container}>
+            <ThemeOverlay
+                visible={showRating}
+                onPressBg={() => setShowRating(false)}>
+                <RateService
+                    provider={selected}
+                    handleClose={() => setShowRating(false)}
+                />
             </ThemeOverlay>
 
-            <ThemeOverlay visible={showSelected} onPressBg={() => setShowSelected(false)}>
-                <BookingSummary    
+            <ThemeOverlay
+                visible={showSelected}
+                onPressBg={() => setShowSelected(false)}>
+                <BookingSummary
                     booking={selected}
-                    closeActionCallback={()=>{
+                    closeActionCallback={() => {
                         setShowSelected(false);
                         setSelected(null);
                     }}
-                    actionTitle={'Cancel Booking'}
-                    actionCallback={()=>{onPressCancelBooking(selected._id)}} />    
+                    actionTitle={"Cancel Booking"}
+                    actionCallback={() => {
+                        onPressCancelBooking(selected._id);
+                    }}
+                />
             </ThemeOverlay>
 
-            <View style={{ width: "100%", alignItems: "center" }}>
+            <View style={styles.titleContainer}>
                 <ThemeBackButton navigation={navigation} />
-                <Text style={styles.textTitle}>
-                    Hire History
-                </Text>
+                <Text style={styles.textTitle}>Hire History</Text>
             </View>
-            {loading && <ActivityIndicator size={50} color={theme.colors.servicesPrimary} />}
+            {loading && (
+                <ActivityIndicator
+                    size={50}
+                    color={theme.colors.servicesPrimary}
+                />
+            )}
             <Suspense fallback={<ActivityIndicator />}>
                 <FlatList
                     data={history}
                     keyExtractor={(item) => item._id}
                     style={{ width: "100%" }}
                     renderItem={({ item, i }) => (
-                        <Animated.View
-                            style={{ width: "100%", alignItems: "center" }}>
+                        <Animated.View style={styles.titleContainer}>
                             <ImageItemCard
                                 style={"side"}
                                 index={i}
-                                onClick={()=>{
+                                onClick={() => {
                                     setSelected(item);
                                     setShowSelected(true);
                                 }}
@@ -149,12 +179,28 @@ const HireHistory = ({navigation}) => {
                                             {item.serviceProvider.lastName}
                                         </Text>
                                         <Text style={styles.textBody}>
-                                            {new Date(item.startDate).toLocaleDateString()} {item.oneDay ? "" : ` to ${new Date(item.endDate).toLocaleDateString()}`}
+                                            {new Date(
+                                                item.startDate
+                                            ).toLocaleDateString()}{" "}
+                                            {item.oneDay
+                                                ? ""
+                                                : ` to ${new Date(
+                                                      item.endDate
+                                                  ).toLocaleDateString()}`}
                                         </Text>
                                         <Text style={styles.textBody}>
-                                            {new Date(item.startTime).toLocaleTimeString()} {` to ${new Date(item.endTime).toLocaleTimeString()}`}
+                                            {new Date(
+                                                item.startTime
+                                            ).toLocaleTimeString()}{" "}
+                                            {` to ${new Date(
+                                                item.endTime
+                                            ).toLocaleTimeString()}`}
                                         </Text>
-                                        <View style={{ flexDirection: "row", marginTop: 5 }}>
+                                        <View
+                                            style={{
+                                                flexDirection: "row",
+                                                marginTop: 5,
+                                            }}>
                                             <Text style={styles.textHighlight}>
                                                 STATUS :{" "}
                                             </Text>
@@ -166,7 +212,14 @@ const HireHistory = ({navigation}) => {
                                             </Text>
                                         </View>
 
-                                        {item.status!=='pending' && <ThemeButton title={'Rate Service'} onPress={()=>handleRatingClick(item)} />}
+                                        {item.status !== "pending" && (
+                                            <ThemeButton
+                                                title={"Rate Service"}
+                                                onPress={() =>
+                                                    handleRatingClick(item)
+                                                }
+                                            />
+                                        )}
                                     </View>
                                 }
                             />

@@ -37,14 +37,14 @@ const OneTimeBooking = ({
                 value={input.startDateTime.toLocaleDateString()}
                 icon={
                     <Entypo
-                        name="calendar"
+                        name='calendar'
                         size={24}
                         color={theme.colors.icon}
                     />
                 }
             />
             <ThemeTextInput
-                title="To"
+                title='To'
                 editable={false}
                 onPressIcon={() => {
                     setDatePicker({
@@ -64,7 +64,7 @@ const OneTimeBooking = ({
                 disabled={oneDay}
                 icon={
                     <Entypo
-                        name="calendar"
+                        name='calendar'
                         size={24}
                         color={oneDay ? "#888" : theme.colors.icon}
                     />
@@ -89,7 +89,7 @@ const OneTimeBooking = ({
                     justifyContent: "space-between",
                 }}>
                 <ThemeTextInput
-                    title={"From - "+input.startDateTime.toLocaleDateString()}
+                    title={"From - " + input.startDateTime.toLocaleDateString()}
                     onPressIcon={() => {
                         setDatePicker({
                             show: true,
@@ -110,7 +110,7 @@ const OneTimeBooking = ({
                     disabled={allDay}
                     icon={
                         <FontAwesome5
-                            name="clock"
+                            name='clock'
                             size={24}
                             color={allDay ? "#888" : theme.colors.icon}
                         />
@@ -118,7 +118,12 @@ const OneTimeBooking = ({
                 />
                 <Text style={styles.textBody}>{" _ "}</Text>
                 <ThemeTextInput
-                    title={"To - "+(oneDay===true ? input.startDateTime.toLocaleDateString() : input.endDateTime.toLocaleDateString())}
+                    title={
+                        "To - " +
+                        (oneDay === true
+                            ? input.startDateTime.toLocaleDateString()
+                            : input.endDateTime.toLocaleDateString())
+                    }
                     width={"45%"}
                     editable={false}
                     disabled={allDay}
@@ -139,7 +144,7 @@ const OneTimeBooking = ({
                     }
                     icon={
                         <FontAwesome5
-                            name="clock"
+                            name='clock'
                             size={24}
                             color={allDay ? "#888" : theme.colors.icon}
                         />

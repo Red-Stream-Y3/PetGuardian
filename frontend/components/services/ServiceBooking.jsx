@@ -1,4 +1,10 @@
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+    ActivityIndicator,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import ThemebackButton from "../common/ThemeBackButton";
 import { useState } from "react";
@@ -114,10 +120,20 @@ const ServiceBooking = ({ navigation, route }) => {
             startDate: input.startDateTime.toISOString().split("T")[0],
             endDate: input.endDateTime.toISOString().split("T")[0],
             startTime: allDay
-                ? new Date(input.startDateTime.toISOString().split('T')[0]+" 12:00:00").toISOString().split("T")[1]
+                ? new Date(
+                      input.startDateTime.toISOString().split("T")[0] +
+                          " 12:00:00"
+                  )
+                      .toISOString()
+                      .split("T")[1]
                 : input.startDateTime.toISOString().split("T")[1],
             endTime: allDay
-                ? new Date(input.startDateTime.toISOString().split('T')[0]+" 23:59:59").toISOString().split("T")[1]
+                ? new Date(
+                      input.startDateTime.toISOString().split("T")[0] +
+                          " 23:59:59"
+                  )
+                      .toISOString()
+                      .split("T")[1]
                 : input.endDateTime.toISOString().split("T")[1],
             daily: bookingType === BOOKING_TYPES[1],
             weekly: bookingType === BOOKING_TYPES[2],
@@ -131,7 +147,10 @@ const ServiceBooking = ({ navigation, route }) => {
 
         try {
             //check if booking time is available
-            const checkResponse = await axios.post(`${SERVER_URL}/api/v1/services/hire/check`, reqData);
+            const checkResponse = await axios.post(
+                `${SERVER_URL}/api/v1/services/hire/check`,
+                reqData
+            );
 
             if (checkResponse.data?.length > 0) {
                 setLoading(false);
@@ -139,7 +158,7 @@ const ServiceBooking = ({ navigation, route }) => {
                     type: "error",
                     text1: "Booking time not available",
                     text2: "Please choose another time",
-                })
+                });
                 return;
             }
             //add booking
@@ -147,7 +166,7 @@ const ServiceBooking = ({ navigation, route }) => {
                 `${SERVER_URL}/api/v1/services/hire`,
                 reqData
             );
-            
+
             setLoading(false);
 
             if (response.status === 201) {
@@ -160,7 +179,6 @@ const ServiceBooking = ({ navigation, route }) => {
             console.debug(error);
             setLoading(false);
         }
-        
     };
 
     return (
@@ -264,7 +282,7 @@ const ServiceBooking = ({ navigation, route }) => {
                         />
                     ) : (
                         <Ionicons
-                            name="add-circle-outline"
+                            name='add-circle-outline'
                             size={24}
                             color={theme.colors.primaryIcon}
                         />
