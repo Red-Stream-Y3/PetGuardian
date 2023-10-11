@@ -9,6 +9,7 @@ import ThemeBackButton from '../common/ThemeBackButton';
 import ThemeOverlay from '../common/ThemeOverlay';
 import BookingSummary from './BookingSummary';
 import Toast from 'react-native-toast-message';
+import ThemeButton from '../common/ThemeButton';
 
 const FlatList = lazy(() => import('react-native/Libraries/Lists/FlatList'));
 
@@ -87,6 +88,10 @@ const HireHistory = ({navigation}) => {
         }
     };
 
+    const handleRatingClick = async (sid) => {
+        
+    };
+
     return (
         <View style={{ flex: 1, alignItems: "center", width: "100%" }}>
 
@@ -150,6 +155,8 @@ const HireHistory = ({navigation}) => {
                                                 {item.status}
                                             </Text>
                                         </View>
+
+                                        {item.status!=='pending' && <ThemeButton title={'Rate Service'} onPress={()=>handleRatingClick(item.serviceProvider._id)} />}
                                     </View>
                                 }
                             />

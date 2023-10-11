@@ -2,7 +2,6 @@ import { StyleSheet, TextInput, View, Text, Pressable } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import { getAppContext } from "../../context/AppContext";
 
-
 const ThemeTextInput = ({
     title, 
     value,
@@ -73,6 +72,7 @@ const ThemeTextInput = ({
             <TextInput
                 value={value}
                 placeholder={placeholder}
+                placeholderTextColor={disabled ? "#888" : theme.colors.text}
                 keyboardType={keyboardType || null}
                 editable={(editable===false ? false : true) && !disabled}
                 multiline={multiline || false}
