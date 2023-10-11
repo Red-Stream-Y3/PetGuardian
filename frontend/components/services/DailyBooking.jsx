@@ -22,7 +22,7 @@ const DailyBooking = ({
             }}>
             <Text style={styles.textH1}>{"Date"}</Text>
             <ThemeTextInput
-                title="From"
+                title='From'
                 editable={false}
                 onPressIcon={() => {
                     setDatePicker({
@@ -37,14 +37,14 @@ const DailyBooking = ({
                 value={input.startDateTime.toLocaleDateString()}
                 icon={
                     <Entypo
-                        name="calendar"
+                        name='calendar'
                         size={24}
                         color={theme.colors.icon}
                     />
                 }
             />
             <ThemeTextInput
-                title="To"
+                title='To'
                 editable={false}
                 onPressIcon={() => {
                     setDatePicker({
@@ -64,7 +64,7 @@ const DailyBooking = ({
                 disabled={oneDay}
                 icon={
                     <Entypo
-                        name="calendar"
+                        name='calendar'
                         size={24}
                         color={oneDay ? "#888" : theme.colors.icon}
                     />
@@ -89,7 +89,7 @@ const DailyBooking = ({
                     justifyContent: "space-between",
                 }}>
                 <ThemeTextInput
-                    title="From"
+                    title='From'
                     onPressIcon={() => {
                         setDatePicker({
                             show: true,
@@ -110,7 +110,7 @@ const DailyBooking = ({
                     disabled={allDay}
                     icon={
                         <FontAwesome5
-                            name="clock"
+                            name='clock'
                             size={24}
                             color={allDay ? "#888" : theme.colors.icon}
                         />
@@ -118,7 +118,7 @@ const DailyBooking = ({
                 />
                 <Text style={styles.textBody}>{" _ "}</Text>
                 <ThemeTextInput
-                    title="To"
+                    title='To'
                     width={"45%"}
                     editable={false}
                     disabled={allDay}
@@ -139,7 +139,7 @@ const DailyBooking = ({
                     }
                     icon={
                         <FontAwesome5
-                            name="clock"
+                            name='clock'
                             size={24}
                             color={allDay ? "#888" : theme.colors.icon}
                         />

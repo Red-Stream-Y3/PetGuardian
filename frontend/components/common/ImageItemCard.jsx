@@ -1,5 +1,11 @@
 import { Suspense, useEffect } from "react";
-import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
+import {
+    ActivityIndicator,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
@@ -48,27 +54,60 @@ const ImageItemCard = ({
         }
     }, []);
 
+    const styles = StyleSheet.create({
+        container: {
+            width: width || "90%",
+            maxWidth: width || 500,
+            margin: 10,
+            shadowColor: theme.colors.shadow,
+            elevation: 3,
+            backgroundColor: theme.colors.surface,
+            borderRadius: borderRadius || 10,
+            overflow: "hidden",
+        },
+        ripple: {
+            color: theme.colors.ripple,
+        },
+        pressableContainer: {
+            height: style === "side" ? 150 : "auto",
+            flexDirection: style === "side" ? "row" : "column",
+        },
+        bodyContainer: {
+            flex: 1,
+            padding: 10,
+            marginBottom: viewMarginBottom || 0,
+            flexDirection: style === "side" ? "column" : "row",
+            justifyContent: style === "side" ? "center" : "space-between",
+        },
+        titleText: {
+            fontWeight: "bold",
+            color: theme.colors.text,
+            marginBottom: textMarginBottom || 0,
+            alignItems: "center",
+            justifyContent: "space-between",
+        },
+        subtitleText: {
+            color: theme.colors.text,
+            fontSize: 12,
+            fontWeight: "bold",
+        },
+        tagText: {
+            color: theme.colors.text,
+            position: "absolute",
+            fontSize: 12,
+            fontWeight: "bold",
+            top: 11.2,
+            right: 10,
+        },
+    });
+
     return (
         <Animated.View
-            style={{
-                width: width || "90%",
-                maxWidth: width || 500,
-                margin: 10,
-                shadowColor: theme.colors.shadow,
-                elevation: 3,
-                backgroundColor: theme.colors.surface,
-                borderRadius: borderRadius || 10,
-                overflow: "hidden",
-            }}
+            style={styles.container}
             entering={FadeInDown.delay(index ? index * 100 : 0)}>
             <Pressable
-                android_ripple={{
-                    color: theme.colors.ripple,
-                }}
-                style={{
-                    height: style === "side" ? 150 : "auto",
-                    flexDirection: style === "side" ? "row" : "column",
-                }}
+                android_ripple={styles.ripple}
+                style={styles.pressableContainer}
                 onPress={onClick || null}>
                 <Suspense fallback={<ActivityIndicator />}>
                     <Animated.Image
@@ -87,52 +126,18 @@ const ImageItemCard = ({
                         sharedTransitionTag={animationTag || null}
                     />
                 </Suspense>
-                <View
-                    style={{
-                        flex: 1,
-                        padding: 10,
-                        marginBottom: viewMarginBottom || 0,
-                        flexDirection: style === "side" ? "column" : "row",
-                        justifyContent:
-                            style === "side" ? "center" : "space-between",
-                    }}>
+                <View style={styles.bodyContainer}>
                     <View>
                         {title ? (
-                            <Text
-                                style={{
-                                    fontWeight: "bold",
-                                    color: theme.colors.text,
-                                    marginBottom: textMarginBottom || 0,
-                                    alignItems: "center",
-                                    justifyContent: "space-between",
-                                }}>
-                                {title}
-                            </Text>
+                            <Text style={styles.titleText}>{title}</Text>
                         ) : null}
                         {subtitle ? (
-                            <Text
-                                style={{
-                                    color: theme.colors.text,
-                                    fontSize: 12,
-                                    fontWeight: 400,
-                                }}>
-                                {subtitle}
-                            </Text>
+                            <Text style={styles.subtitleText}>{subtitle}</Text>
                         ) : null}
                     </View>
 
                     {sideTag !== undefined && sideTag !== null ? (
-                        <Text
-                            style={{
-                                color: theme.colors.text,
-                                position: "absolute",
-                                fontSize: 12,
-                                fontWeight: "bold",
-                                top: 11.2,
-                                right: 10,
-                            }}>
-                            {sideTag}
-                        </Text>
+                        <Text style={styles.tagText}>{sideTag}</Text>
                     ) : null}
 
                     {body ? body : null}

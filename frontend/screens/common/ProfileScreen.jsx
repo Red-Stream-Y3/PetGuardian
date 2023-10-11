@@ -13,10 +13,9 @@ const ProfileScreen = () => {
                 }
                 hidden={false}
             />
-            <View style={{flex:1, marginTop:StatusBar.currentHeight }}>
+            <View style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
                 <Text>Profile Screen</Text>
             </View>
-
         </SafeAreaView>
     );
 };

@@ -93,60 +93,74 @@ const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallb
         setLoading(false);
     };
 
-    return (<>
-        {loading ? <ActivityIndicator color={theme.colors.text} size={40} /> : <Animated.View entering={FadeInDown} style={styles.container}>
-            <Text style={styles.title}>Booking Summary</Text>
-            <Text
-                style={
-                    styles.subtitle
-                }>{`Booking for ${booking?.serviceProvider?.firstName} ${booking?.serviceProvider?.lastName}`}</Text>
+    return (
+        <>
+            {loading ? (
+                <ActivityIndicator color={theme.colors.text} size={40} />
+            ) : (
+                <Animated.View entering={FadeInDown} style={styles.container}>
+                    <Text style={styles.title}>Booking Summary</Text>
+                    <Text
+                        style={
+                            styles.subtitle
+                        }>{`Booking for ${booking?.serviceProvider?.firstName} ${booking?.serviceProvider?.lastName}`}</Text>
 
-            <View style={styles.textContainer}>
-                <Text style={styles.body}>
-                    {new Date(booking.startDate).toLocaleDateString()}{" "}
-                    {data?.oneDay
-                        ? ""
-                        : ` to ${new Date(
-                              booking.endDate
-                          ).toLocaleDateString()}`}
-                </Text>
-                <Text style={styles.body}>
-                    {new Date(booking.startTime).toLocaleTimeString()}{" "}
-                    {` to ${new Date(booking.endTime).toLocaleTimeString()}`}
-                </Text>
-            </View>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.body}>
+                            {new Date(booking.startDate).toLocaleDateString()}{" "}
+                            {data?.oneDay
+                                ? ""
+                                : ` to ${new Date(
+                                      booking.endDate
+                                  ).toLocaleDateString()}`}
+                        </Text>
+                        <Text style={styles.body}>
+                            {new Date(booking.startTime).toLocaleTimeString()}{" "}
+                            {` to ${new Date(
+                                booking.endTime
+                            ).toLocaleTimeString()}`}
+                        </Text>
+                    </View>
 
-            <View style={{...styles.textContainer, flexDirection:'row'}}>
-                <Text style={styles.subtitle}>Pets </Text>
-                {data?.involvedPets?.map((pet, index) => (
-                    <ThemeChip key={index} text={pet.name} />
-                ))}
-            </View>
+                    <View
+                        style={{
+                            ...styles.textContainer,
+                            flexDirection: "row",
+                        }}>
+                        <Text style={styles.subtitle}>Pets </Text>
+                        {data?.involvedPets?.map((pet, index) => (
+                            <ThemeChip key={index} text={pet.name} />
+                        ))}
+                    </View>
 
-            <Text style={styles.subtitle}>Total Fee : {data?.totalFee} {data?.continuous ? '$/day' : '$'}</Text>
+                    <Text style={styles.subtitle}>
+                        Total Fee : {data?.totalFee}{" "}
+                        {data?.continuous ? "$/day" : "$"}
+                    </Text>
 
-            <View style={styles.textContainerRow}>
-                <Text style={styles.highlight}>STATUS : </Text>
-                <Text style={styles.highlightBold}>{booking.status}</Text>
-            </View>
+                    <View style={styles.textContainerRow}>
+                        <Text style={styles.highlight}>STATUS : </Text>
+                        <Text style={styles.highlightBold}>
+                            {booking.status}
+                        </Text>
+                    </View>
 
-            {/* <ThemeButton
-                title={"View Details"}
-                onPress={() => {
-                    console.log(data);
-                }}
-            /> */}
-            <View style={styles.actionContainer}>
-                <ThemeButton
-                    variant={"clear"}
-                    title={"Close"}
-                    onPress={closeActionCallback}
-                />
-                {booking.status === "pending" && (
-                    <ThemeButton title={actionTitle} onPress={handleActionPress} />
-                )}
-            </View>
-        </Animated.View>}</>
+                    <View style={styles.actionContainer}>
+                        <ThemeButton
+                            variant={"clear"}
+                            title={"Close"}
+                            onPress={closeActionCallback}
+                        />
+                        {booking.status === "pending" && (
+                            <ThemeButton
+                                title={actionTitle}
+                                onPress={handleActionPress}
+                            />
+                        )}
+                    </View>
+                </Animated.View>
+            )}
+        </>
     );
 };
 

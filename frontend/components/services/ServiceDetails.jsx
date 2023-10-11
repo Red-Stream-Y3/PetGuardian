@@ -14,16 +14,16 @@ import { useEffect, useState } from "react";
 import ThemeChip from "../common/ThemeChip";
 import ThemeButton from "../common/ThemeButton";
 import { Entypo } from "@expo/vector-icons";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 import ThemebackButton from "../common/ThemeBackButton";
 
 const ServiceDetails = ({ navigation, route }) => {
     const { SERVER_URL } = getAppContext();
     const { theme } = getThemeContext();
-    const [ details, setDetails ] = useState(null);
-    const [ loading, setLoading ] = useState(true);
-    const [ showRating, setShowRating] = useState(false);
-    const [ rating, setRating ] = useState(null);
+    const [details, setDetails] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [showRating, setShowRating] = useState(false);
+    const [rating, setRating] = useState(null);
 
     const { service } = route.params;
 
@@ -43,7 +43,8 @@ const ServiceDetails = ({ navigation, route }) => {
                 `${SERVER_URL}/api/v1/ratings/${service._id}`
             );
 
-            if (result.data && result.data.length > 0) setRating(result.data[0]);
+            if (result.data && result.data.length > 0)
+                setRating(result.data[0]);
             setShowRating(true);
         } catch (error) {
             console.error(error);
@@ -61,6 +62,20 @@ const ServiceDetails = ({ navigation, route }) => {
     };
 
     const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            backgroundColor: theme.colors.background,
+        },
+        scrollViewStyle: {
+            width: "100%",
+            flex: 1,
+        },
+        imageStyle: {
+            width: "100%",
+            height: Dimensions.get("window").height / 4,
+            position: "relative",
+            marginBottom: 10,
+        },
         textContainer: {
             flexDirection: "row",
             justifyContent: "space-between",
@@ -69,24 +84,84 @@ const ServiceDetails = ({ navigation, route }) => {
             borderWidth: 1,
             borderRadius: 10,
         },
-        title: {
+        H1: {
             fontSize: 16,
             color: theme.colors.text,
+        },
+        descriptionContainer: {
+            position: "relative",
+            width: "100%",
+            minHeight: (Dimensions.get("window").height * 3) / 4,
+            backgroundColor: theme.colors.surface,
+            borderTopEndRadius: 20,
+            borderTopStartRadius: 20,
+            paddingHorizontal: 15,
+            elevation: 5,
+        },
+        titleContainer: {
+            flexDirection: "row",
+            paddingVertical: 10,
+            justifyContent: "space-between",
+            alignItems: "center",
+        },
+        titleText: {
+            color: theme.colors.text,
+            fontSize: 20,
+            fontWeight: "bold",
+        },
+        subtitleText: {
+            color: theme.colors.text,
+            fontSize: 14,
+            fontWeight: "bold",
+        },
+        ratingContainer: {
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            alignItems: "center",
+        },
+        text: {
+            color: theme.colors.text,
+        },
+        flexRow: {
+            flexDirection: "row",
+        },
+        marginVertical10: {
+            marginVertical: 10,
+        },
+        multiLineTextContainer: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 10,
+            borderWidth: 1,
+            borderRadius: 10,
+            borderColor: theme.colors.servicesPrimary,
+        },
+        multiLineText: {
+            color: theme.colors.text,
+            fontSize: 16,
+            marginVertical: 10,
+        },
+        multiLineTextBold: {
+            color: theme.colors.text,
+            fontSize: 14,
+            fontWeight: "bold",
+            marginVertical: 10,
+        },
+        buttonContainer: {
+            flexDirection: "row",
+            justifyContent: "center",
+            marginTop: 15,
         },
     });
 
     return (
-        <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+        <View style={styles.container}>
             <ThemebackButton navigation={navigation} />
 
-            <ScrollView style={{ width: "100%", flex: 1 }}>
+            <ScrollView style={styles.scrollViewStyle}>
                 <Animated.Image
-                    style={{
-                        width: "100%",
-                        height: Dimensions.get("window").height / 4,
-                        position: "relative",
-                        marginBottom: 10,
-                    }}
+                    style={styles.imageStyle}
                     source={{
                         uri:
                             service?.image ||
@@ -96,43 +171,14 @@ const ServiceDetails = ({ navigation, route }) => {
                 />
 
                 <Animated.View
-                    style={{
-                        position: "relative",
-                        width: "100%",
-                        minHeight: (Dimensions.get("window").height * 3) / 4,
-                        backgroundColor: theme.colors.surface,
-                        borderTopEndRadius: 20,
-                        borderTopStartRadius: 20,
-                        paddingHorizontal: 15,
-                        elevation: 5,
-                    }}
+                    style={styles.descriptionContainer}
                     entering={FadeInDown.delay(600).springify()}>
-                    {/* <View
-                    style={{
-                        paddingHorizontal: 15,
-                    }} > */}
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            paddingVertical: 10,
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                        }}>
+                    <View style={styles.titleContainer}>
                         <View>
-                            <Text
-                                style={{
-                                    color: theme.colors.text,
-                                    fontSize: 20,
-                                    fontWeight: "bold",
-                                }}>
+                            <Text style={styles.titleText}>
                                 {details?.firstName + " " + details?.lastName}
                             </Text>
-                            <Text
-                                style={{
-                                    color: theme.colors.text,
-                                    fontSize: 14,
-                                    fontWeight: "bold",
-                                }}>
+                            <Text style={styles.subtitleText}>
                                 {"Available in : "}
                                 {details?.services?.activeCities
                                     .map((item) => item)
@@ -142,21 +188,18 @@ const ServiceDetails = ({ navigation, route }) => {
                         <View>
                             {showRating && (
                                 <Animated.View entering={FadeInLeft}>
-                                    <View style={{ flexDirection: "row", justifyContent:'flex-end' }}>
+                                    <View style={styles.ratingContainer}>
                                         <Ionicons
-                                            name="paw"
+                                            name='paw'
                                             size={24}
                                             color={theme.colors.servicesPrimary}
                                         />
-                                        <Text
-                                            style={{
-                                                color: theme.colors.text,
-                                            }}>
+                                        <Text style={styles.text}>
                                             {rating?.averageRating}
                                         </Text>
                                     </View>
                                     <Text style={{ color: theme.colors.text }}>
-                                        {rating?.count || 'No'} Ratings
+                                        {rating?.count || "No"} Ratings
                                     </Text>
                                 </Animated.View>
                             )}
@@ -169,9 +212,9 @@ const ServiceDetails = ({ navigation, route }) => {
                         />
                     ) : (
                         <>
-                            <View style={{ marginVertical: 10 }}>
-                                <Text style={styles.title}>SERVICES</Text>
-                                <View style={{ flexDirection: "row" }}>
+                            <View style={styles.marginVertical10}>
+                                <Text style={styles.H1}>SERVICES</Text>
+                                <View style={styles.flexRow}>
                                     {details?.services?.serviceTypes.map(
                                         (item, i) => (
                                             <ThemeChip key={i} text={item} />
@@ -180,9 +223,9 @@ const ServiceDetails = ({ navigation, route }) => {
                                 </View>
                             </View>
 
-                            <View style={{ marginVertical: 10 }}>
-                                <Text style={styles.title}>I ACCEPT</Text>
-                                <View style={{ flexDirection: "row" }}>
+                            <View style={styles.marginVertical10}>
+                                <Text style={styles.H1}>I ACCEPT</Text>
+                                <View style={styles.flexRow}>
                                     {details?.services?.petTypes.map(
                                         (item, i) => (
                                             <ThemeChip key={i} text={item} />
@@ -191,9 +234,9 @@ const ServiceDetails = ({ navigation, route }) => {
                                 </View>
                             </View>
 
-                            <View style={{ marginVertical: 10 }}>
-                                <Text style={styles.title}>WORKING DAYS</Text>
-                                <View style={{ flexDirection: "row" }}>
+                            <View style={styles.marginVertical10}>
+                                <Text style={styles.H1}>WORKING DAYS</Text>
+                                <View style={styles.flexRow}>
                                     {details?.services?.workDays.map(
                                         (item, i) => (
                                             <ThemeChip key={i} text={item} />
@@ -202,9 +245,9 @@ const ServiceDetails = ({ navigation, route }) => {
                                 </View>
                             </View>
 
-                            <View style={{ marginVertical: 10 }}>
-                                <Text style={styles.title}>MY RATES</Text>
-                                <View style={{ flexDirection: "row" }}>
+                            <View style={styles.marginVertical10}>
+                                <Text style={styles.H1}>MY RATES</Text>
+                                <View style={styles.flexRow}>
                                     {details?.services?.fees.map((item, i) => (
                                         <ThemeChip
                                             key={i}
@@ -219,39 +262,18 @@ const ServiceDetails = ({ navigation, route }) => {
                                 </View>
                             </View>
 
-                            <View style={{ marginVertical: 10 }}>
-                                <Text style={styles.title}>ABOUT ME</Text>
-                                <View
-                                    style={{
-                                        ...styles.textContainer,
-                                        borderColor:
-                                            theme.colors.servicesPrimary,
-                                    }}>
-                                    <Text
-                                        style={{
-                                            color: theme.colors.text,
-                                            fontSize: 16,
-                                            marginVertical: 10,
-                                        }}>
+                            <View style={styles.marginVertical10}>
+                                <Text style={styles.H1}>ABOUT ME</Text>
+                                <View style={styles.multiLineTextContainer}>
+                                    <Text style={styles.multiLineText}>
                                         {details?.services?.description}
                                     </Text>
                                 </View>
                             </View>
 
-                            <View
-                                style={{
-                                    ...styles.textContainer,
-                                    borderColor: theme.colors.servicesPrimary,
-                                }}>
-                                <Text
-                                    style={{
-                                        color: theme.colors.text,
-                                        fontSize: 14,
-                                        fontWeight: "bold",
-                                        marginVertical: 10,
-                                    }}>
+                            <View style={styles.multiLineTextContainer}>
+                                <Text style={styles.multiLineTextBold}>
                                     {"Contact: "}
-                                    {/* {details?.services?.businessPhone} */}
                                     {details?.services?.businessPhone
                                         ?.map((item) => item)
                                         ?.join(", ")}
@@ -260,26 +282,20 @@ const ServiceDetails = ({ navigation, route }) => {
                         </>
                     )}
 
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            justifyContent: "center",
-                            marginTop: 15,
-                        }}>
+                    <View style={styles.buttonContainer}>
                         <ThemeButton
                             textSize={16}
-                            title="Book Now"
+                            title='Book Now'
                             onPress={handleBookingPress}
                         />
                         <ThemeButton>
                             <Entypo
-                                name="calendar"
+                                name='calendar'
                                 size={24}
                                 color={theme.colors.primaryIcon}
                             />
                         </ThemeButton>
                     </View>
-                    {/* </View> */}
                 </Animated.View>
             </ScrollView>
         </View>

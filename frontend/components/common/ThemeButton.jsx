@@ -1,6 +1,6 @@
-import { Animated, Pressable, Text, View } from "react-native";
+import { Animated, Pressable, StyleSheet, Text } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
-import { getAppContext } from '../../context/AppContext';
+import { getAppContext } from "../../context/AppContext";
 
 const ThemeButton = ({
     children,
@@ -14,7 +14,7 @@ const ThemeButton = ({
     const { theme } = getThemeContext();
     const { tabColor } = getAppContext();
 
-    const styles = {
+    const styles = StyleSheet.create({
         filled: {
             backgroundColor: tabColor,
             overflow: "hidden",
@@ -34,7 +34,30 @@ const ThemeButton = ({
             borderRadius: borderRadius || 5,
             margin: 5,
         },
-    };
+        ripple: {
+            color:
+                variant === "clear" || variant === "outlined"
+                    ? tabColor
+                    : theme.colors.ripple,
+        },
+        PressableContainer: {
+            padding: padding || 10,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "center",
+            width: "auto",
+        },
+        text: {
+            fontSize: textSize || 14,
+            marginHorizontal: 2,
+            marginStart: children ? 5 : 2,
+            fontWeight: "bold",
+            color:
+                variant === "clear" || variant === "outlined"
+                    ? theme.colors.text
+                    : theme.colors.buttonText,
+        },
+    });
 
     return (
         <Animated.View
@@ -46,36 +69,11 @@ const ThemeButton = ({
                     : styles.filled
             }>
             <Pressable
-                android_ripple={{
-                    color:
-                        variant === "clear" || variant === "outlined"
-                            ? tabColor
-                            : theme.colors.ripple,
-                }}
-                style={{
-                    padding: padding || 10,
-                    alignItems: "center",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    width: "auto",
-                }}
+                android_ripple={styles.ripple}
+                style={styles.PressableContainer}
                 onPress={onPress || (() => {})}>
                 {children}
-                {title && (
-                    <Text
-                        style={{
-                            fontSize: textSize || 14,
-                            marginHorizontal: 2,
-                            marginStart: children ? 5 : 2,
-                            fontWeight: "bold",
-                            color:
-                                variant === "clear" || variant === "outlined"
-                                    ? theme.colors.text
-                                    : theme.colors.buttonText,
-                        }}>
-                        {title}
-                    </Text>
-                )}
+                {title && <Text style={styles.text}>{title}</Text>}
             </Pressable>
         </Animated.View>
     );

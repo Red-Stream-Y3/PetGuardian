@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, Switch, Dimensions, FlatList, StatusBar, SafeAreaView } from "react-native";
+import {
+    View,
+    Text,
+    ScrollView,
+    Switch,
+    Dimensions,
+    StatusBar,
+    SafeAreaView,
+} from "react-native";
 import { ImageItemCard, ThemeButton } from "../../components";
 import getThemeContext from "../../context/ThemeContext";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 
 const HomeScreen = () => {
     const { theme, toggleTheme } = getThemeContext();
     const [themeSwitch, setThemeSwitch] = useState(false);
 
     useEffect(() => {
-      if (theme.mode === "dark") setThemeSwitch(true);
+        if (theme.mode === "dark") setThemeSwitch(true);
     }, []);
 
     //example with a body element
@@ -23,15 +31,32 @@ const HomeScreen = () => {
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToPtWIfv5-l3Q1GRBnlJ0H4jCVK2DEz63oSIx92b7FmYpPfx0FqvG7UVj8JcyPNAAlImE&usqp=CAU"
             }
             body={
-                <View style={{flex:1, flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                    }}>
                     <View>
-                      <Text style={{ fontWeight: "bold", color:theme.colors.text }}>
-                          Body Example Title
-                      </Text>
-                      <Text style={{ color:theme.colors.text }}>Body</Text>
+                        <Text
+                            style={{
+                                fontWeight: "bold",
+                                color: theme.colors.text,
+                            }}>
+                            Body Example Title
+                        </Text>
+                        <Text style={{ color: theme.colors.text }}>Body</Text>
                     </View>
-                    <ThemeButton title="Button" onPress={()=>console.debug("Test button")} variant={'clear'}>
-                      <AntDesign name="addfile" size={24} color={theme.colors.icon} />
+                    <ThemeButton
+                        title='Button'
+                        onPress={() => console.debug("Test button")}
+                        variant={"clear"}>
+                        <AntDesign
+                            name='addfile'
+                            size={24}
+                            color={theme.colors.icon}
+                        />
                     </ThemeButton>
                 </View>
             }
@@ -57,17 +82,28 @@ const HomeScreen = () => {
             index={i}
             uri={"https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg"}
             body={
-              <View>
-                  <Text style={{ fontWeight: "bold", color:theme.colors.text }}>
-                      Body Example Title
-                  </Text>
-                  <Text style={{ color:theme.colors.text }}>Body</Text>
-                  <ThemeButton title="Button" onPress={()=>console.debug("Test button")} />
-                  <ThemeButton title="Button" onPress={()=>console.debug("Test button")} variant={'outlined'} />
-              </View>
-          }
+                <View>
+                    <Text
+                        style={{
+                            fontWeight: "bold",
+                            color: theme.colors.text,
+                        }}>
+                        Body Example Title
+                    </Text>
+                    <Text style={{ color: theme.colors.text }}>Body</Text>
+                    <ThemeButton
+                        title='Button'
+                        onPress={() => console.debug("Test button")}
+                    />
+                    <ThemeButton
+                        title='Button'
+                        onPress={() => console.debug("Test button")}
+                        variant={"outlined"}
+                    />
+                </View>
+            }
             style={"side"}
-            onClick={()=>console.debug("Test component click")}
+            onClick={() => console.debug("Test component click")}
         />
     );
 
@@ -75,7 +111,9 @@ const HomeScreen = () => {
     const smallWidth = (i) => (
         <ImageItemCard
             key={i}
-            uri={"https://wallpaperbat.com/img/609256-anime-boy-power-up-wallpaper.jpg"}
+            uri={
+                "https://wallpaperbat.com/img/609256-anime-boy-power-up-wallpaper.jpg"
+            }
             title={"Example Title"}
             width={"45%"}
             subtitle={"Example Subtitle"}
@@ -86,10 +124,10 @@ const HomeScreen = () => {
 
     const changeTheme = () => {
         try {
-          setThemeSwitch(!themeSwitch);
-          toggleTheme();
+            setThemeSwitch(!themeSwitch);
+            toggleTheme();
         } catch (error) {
-          console.debug(error);
+            console.debug(error);
         }
     };
 
@@ -131,14 +169,17 @@ const HomeScreen = () => {
                     style={{ width: "100%" }}
                     contentContainerStyle={{ alignItems: "center" }}>
                     {Array(8)
-                        .fill((i) => body(i),0,2)
-                        .fill((i) => noBody(i),3,5)
-                        .fill((i) => side(i),6,8)
+                        .fill((i) => body(i), 0, 2)
+                        .fill((i) => noBody(i), 3, 5)
+                        .fill((i) => side(i), 6, 8)
                         .map((func, i) => func(i))}
                     <ScrollView
                         horizontal={true}
                         contentContainerStyle={{ alignItems: "center" }}
-                        style={{ marginBottom: 10, width:Dimensions.get('screen').width }}>
+                        style={{
+                            marginBottom: 10,
+                            width: Dimensions.get("screen").width,
+                        }}>
                         {Array(5)
                             .fill(0)
                             .map((_, i) => smallWidth(i))}
