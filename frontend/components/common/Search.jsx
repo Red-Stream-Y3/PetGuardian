@@ -27,6 +27,7 @@ const Search = ({ navigation, image }) => {
             color: theme.colors.text,
             borderRadius: 10,
             paddingHorizontal: 16,
+            elevation: 5,
         },
         userProfileImage: {
             width: 40,
