@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import getThemeContext from '../../context/ThemeContext';
 
 import ImageItemCard from './ImageItemCard';
 
@@ -17,6 +18,7 @@ const PetsContainer = ({
   screen,
   fontSize,
 }) => {
+  const { theme } = getThemeContext();
   const navigation = useNavigation();
 
   const handleSeeAllPress = () => {
@@ -62,7 +64,14 @@ const PetsContainer = ({
     <View style={styles.sectionContainer}>
       {header ? (
         <View style={styles.headerContainer}>
-          <Text style={styles.sectionHeader}>{header}</Text>
+          <Text
+            style={{
+              color: theme.colors.text,
+              ...styles.sectionHeader,
+            }}
+          >
+            {header}
+          </Text>
           {btnText && (
             <TouchableOpacity
               style={styles.seeAllButton}
@@ -83,7 +92,7 @@ const PetsContainer = ({
                 uri={item.images[0].uri}
                 title={item.title}
                 width="45%"
-                tag={item.age}
+                sideTag={item.age}
                 subtitle={
                   item.location.split(' ').length > 4
                     ? `${item.location.split(' ').slice(0, 3).join(' ')} ...`

@@ -42,8 +42,22 @@ const UserBox = () => {
           style={styles.rowImage}
         />
         <View style={styles.rowDetails}>
-          <Text style={styles.name}>{user.name}</Text>
-          <Text style={styles.phone}>{user.phone}</Text>
+          <Text
+            style={{
+              color: theme.colors.text,
+              ...styles.name,
+            }}
+          >
+            {user.name}
+          </Text>
+          <Text
+            style={{
+              color: theme.colors.text,
+              ...styles.phone,
+            }}
+          >
+            {user.phone}
+          </Text>
         </View>
         <TouchableOpacity
           style={styles.phoneIcon}

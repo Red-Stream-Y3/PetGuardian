@@ -9,6 +9,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 
+import getThemeContext from '../../context/ThemeContext';
 import ImageItemCard from './ImageItemCard';
 
 const SelectPets = ({
@@ -19,6 +20,7 @@ const SelectPets = ({
   screen,
   fontSize,
 }) => {
+  const { theme } = getThemeContext();
   const navigation = useNavigation();
   const [selectedPosts, setSelectedPosts] = useState([]);
 
@@ -64,7 +66,6 @@ const SelectPets = ({
     },
     rowContainer: {
       flexDirection: 'row',
-      marginBottom: 10,
     },
     imageItemCard: {
       width: 165,
@@ -77,7 +78,6 @@ const SelectPets = ({
       right: 18,
       color: 'white',
       borderRadius: 5,
-      padding: 0,
     },
   });
 
@@ -85,7 +85,14 @@ const SelectPets = ({
     <View style={styles.sectionContainer}>
       {header ? (
         <View style={styles.headerContainer}>
-          <Text style={styles.sectionHeader}>{header}</Text>
+          <Text
+            style={{
+              color: theme.colors.text,
+              ...styles.sectionHeader,
+            }}
+          >
+            {header}
+          </Text>
           {btnText && (
             <TouchableOpacity
               style={styles.seeAllButton}
