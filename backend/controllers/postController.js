@@ -1,4 +1,4 @@
-import Post from '../models/postModel';
+import Post from '../models/postModel.js';
 import asyncHandler from 'express-async-handler';
 
 // @desc    Fetch all posts
