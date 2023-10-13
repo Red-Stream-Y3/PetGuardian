@@ -1,12 +1,12 @@
 import React, { Suspense } from 'react';
 import { ActivityIndicator, View, StyleSheet, ScrollView } from 'react-native';
-import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import getThemeContext from '../../../context/ThemeContext';
 
 import Header from '../../common/Header';
-import { lostPetsData } from '../pets';
 import SelectPets from '../../common/SelectPets';
-import Details from './Details';
+import LostDetails from './LostDetails';
+import MarkerTitle from '../../common/MarkerTitle';
+import { lostPetsData } from '../pets';
 
 const LostPost = () => {
   const { theme } = getThemeContext();
@@ -21,11 +21,16 @@ const LostPost = () => {
   const lostPetsPairs = groupIntoPairs(lostPetsData);
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      <Header title="New Post" />
+    <ScrollView
+      contentContainerStyle={{
+        flexGrow: 1,
+        backgroundColor: theme.colors.background,
+      }}
+    >
+      <View style={{ flex: 1 }}>
+        <Header title="New Post" />
 
-      <Suspense fallback={<ActivityIndicator />}>
-        <ScrollView>
+        <Suspense fallback={<ActivityIndicator />}>
           <SelectPets
             header="Select your pets"
             pairs={lostPetsPairs}
@@ -33,18 +38,16 @@ const LostPost = () => {
             screen="Post"
             fontSize={14}
           />
-        </ScrollView>
 
-        <Details />
-      </Suspense>
-    </View>
+          <LostDetails />
+
+          <MarkerTitle />
+        </Suspense>
+      </View>
+    </ScrollView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-  },
-});
+const styles = StyleSheet.create({});
 
 export default LostPost;
