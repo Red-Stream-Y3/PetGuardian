@@ -27,4 +27,5 @@ export { default as LostPost } from './laf/Lost/LostPost';
 export { default as ServicesHome } from './services/ServicesHome';
 export { default as ServiceDetails } from './services/ServiceDetails';
 export { default as ServiceBooking } from './services/ServiceBooking';
+export { default as HireHistoy } from './services/HireHistory';
 

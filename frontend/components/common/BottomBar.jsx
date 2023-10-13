@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Animated, View } from "react-native";
+import { Animated, StyleSheet } from "react-native";
 import RoundIconButton from "./RoundIconButton";
 import getThemeContext from "../../context/ThemeContext";
-import { Ionicons } from '@expo/vector-icons';
-import { StackActions, useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { getAppContext } from "../../context/AppContext";
 
 const BottomBar = ({}) => {
-    const {theme} = getThemeContext();
+    const { theme } = getThemeContext();
     const { selectedTab, setSelectedTab, tabColor } = getAppContext();
     const navigation = useNavigation();
     const [barColor, setBarColor] = useState(theme.colors.homePrimary);
@@ -44,30 +44,54 @@ const BottomBar = ({}) => {
     const buttons = [
         {
             name: "SERVICES",
-            icon: <Ionicons name="paw-outline" size={SIZE_1} color={ICON_THEME} />,
-            selectIcon: <Ionicons name="paw" size={SIZE_1} color={ICON_THEME} />,
+            icon: (
+                <Ionicons name='paw-outline' size={SIZE_1} color={ICON_THEME} />
+            ),
+            selectIcon: (
+                <Ionicons name='paw' size={SIZE_1} color={ICON_THEME} />
+            ),
             padding: PADDING,
-        },{
+        },
+        {
             name: "LOST",
-            icon: <Ionicons name="paw-outline" size={SIZE_1} color={ICON_THEME} />,
-            selectIcon: <Ionicons name="paw" size={SIZE_1} color={ICON_THEME} />,
+            icon: (
+                <Ionicons name='paw-outline' size={SIZE_1} color={ICON_THEME} />
+            ),
+            selectIcon: (
+                <Ionicons name='paw' size={SIZE_1} color={ICON_THEME} />
+            ),
             padding: PADDING,
-        },{
+        },
+        {
             name: "HOME",
-            icon: <Ionicons name="paw-outline" size={SIZE_2} color={ICON_THEME} />,
-            selectIcon: <Ionicons name="paw" size={SIZE_2} color={ICON_THEME} />,
+            icon: (
+                <Ionicons name='paw-outline' size={SIZE_2} color={ICON_THEME} />
+            ),
+            selectIcon: (
+                <Ionicons name='paw' size={SIZE_2} color={ICON_THEME} />
+            ),
             padding: PADDING,
-        },{
+        },
+        {
             name: "ADOPT",
-            icon: <Ionicons name="paw-outline" size={SIZE_1} color={ICON_THEME} />,
-            selectIcon: <Ionicons name="paw" size={SIZE_1} color={ICON_THEME} />,
+            icon: (
+                <Ionicons name='paw-outline' size={SIZE_1} color={ICON_THEME} />
+            ),
+            selectIcon: (
+                <Ionicons name='paw' size={SIZE_1} color={ICON_THEME} />
+            ),
             padding: PADDING,
-        },{
+        },
+        {
             name: "PLAY",
-            icon: <Ionicons name="paw-outline" size={SIZE_1} color={ICON_THEME} />,
-            selectIcon: <Ionicons name="paw" size={SIZE_1} color={ICON_THEME} />,
+            icon: (
+                <Ionicons name='paw-outline' size={SIZE_1} color={ICON_THEME} />
+            ),
+            selectIcon: (
+                <Ionicons name='paw' size={SIZE_1} color={ICON_THEME} />
+            ),
             padding: PADDING,
-        }
+        },
     ];
 
     let backgroundColor = animation.interpolate({
@@ -75,21 +99,23 @@ const BottomBar = ({}) => {
         outputRange: [barColor, tabColor],
     });
 
+    const styles = StyleSheet.create({
+        container: {
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            backgroundColor: backgroundColor,
+        },
+    });
+
     return (
-        <Animated.View
-            style={{
-                alignItems: "center",
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                backgroundColor: backgroundColor,
-            }}>
+        <Animated.View style={styles.container}>
             {buttons.map((button, index) => (
                 <RoundIconButton
                     key={index}
                     name={button.name}
                     padding={button.padding}
-                    onPress={() => handlePress(index)}
-                >
+                    onPress={() => handlePress(index)}>
                     {selectedTab === index ? button.selectIcon : button.icon}
                 </RoundIconButton>
             ))}

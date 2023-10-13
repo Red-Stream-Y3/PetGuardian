@@ -1,7 +1,6 @@
 import {
     ActivityIndicator,
     Dimensions,
-    FlatList,
     ScrollView,
     StyleSheet,
     Text,
@@ -18,8 +17,8 @@ import ThemeChip from "../common/ThemeChip";
 const ServicesHome = ({ navigation }) => {
     const { theme } = getThemeContext();
     const { SERVER_URL } = getAppContext();
-    const [ providers, setProviders ] = useState([]);
-    const [ loading, setLoading ] = useState(false);
+    const [providers, setProviders] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const getProviders = async () => {
         try {
@@ -54,21 +53,38 @@ const ServicesHome = ({ navigation }) => {
         },
     ];
 
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            backgroundColor: theme.colors.background,
+        },
+        chipContainer: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 20,
+            paddingVertical: 5,
+        },
+        titleText: {
+            fontSize: 18,
+            fontWeight: "bold",
+            color: theme.colors.text,
+        },
+        subtitleText: {
+            fontSize: 14,
+            fontWeight: "bold",
+            color: theme.colors.text,
+        },
+        textMargin5: {
+            marginTop: 5,
+            color: theme.colors.text,
+        },
+    });
+
     return (
-        <View
-            style={{
-                ...styles.container,
-                backgroundColor: theme.colors.background,
-            }}>
-            <Search />
-            <View
-                style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    paddingHorizontal: 20,
-                    paddingVertical: 5,
-                }}>
+        <View style={styles.container}>
+            <Search navigation={navigation} />
+            <View style={styles.chipContainer}>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {chips.map((chip, i) => (
                         <ThemeChip key={i} clickable text={chip.text} />
@@ -76,127 +92,51 @@ const ServicesHome = ({ navigation }) => {
                 </ScrollView>
             </View>
             <Suspense fallback={<ActivityIndicator />}>
-                {/* <FlatList
-                    data={providers}
-                    style={{ width: "100%" }}
-                    contentContainerStyle={{ alignItems: "center" }}
-                    renderItem={(provider, i) => {
-                        return (
-                            <ImageItemCard
-                                key={i}
-                                index={i}
-                                width={Dimensions.get("window").width * 0.9}
-                                onClick={() => {
-                                    navigation?.navigate("ServiceDetails", {
-                                        service: provider.item,
-                                    });
-                                }}
-                                uri={
-                                    "https://wallpapercave.com/wp/wp4928162.jpg"
-                                }
-                                style="side"
-                                animationTag={provider.item._id}
-                                body={
-                                    <View>
-                                        <Text
-                                            style={{
-                                                fontSize: 18,
-                                                fontWeight: "bold",
-                                                color: theme.colors.text,
-                                            }}>
-                                            {provider.item.firstName}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                fontSize: 14,
-                                                fontWeight: "bold",
-                                                color: theme.colors.text,
-                                            }}>
-                                            {provider.item.services?.serviceTypes
-                                                ?.map(
-                                                    (serviceType) => serviceType
-                                                )
-                                                .join(", ")}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                marginTop: 5,
-                                                color: theme.colors.text,
-                                            }}>
-                                            {provider.item.services?.activeCities
-                                                ?.map((city) => city)
-                                                .join(", ")}
-                                        </Text>
-                                    </View>
-                                }
-                            />
-                        );
-                    }}
-                /> */}
                 <ScrollView
                     style={{ width: "100%" }}
                     contentContainerStyle={{ alignItems: "center" }}>
-                    {loading && <ActivityIndicator size={50} color={theme.colors.servicesPrimary} />}
+                    {loading && (
+                        <ActivityIndicator
+                            size={50}
+                            color={theme.colors.servicesPrimary}
+                        />
+                    )}
                     {providers.map((provider, i) => (
                         <ImageItemCard
-                                key={i}
-                                index={i}
-                                width={Dimensions.get("window").width * 0.9}
-                                onClick={() => {
-                                    navigation?.navigate("ServiceDetails", {
-                                        service: provider,
-                                    });
-                                }}
-                                uri={
-                                    "https://wallpapercave.com/wp/wp4928162.jpg"
-                                }
-                                style="side"
-                                animationTag={provider._id}
-                                body={
-                                    <View>
-                                        <Text
-                                            style={{
-                                                fontSize: 18,
-                                                fontWeight: "bold",
-                                                color: theme.colors.text,
-                                            }}>
-                                            {provider.firstName}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                fontSize: 14,
-                                                fontWeight: "bold",
-                                                color: theme.colors.text,
-                                            }}>
-                                            {provider.services?.serviceTypes
-                                                ?.map(
-                                                    (serviceType) => serviceType
-                                                )
-                                                .join(", ")}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                marginTop: 5,
-                                                color: theme.colors.text,
-                                            }}>
-                                            {provider.services?.activeCities
-                                                ?.map((city) => city)
-                                                .join(", ")}
-                                        </Text>
-                                    </View>
-                                }
-                            />
+                            key={i}
+                            index={i}
+                            width={Dimensions.get("window").width * 0.9}
+                            onClick={() => {
+                                navigation?.navigate("ServiceDetails", {
+                                    service: provider,
+                                });
+                            }}
+                            uri={"https://wallpapercave.com/wp/wp4928162.jpg"}
+                            style='side'
+                            animationTag={provider._id}
+                            body={
+                                <View>
+                                    <Text style={styles.titleText}>
+                                        {provider.firstName}
+                                    </Text>
+                                    <Text style={styles.subtitleText}>
+                                        {provider.services?.serviceTypes
+                                            ?.map((serviceType) => serviceType)
+                                            .join(", ")}
+                                    </Text>
+                                    <Text style={styles.textMargin5}>
+                                        {provider.services?.activeCities
+                                            ?.map((city) => city)
+                                            .join(", ")}
+                                    </Text>
+                                </View>
+                            }
+                        />
                     ))}
                 </ScrollView>
             </Suspense>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-});
 
 export default ServicesHome;

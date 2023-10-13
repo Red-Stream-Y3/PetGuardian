@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const ServiceNavigator = createNativeStackNavigator();
 
-const ServicesScreen = () => {
+const ServicesScreen = ({navigation}) => {
     const { theme } = getThemeContext();
     return (
         <SafeAreaView
@@ -17,10 +17,12 @@ const ServicesScreen = () => {
                 }
                 hidden={false}
             />
-            <ServiceNavigator.Navigator initialRouteName="Services">
-                <ServiceNavigator.Screen name="Services" component={ServicesHome} options={{headerShown:false}} />
-                <ServiceNavigator.Screen name="ServiceDetails" component={ServiceDetails} options={{headerShown:false}} />
-                <ServiceNavigator.Screen name="Booking" component={ServiceBooking} options={{headerShown:false}} />
+            <ServiceNavigator.Navigator 
+                initialRouteName="Services"
+                screenOptions={{ headerShown: false }}>
+                <ServiceNavigator.Screen name="Services" component={ServicesHome} />
+                <ServiceNavigator.Screen name="ServiceDetails" component={ServiceDetails} />
+                <ServiceNavigator.Screen name="Booking" component={ServiceBooking} />
             </ServiceNavigator.Navigator>
 
         </SafeAreaView>

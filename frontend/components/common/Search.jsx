@@ -1,14 +1,55 @@
 import React from 'react';
 import {
-  View,
   TextInput,
+  View,
   Image,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
 import { FontAwesome5 } from '@expo/vector-icons';
 
-const Search = ({ profile, image }) => {
+const Search = ({ navigation, profile, image }) => {
+  const { theme } = getThemeContext();
+
+  const styles = StyleSheet.create({
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      marginBottom: 10,
+      marginLeft: 2,
+    },
+    searchIcon: {
+      marginRight: 15,
+    },
+    searchBar: {
+      flex: 1,
+      height: 40,
+      backgroundColor: theme.colors.surface,
+      color: theme.colors.text,
+      borderRadius: 10,
+      paddingVertical: 0,
+      paddingHorizontal: 16,
+      elevation: 5,
+    },
+    inputContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: '#F2F2F2',
+      borderRadius: 10,
+      paddingHorizontal: 16,
+    },
+    userProfileImage: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      marginLeft: 20,
+    },
+  });
+
   return (
     <View style={styles.header}>
       <View style={styles.inputContainer}>
@@ -18,10 +59,17 @@ const Search = ({ profile, image }) => {
           color="grey"
           style={styles.searchIcon}
         />
-        <TextInput placeholder="Search" style={styles.searchBar} />
+        <TextInput
+          placeholderTextColor={theme.colors.text}
+          placeholder="Search"
+          style={styles.searchBar}
+        />
       </View>
       {profile ? (
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.getParent().getParent().openDrawer()}
+        >
+          >
           <Image
             style={styles.userProfileImage}
             source={{
@@ -35,38 +83,5 @@ const Search = ({ profile, image }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    marginBottom: 10,
-    marginLeft: 2,
-  },
-  inputContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F2F2F2',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-  },
-  searchIcon: {
-    marginRight: 15,
-  },
-  searchBar: {
-    flex: 1,
-    height: 40,
-    paddingVertical: 0,
-  },
-  userProfileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginLeft: 20,
-  },
-});
 
 export default Search;

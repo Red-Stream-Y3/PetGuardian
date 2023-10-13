@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import ThemeChip from "./ThemeChip";
 import { useEffect, useState } from "react";
 
@@ -8,20 +8,24 @@ const ThemeChipList = ({ data, defaultIndex, multiSelect, activeList }) => {
         activeList || new Array(data.length).fill(false)
     );
 
+    const styles = StyleSheet.create({
+        container: {
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+        },
+    });
+
     useEffect(() => {
         if (multiSelect !== true)
             setActiveChips(
                 activeChips.map((chip, index) => index === clickIndex)
             );
     }, [clickIndex]);
+
     return (
-        <View
-            style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                alignItems: "center",
-            }}>
+        <View style={styles.container}>
             {multiSelect === true
                 ? data.map((item, index) => (
                       <ThemeChip
