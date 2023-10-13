@@ -92,6 +92,7 @@ const Post = ({ route }) => {
                   {
                     borderWidth: 3,
                     borderColor: getRandomColor(),
+                    color: theme.colors.text,
                   },
                 ]}
               >

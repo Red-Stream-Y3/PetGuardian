@@ -1,8 +1,10 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import getThemeContext from '../../context/ThemeContext';
 import PetFilter from './PetFilter';
 
 const Header = ({ title, onFilterPress, petTypes }) => {
+  const { theme } = getThemeContext();
   const navigation = useNavigation();
 
   const handleBackPress = () => {
@@ -16,7 +18,14 @@ const Header = ({ title, onFilterPress, petTypes }) => {
           <Text>Back</Text>
         </TouchableOpacity>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>{title}</Text>
+          <Text
+            style={{
+              color: theme.colors.text,
+              ...styles.title,
+            }}
+          >
+            {title}
+          </Text>
         </View>
       </View>
       {petTypes ? (

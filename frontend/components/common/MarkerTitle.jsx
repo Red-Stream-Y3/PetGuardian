@@ -12,7 +12,7 @@ const MarkerTitle = () => {
   return (
     <>
       <MapLocation onMarkerChange={handleMarkerChange} />
-      <Text>{markerTitle}</Text>
+      {/* <Text>{markerTitle}</Text> */}
     </>
   );
 };

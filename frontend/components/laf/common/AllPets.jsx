@@ -1,8 +1,6 @@
 import React, { Suspense, useState } from 'react';
 import { ActivityIndicator, ScrollView } from 'react-native';
-// import { Header, HomeContainer } from '../../../components';
-import { Header } from '../../common/Header.jsx';
-import { HomeContainer } from '../../laf/common/HomeContainer.jsx';
+import { Header, PetsContainer } from '../../../components';
 
 const AllPets = ({ title, data }) => {
   const [filter, setFilter] = useState('All');
@@ -40,7 +38,7 @@ const AllPets = ({ title, data }) => {
       />
       <Suspense fallback={<ActivityIndicator />}>
         <ScrollView>
-          <HomeContainer Pairs={petsPairs} />
+          <PetsContainer pairs={petsPairs} screen="Post" />
         </ScrollView>
       </Suspense>
     </>

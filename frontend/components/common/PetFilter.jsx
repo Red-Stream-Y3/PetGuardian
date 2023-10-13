@@ -7,8 +7,10 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
 
 const PetFilter = ({ petTypes, onFilterPress }) => {
+  const { theme } = getThemeContext();
   const [selectedFilter, setSelectedFilter] = useState('All');
   const petTypeImages = {
     All: 'https://media.istockphoto.com/id/1445196818/photo/group-of-cute-pets-on-white-background-banner-design.webp?b=1&s=170667a&w=0&k=20&c=iQ527QsrVbpECw-3b8GQVw0YD5FhBoorJzFPYQSw_40=',
@@ -25,6 +27,44 @@ const PetFilter = ({ petTypes, onFilterPress }) => {
   const isFilterSelected = (filter) => {
     return selectedFilter === filter;
   };
+
+  const styles = StyleSheet.create({
+    filterScrollContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    filterButton: {
+      alignItems: 'center',
+      borderRadius: 50,
+      borderWidth: 1,
+      borderColor: '#EBEBEB',
+      paddingVertical: 8,
+      paddingHorizontal: 9,
+      marginHorizontal: 4,
+    },
+    filterContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    filterImage: {
+      width: 40,
+      height: 40,
+      borderRadius: 25,
+      marginRight: 5,
+    },
+    filterText: {
+      fontSize: 16,
+      paddingHorizontal: 10,
+      color: theme.colors.text,
+    },
+    selectedFilterButton: {
+      backgroundColor: '#f5857d',
+    },
+    selectedFilterText: {
+      color: 'white',
+      fontWeight: 'bold',
+    },
+  });
 
   return (
     <ScrollView
@@ -84,42 +124,5 @@ const PetFilter = ({ petTypes, onFilterPress }) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  filterScrollContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  filterButton: {
-    alignItems: 'center',
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: '#EBEBEB',
-    paddingVertical: 8,
-    paddingHorizontal: 9,
-    marginHorizontal: 4,
-  },
-  filterContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  filterImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 25,
-    marginRight: 5,
-  },
-  filterText: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-  },
-  selectedFilterButton: {
-    backgroundColor: '#f5857d',
-  },
-  selectedFilterText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-});
 
 export default PetFilter;
