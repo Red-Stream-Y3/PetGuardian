@@ -1,6 +1,8 @@
 import React, { Suspense, useState } from 'react';
 import { ActivityIndicator, ScrollView } from 'react-native';
-import { Header, HomeContainer } from '../../../components';
+// import { Header, HomeContainer } from '../../../components';
+import { Header } from '../../common/Header.jsx';
+import { HomeContainer } from '../../laf/common/HomeContainer.jsx';
 
 const AllPets = ({ title, data }) => {
   const [filter, setFilter] = useState('All');

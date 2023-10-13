@@ -1,59 +1,50 @@
-import { Animated, Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
-import { getAppContext } from '../../context/AppContext';
-import { useEffect, useState } from "react";
+import { getAppContext } from "../../context/AppContext";
 
-const ThemeChip = ({ children, clickable, onClick, text, disableRipple, filled, color, active }) => {
+const ThemeChip = ({
+    children,
+    clickable,
+    onClick,
+    text,
+    disableRipple,
+    filled,
+    color,
+    active,
+}) => {
     const { theme } = getThemeContext();
-    const { selectedTab, tabColor } = getAppContext();
+    const { tabColor } = getAppContext();
 
-    // const [animation] = useState(new Animated.Value(0));
-    // const [currentColor, setCurrentColor] = useState(theme.colors.homePrimary);
-    // const [nextColor, setNextColor] = useState(theme.colors.homePrimary);
-
-    // const triggerAnimation = (color) => {
-    //     Animated.timing(animation, {
-    //         toValue: 1,
-    //         duration: 300,
-    //         useNativeDriver: false,
-    //     }).start(() => {
-    //         setCurrentColor(color);
-    //         animation.setValue(0);
-    //     });
-    // };
-
-    // let bgColor = animation.interpolate({
-    //     inputRange: [0, 1],
-    //     outputRange: [currentColor, nextColor],
-    // });
-    
-    // useEffect(() => {
-    //     setNextColor(tabColor);
-    //     triggerAnimation(tabColor);
-    // }, [selectedTab, theme]);
+    const styles = StyleSheet.create({
+        container: {
+            overflow: "hidden",
+            borderRadius: 20,
+            borderWidth: 1,
+            marginHorizontal: 1,
+            marginVertical: 2,
+            borderColor: tabColor,
+        },
+        ripple: {
+            color: disableRipple ? null : theme.colors.ripple,
+        },
+        pressableStyle: {
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            backgroundColor: active ? color || tabColor : theme.colors.surface,
+            alignItems: "center",
+        },
+        text: {
+            fontWeight: "bold",
+            color: active ? theme.colors.primaryText : theme.colors.text,
+            paddingHorizontal: 5,
+        },
+    });
 
     return (
-        <View
-            style={{
-                overflow: "hidden",
-                borderRadius: 20,
-                borderWidth: 1,
-                marginHorizontal: 1,
-                marginVertical: 2,
-                borderColor: tabColor,
-            }}>
+        <View style={styles.container}>
             <Pressable
-                android_ripple={{
-                    color: disableRipple ? null : theme.colors.ripple,
-                }}
-                style={{
-                    paddingHorizontal: 10,
-                    paddingVertical: 5,
-                    backgroundColor: active
-                        ? (color || tabColor)
-                        : theme.colors.surface,
-                    alignItems: "center",
-                }}
+                android_ripple={styles.ripple}
+                style={styles.pressableStyle}
                 onPress={() => {
                     if (clickable) {
                         if (onClick) onClick();
@@ -61,16 +52,7 @@ const ThemeChip = ({ children, clickable, onClick, text, disableRipple, filled, 
                 }}>
                 {children}
 
-                <Text
-                    style={{
-                        fontWeight: "bold",
-                        color: active
-                            ? theme.colors.primaryText
-                            : theme.colors.text,
-                        paddingHorizontal: 5,
-                    }}>
-                    {text}
-                </Text>
+                <Text style={styles.text}>{text}</Text>
             </Pressable>
         </View>
     );

@@ -1,4 +1,10 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+    ActivityIndicator,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import ThemebackButton from "../common/ThemeBackButton";
 import { useState } from "react";
@@ -18,16 +24,20 @@ import Animated, {
 } from "react-native-reanimated";
 import DailyBooking from "./DailyBooking";
 import WeeklyBooking from "./WeeklyBooking";
+import axios from "axios";
+import Toast from "react-native-toast-message";
 
 const BOOKING_TYPES = ["ONE_TIME", "DAILY", "WEEKLY"];
 
 const ServiceBooking = ({ navigation, route }) => {
     const { theme } = getThemeContext();
-    const { tabColor } = getAppContext();
     const { service } = route.params;
+    const { SERVER_URL, USER } = getAppContext();
+    const [loading, setLoading] = useState(false);
     const [bookingType, setBookingType] = useState(BOOKING_TYPES[0]);
     const [prevType, setPrevType] = useState(BOOKING_TYPES[0]); //for animation [0,1,2]
     const [allDay, setAllDay] = useState(false);
+    const [continuous, setContinuous] = useState(false); //for daily booking [0,1
     const [oneDay, setOneDay] = useState(false);
     const [datePicker, setDatePicker] = useState({
         show: false,
@@ -38,12 +48,10 @@ const ServiceBooking = ({ navigation, route }) => {
 
     //input data
     const [input, setInput] = useState({
-        startDate: new Date(Date.now()),
-        endDate: new Date(Date.now()),
-        startTime: new Date(Date.now()),
-        endTime: new Date(Date.now()),
+        startDateTime: new Date(Date.now()),
+        endDateTime: new Date(Date.now()),
         pets: [],
-        paymentMethod: null,
+        paymentMethod: "credit",
         notes: "",
         days: new Array(7).fill(false),
     });
@@ -90,6 +98,89 @@ const ServiceBooking = ({ navigation, route }) => {
         },
     ];
 
+    const handleHirePress = async () => {
+        setLoading(true);
+        //calculate fees
+        const fee = service.services.fees.find(
+            (fee) => fee.tag === bookingType
+        ).price;
+        const totalFee = calculateFees(
+            input,
+            bookingType,
+            allDay,
+            fee,
+            continuous,
+            oneDay
+        );
+
+        const reqData = {
+            user: USER._id,
+            serviceProvider: service._id,
+            involvedPets: [], //TODO: input.pets.map((pet) => pet._id),
+            startDate: input.startDateTime.toISOString().split("T")[0],
+            endDate: input.endDateTime.toISOString().split("T")[0],
+            startTime: allDay
+                ? new Date(
+                      input.startDateTime.toISOString().split("T")[0] +
+                          " 12:00:00"
+                  )
+                      .toISOString()
+                      .split("T")[1]
+                : input.startDateTime.toISOString().split("T")[1],
+            endTime: allDay
+                ? new Date(
+                      input.startDateTime.toISOString().split("T")[0] +
+                          " 23:59:59"
+                  )
+                      .toISOString()
+                      .split("T")[1]
+                : input.endDateTime.toISOString().split("T")[1],
+            daily: bookingType === BOOKING_TYPES[1],
+            weekly: bookingType === BOOKING_TYPES[2],
+            days: input.days,
+            oneDay: oneDay,
+            continuous: continuous,
+            totalFee: totalFee,
+            notes: input.notes,
+            paymentMethod: input.paymentMethod,
+        };
+
+        try {
+            //check if booking time is available
+            const checkResponse = await axios.post(
+                `${SERVER_URL}/api/v1/services/hire/check`,
+                reqData
+            );
+
+            if (checkResponse.data?.length > 0) {
+                setLoading(false);
+                Toast.show({
+                    type: "error",
+                    text1: "Booking time not available",
+                    text2: "Please choose another time",
+                });
+                return;
+            }
+            //add booking
+            const response = await axios.post(
+                `${SERVER_URL}/api/v1/services/hire`,
+                reqData
+            );
+
+            setLoading(false);
+
+            if (response.status === 201) {
+                navigation.goBack();
+                // response.data.message;
+            } else {
+                console.log(response.data.error);
+            }
+        } catch (error) {
+            console.debug(error);
+            setLoading(false);
+        }
+    };
+
     return (
         <View
             style={{
@@ -124,6 +215,8 @@ const ServiceBooking = ({ navigation, route }) => {
                             setDatePicker={setDatePicker}
                             input={input}
                             setInput={setInput}
+                            oneDay={oneDay}
+                            setOneDay={setOneDay}
                             allDay={allDay}
                             setAllDay={setAllDay}
                             theme={theme}
@@ -133,15 +226,23 @@ const ServiceBooking = ({ navigation, route }) => {
 
                 {bookingType === BOOKING_TYPES[1] && (
                     <Animated.View
-                        entering={prevType===BOOKING_TYPES[2] ? SlideInLeft : SlideInRight}
-                        exiting={prevType===BOOKING_TYPES[0] ? SlideOutLeft : SlideOutRight}>
+                        entering={
+                            prevType === BOOKING_TYPES[2]
+                                ? SlideInLeft
+                                : SlideInRight
+                        }
+                        exiting={
+                            prevType === BOOKING_TYPES[0]
+                                ? SlideOutLeft
+                                : SlideOutRight
+                        }>
                         <DailyBooking
                             styles={styles}
                             setDatePicker={setDatePicker}
                             input={input}
                             setInput={setInput}
-                            oneDay={oneDay}
-                            setOneDay={setOneDay}
+                            oneDay={continuous}
+                            setOneDay={setContinuous}
                             allDay={allDay}
                             setAllDay={setAllDay}
                             theme={theme}
@@ -169,13 +270,23 @@ const ServiceBooking = ({ navigation, route }) => {
             <Animated.View
                 entering={FadeInDown}
                 exiting={FadeOutDown}
-                style={{marginBottom:10}}>
-                <ThemeButton title={"Hire"} textSize={16}>
-                    <Ionicons
-                        name="add-circle-outline"
-                        size={24}
-                        color={theme.colors.primaryIcon}
-                    />
+                style={{ marginBottom: 10 }}>
+                <ThemeButton
+                    title={loading ? null : "Hire"}
+                    textSize={16}
+                    onPress={handleHirePress}>
+                    {loading ? (
+                        <ActivityIndicator
+                            size={24}
+                            color={theme.colors.primaryIcon}
+                        />
+                    ) : (
+                        <Ionicons
+                            name='add-circle-outline'
+                            size={24}
+                            color={theme.colors.primaryIcon}
+                        />
+                    )}
                 </ThemeButton>
             </Animated.View>
 
@@ -195,3 +306,62 @@ const ServiceBooking = ({ navigation, route }) => {
 };
 
 export default ServiceBooking;
+
+const calculateFees = (input, bookingType, allDay, fee, continuous, oneDay) => {
+    let totalFee;
+    let oneDayTime = new Date(
+        input.startDateTime.toISOString().split("T")[0] +
+            "T" +
+            input.endDateTime.toISOString().split("T")[1]
+    );
+
+    let sameDayTimeDifference = (oneDayTime - input.startDateTime) / 3600000;
+    let timeRangeDateDifference =
+        Math.floor(
+            (new Date(input.endDateTime.toISOString().split("T")[0]) -
+                new Date(input.startDateTime.toISOString().split("T")[0])) /
+                86400000
+        ) + 1;
+
+    if (bookingType === BOOKING_TYPES[2]) {
+        let numDays = input.days.filter((day) => day).length;
+        if (allDay) {
+            totalFee = numDays * 24 * fee;
+        } else {
+            totalFee =
+                numDays * ((oneDayTime - input.startDateTime) / 3600000) * fee;
+        }
+    } else if (bookingType === BOOKING_TYPES[1]) {
+        if (allDay) {
+            if (continuous) {
+                totalFee = fee * 24;
+            } else {
+                totalFee = timeRangeDateDifference * 24 * fee;
+            }
+        } else {
+            if (continuous) {
+                totalFee = fee * sameDayTimeDifference;
+            } else {
+                totalFee =
+                    timeRangeDateDifference * sameDayTimeDifference * fee;
+            }
+        }
+    } else {
+        if (allDay) {
+            if (oneDay) {
+                totalFee = fee * 24;
+            } else {
+                totalFee = fee * 24 * timeRangeDateDifference;
+            }
+        } else {
+            if (oneDay) {
+                totalFee = fee * sameDayTimeDifference;
+            } else {
+                totalFee =
+                    fee * sameDayTimeDifference * timeRangeDateDifference;
+            }
+        }
+    }
+
+    return totalFee;
+};
