@@ -2,7 +2,14 @@ import { StatusBar } from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { FoundHome, LostFoundHome, LostHome, Post } from '../../components';
+import {
+  FoundHome,
+  LostFoundHome,
+  LostHome,
+  LostPost,
+  Post,
+  Profile,
+} from '../../components';
 
 const LostFoundNavigator = createNativeStackNavigator();
 
@@ -33,6 +40,16 @@ const LostAndFoundScreen = () => {
         <LostFoundNavigator.Screen
           name="Post"
           component={Post}
+          options={{ headerShown: false }}
+        />
+        <LostFoundNavigator.Screen
+          name="Profile"
+          component={Profile}
+          options={{ headerShown: false }}
+        />
+        <LostFoundNavigator.Screen
+          name="LostPost"
+          component={LostPost}
           options={{ headerShown: false }}
         />
       </LostFoundNavigator.Navigator>

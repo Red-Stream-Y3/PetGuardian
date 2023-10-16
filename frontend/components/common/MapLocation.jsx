@@ -10,7 +10,10 @@ import {
 import * as Location from 'expo-location';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 
+import getThemeContext from '../../context/ThemeContext';
+
 const MapLocation = ({ onMarkerChange }) => {
+  const { theme } = getThemeContext();
   const [mapRegion, setMapRegion] = useState({
     latitude: 6.9271,
     longitude: 79.8612,
@@ -51,7 +54,7 @@ const MapLocation = ({ onMarkerChange }) => {
       });
 
       setMarkerCoordinate(coords);
-      // onMarkerChange(formattedAddress);
+      onMarkerChange(formattedAddress);
       setMarkerTitle(formattedAddress);
 
       mapViewRef.current?.animateToRegion({
@@ -81,7 +84,7 @@ const MapLocation = ({ onMarkerChange }) => {
         `${streetNumber}${streetName}${city}${country}`.replace(/,\s*$/, '');
 
       setMarkerCoordinate(coordinate);
-      // onMarkerChange(formattedAddress);
+      onMarkerChange(formattedAddress);
       setMarkerTitle(formattedAddress);
 
       mapViewRef.current?.animateToRegion({
@@ -104,7 +107,14 @@ const MapLocation = ({ onMarkerChange }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionHeader}>Location</Text>
+      <Text
+        style={{
+          color: theme.colors.text,
+          ...styles.sectionHeader,
+        }}
+      >
+        Location
+      </Text>
       <View style={styles.mapContainer}>
         <Suspense fallback={<ActivityIndicator />}>
           <MapView ref={mapViewRef} style={styles.map} region={mapRegion}>
@@ -137,19 +147,18 @@ const MapLocation = ({ onMarkerChange }) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: '40%',
-    marginTop: 40,
+    height: '32%',
     padding: 10,
   },
   sectionHeader: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 10,
   },
   mapContainer: {
     flex: 1,
     margin: 10,
-    borderRadius: 15,
+    borderRadius: 25,
     overflow: 'hidden',
     borderColor: '#808080',
   },

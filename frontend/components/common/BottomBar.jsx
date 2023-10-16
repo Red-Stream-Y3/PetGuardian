@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Animated, View } from "react-native";
+import { Animated, StyleSheet } from "react-native";
 import RoundIconButton from "./RoundIconButton";
 import getThemeContext from "../../context/ThemeContext";
-import { Ionicons } from '@expo/vector-icons';
-import { StackActions, useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { getAppContext } from "../../context/AppContext";
 
-const BottomBar = ({selected, setSelected}) => {
-    const {theme} = getThemeContext();
+const BottomBar = ({}) => {
+    const { theme } = getThemeContext();
+    const { selectedTab, setSelectedTab, tabColor } = getAppContext();
     const navigation = useNavigation();
     const [barColor, setBarColor] = useState(theme.colors.homePrimary);
     const [animation] = useState(new Animated.Value(0));
@@ -16,84 +18,105 @@ const BottomBar = ({selected, setSelected}) => {
     const SIZE_2 = 35;
     const ICON_THEME = theme.colors.primaryIcon;
 
-    const triggerAnimation = (index) => {
+    const triggerAnimation = () => {
         Animated.timing(animation, {
             toValue: 1,
             duration: 300,
             useNativeDriver: false,
         }).start(() => {
-            setBarColor(theme.colors[buttons[index].name.toLowerCase() + "Primary"]);
+            setBarColor(tabColor);
             animation.setValue(0);
         });
     };
 
     useEffect(() => {
-        navigation.dispatch(
-            StackActions.replace(buttons[selected].name)
-        )
-    }, [selected]);
+        navigation.navigate(buttons[selectedTab].name);
+    }, [selectedTab]);
 
     useEffect(() => {
-        triggerAnimation(selected);
-    }, [theme]);
+        triggerAnimation();
+    }, [theme, tabColor]);
 
     const handlePress = (index) => {
-        setSelected(index);
-
-        //animate bar color
-        triggerAnimation(index);
+        setSelectedTab(index);
     };
 
     const buttons = [
         {
             name: "SERVICES",
-            icon: <Ionicons name="paw-outline" size={SIZE_1} color={ICON_THEME} />,
-            selectIcon: <Ionicons name="paw" size={SIZE_1} color={ICON_THEME} />,
+            icon: (
+                <Ionicons name='paw-outline' size={SIZE_1} color={ICON_THEME} />
+            ),
+            selectIcon: (
+                <Ionicons name='paw' size={SIZE_1} color={ICON_THEME} />
+            ),
             padding: PADDING,
-        },{
+        },
+        {
             name: "LOST",
-            icon: <Ionicons name="paw-outline" size={SIZE_1} color={ICON_THEME} />,
-            selectIcon: <Ionicons name="paw" size={SIZE_1} color={ICON_THEME} />,
+            icon: (
+                <Ionicons name='paw-outline' size={SIZE_1} color={ICON_THEME} />
+            ),
+            selectIcon: (
+                <Ionicons name='paw' size={SIZE_1} color={ICON_THEME} />
+            ),
             padding: PADDING,
-        },{
+        },
+        {
             name: "HOME",
-            icon: <Ionicons name="paw-outline" size={SIZE_2} color={ICON_THEME} />,
-            selectIcon: <Ionicons name="paw" size={SIZE_2} color={ICON_THEME} />,
+            icon: (
+                <Ionicons name='paw-outline' size={SIZE_2} color={ICON_THEME} />
+            ),
+            selectIcon: (
+                <Ionicons name='paw' size={SIZE_2} color={ICON_THEME} />
+            ),
             padding: PADDING,
-        },{
+        },
+        {
             name: "ADOPT",
-            icon: <Ionicons name="paw-outline" size={SIZE_1} color={ICON_THEME} />,
-            selectIcon: <Ionicons name="paw" size={SIZE_1} color={ICON_THEME} />,
+            icon: (
+                <Ionicons name='paw-outline' size={SIZE_1} color={ICON_THEME} />
+            ),
+            selectIcon: (
+                <Ionicons name='paw' size={SIZE_1} color={ICON_THEME} />
+            ),
             padding: PADDING,
-        },{
+        },
+        {
             name: "PLAY",
-            icon: <Ionicons name="paw-outline" size={SIZE_1} color={ICON_THEME} />,
-            selectIcon: <Ionicons name="paw" size={SIZE_1} color={ICON_THEME} />,
+            icon: (
+                <Ionicons name='paw-outline' size={SIZE_1} color={ICON_THEME} />
+            ),
+            selectIcon: (
+                <Ionicons name='paw' size={SIZE_1} color={ICON_THEME} />
+            ),
             padding: PADDING,
-        }
+        },
     ];
 
     let backgroundColor = animation.interpolate({
         inputRange: [0, 1],
-        outputRange: [barColor, theme.colors[buttons[selected].name.toLowerCase() + "Primary"]],
+        outputRange: [barColor, tabColor],
+    });
+
+    const styles = StyleSheet.create({
+        container: {
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            backgroundColor: backgroundColor,
+        },
     });
 
     return (
-        <Animated.View
-            style={{
-                alignItems: "center",
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                backgroundColor: backgroundColor,
-            }}>
+        <Animated.View style={styles.container}>
             {buttons.map((button, index) => (
                 <RoundIconButton
                     key={index}
                     name={button.name}
                     padding={button.padding}
-                    onPress={() => handlePress(index)}
-                >
-                    {selected === index ? button.selectIcon : button.icon}
+                    onPress={() => handlePress(index)}>
+                    {selectedTab === index ? button.selectIcon : button.icon}
                 </RoundIconButton>
             ))}
         </Animated.View>

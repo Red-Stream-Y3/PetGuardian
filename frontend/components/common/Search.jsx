@@ -6,12 +6,47 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
 
-const Search = ({ image }) => {
+const Search = ({ navigation, image }) => {
+  const { theme } = getThemeContext();
+
+  const styles = StyleSheet.create({
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      marginBottom: 10,
+      marginLeft: 2,
+    },
+    searchBar: {
+      flex: 1,
+      height: 40,
+      backgroundColor: theme.colors.surface,
+      color: theme.colors.text,
+      borderRadius: 10,
+      paddingHorizontal: 16,
+      elevation: 5,
+    },
+    userProfileImage: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      marginLeft: 20,
+    },
+  });
+
   return (
     <View style={styles.header}>
-      <TextInput placeholder="Search" style={styles.searchBar} />
-      <TouchableOpacity>
+      <TextInput
+        placeholderTextColor={theme.colors.text}
+        placeholder="Search"
+        style={styles.searchBar}
+      />
+      <TouchableOpacity
+        onPress={() => navigation.getParent().getParent().openDrawer()}
+      >
         <Image
           style={styles.userProfileImage}
           source={{
@@ -24,29 +59,5 @@ const Search = ({ image }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    marginBottom: 10,
-    marginLeft: 2,
-  },
-  searchBar: {
-    flex: 1,
-    height: 40,
-    backgroundColor: '#F2F2F2',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-  },
-  userProfileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginLeft: 20,
-  },
-});
 
 export default Search;

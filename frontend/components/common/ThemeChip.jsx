@@ -1,51 +1,58 @@
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
-import { useState } from "react";
+import { getAppContext } from "../../context/AppContext";
 
-const ThemeChip = ({ children, clickable, onClick, text, disableRipple, filled }) => {
+const ThemeChip = ({
+    children,
+    clickable,
+    onClick,
+    text,
+    disableRipple,
+    filled,
+    color,
+    active,
+}) => {
     const { theme } = getThemeContext();
-    const [clicked, setClicked] = useState(filled ? true : false);
+    const { tabColor } = getAppContext();
+
+    const styles = StyleSheet.create({
+        container: {
+            overflow: "hidden",
+            borderRadius: 20,
+            borderWidth: 1,
+            marginHorizontal: 1,
+            marginVertical: 2,
+            borderColor: tabColor,
+        },
+        ripple: {
+            color: disableRipple ? null : theme.colors.ripple,
+        },
+        pressableStyle: {
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            backgroundColor: active ? color || tabColor : theme.colors.surface,
+            alignItems: "center",
+        },
+        text: {
+            fontWeight: "bold",
+            color: active ? theme.colors.primaryText : theme.colors.text,
+            paddingHorizontal: 5,
+        },
+    });
 
     return (
-        <View
-            style={{
-                overflow: "hidden",
-                borderRadius: 20,
-                borderWidth: 1,
-                marginHorizontal: 1,
-                borderColor: theme.colors.servicesPrimary,
-            }}>
+        <View style={styles.container}>
             <Pressable
-                android_ripple={{
-                    color: disableRipple ? null : theme.colors.ripple,
-                }}
-                style={{
-                    paddingHorizontal: 10,
-                    paddingVertical: 5,
-                    backgroundColor: clicked
-                        ? theme.colors.servicesPrimary
-                        : theme.colors.surface,
-                    borderColor: theme.colors.primary,
-                    alignItems: "center",
-                }}
+                android_ripple={styles.ripple}
+                style={styles.pressableStyle}
                 onPress={() => {
                     if (clickable) {
-                        setClicked(!clicked);
                         if (onClick) onClick();
                     }
                 }}>
                 {children}
 
-                <Text
-                    style={{
-                        fontWeight: "bold",
-                        color: clicked
-                            ? theme.colors.primaryText
-                            : theme.colors.text,
-                        paddingHorizontal: 5,
-                    }}>
-                    {text}
-                </Text>
+                <Text style={styles.text}>{text}</Text>
             </Pressable>
         </View>
     );
