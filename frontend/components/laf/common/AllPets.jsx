@@ -1,7 +1,7 @@
 import React, { Suspense, useState } from 'react';
 import { ActivityIndicator, ScrollView } from 'react-native';
-import { Header } from '../../common/Header';
-import { PetsContainer } from '../../common/PetsContainer';
+import Header from '../../common/Header';
+import PetsContainer from '../../common/PetsContainer';
 
 const AllPets = ({ title, data }) => {
     const [filter, setFilter] = useState('All');
@@ -15,7 +15,7 @@ const AllPets = ({ title, data }) => {
         return pairs;
     };
 
-    const petTypes = [...new Set(data.map((pet) => pet.petType))]; // Get unique pet types
+    const petTypes = [...new Set(data.map((pet) => pet.pet.type))]; // Get unique pet types
 
     const filteredPetsData = data.filter((pet) => {
         if (filter === 'All') {

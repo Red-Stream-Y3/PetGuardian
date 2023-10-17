@@ -1,15 +1,31 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { ActivityIndicator, TouchableOpacity, View, Text, Image, StyleSheet, FlatList } from 'react-native';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import getThemeContext from '../../../context/ThemeContext';
+import { getAppContext } from '../../../context/AppContext';
 import Header from '../../common/Header';
-import { lostPetsData } from '../pets';
+import { getPostByUser } from '../../../services/PostServices';
 
 const Profile = () => {
     const { theme } = getThemeContext();
     const { user } = getAppContext();
     const navigation = useNavigation();
+
+    const [posts, setPosts] = useState([]);
+
+    const getPosts = async () => {
+        try {
+            const response = await getPostByUser(user._id, user.token);
+            setPosts(response);
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+    };
+
+    useEffect(() => {
+        getPosts();
+    }, []);
 
     const handleNew = () => {
         navigation.navigate('LostPost');
@@ -106,8 +122,8 @@ const Profile = () => {
 
     const renderItem = ({ item }) => (
         <View style={styles.postItem}>
-            <Image source={{ uri: item.images[0].uri }} style={styles.postImage} />
-            <Text style={styles.postName}>{item.title}</Text>
+            <Image source={{ uri: item.images[0] }} style={styles.postImage} />
+            <Text style={styles.postName}>{item.pet.name}</Text>
             <TouchableOpacity onPress={() => removePost(item._id)} style={styles.removePostButton}>
                 <AntDesign name="closecircle" size={24} color="black" />
             </TouchableOpacity>
@@ -136,7 +152,7 @@ const Profile = () => {
                     </TouchableOpacity>
                 </View>
                 <FlatList
-                    data={lostPetsData}
+                    data={posts}
                     keyExtractor={(item) => item._id}
                     renderItem={renderItem}
                     style={styles.postsContainer}
