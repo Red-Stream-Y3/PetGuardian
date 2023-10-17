@@ -8,17 +8,17 @@ const userRatingSchema = new mongoose.Schema(
         },
         review: {
             type: String,
-            default: "",
+            default: '',
         },
         user: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: 'User',
             required: true,
         },
     },
     {
         timestamps: true,
-    }
+    },
 );
 
 const UserRating = mongoose.model('UserRating', userRatingSchema);

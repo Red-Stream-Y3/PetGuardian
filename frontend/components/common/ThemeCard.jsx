@@ -1,6 +1,6 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import getThemeContext from "../../context/ThemeContext";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
 
 const ThemeCard = ({
     backgroundColor,
@@ -21,8 +21,8 @@ const ThemeCard = ({
             marginVertical: marginVertical || 10,
             borderRadius: 10,
             elevation: 5,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
         },
     });
 

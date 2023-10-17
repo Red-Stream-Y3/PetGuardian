@@ -1,13 +1,8 @@
-import { SafeAreaView, Text, View, StatusBar, StyleSheet } from "react-native";
-import getThemeContext from "../../context/ThemeContext";
-import {
-    ThemeBackButton,
-    ThemeButton,
-    ThemeCard,
-    ThemeOverlay,
-} from "../../components";
-import { getAppContext } from "../../context/AppContext";
-import { useState } from "react";
+import { SafeAreaView, Text, View, StatusBar, StyleSheet } from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
+import { ThemeBackButton, ThemeButton, ThemeCard, ThemeOverlay } from '../../components';
+import { getAppContext } from '../../context/AppContext';
+import { useState } from 'react';
 
 const ProfileScreen = ({ navigation }) => {
     const { theme, toggleTheme } = getThemeContext();
@@ -34,66 +29,44 @@ const ProfileScreen = ({ navigation }) => {
         },
         titleText: {
             fontSize: 20,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             marginStart: 10,
         },
         titleContainer: {
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
         },
         text: {
             color: theme.colors.text,
             fontSize: 14,
         },
         buttonGroup: {
-            flexDirection: "row",
-            justifyContent: "space-between",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
             marginTop: 10,
         },
     });
 
     return (
-        <SafeAreaView
-            style={{ flex: 1, backgroundColor: theme.colors.background }}>
-            <StatusBar
-                barStyle={
-                    theme.mode === "dark" ? "light-content" : "dark-content"
-                }
-                hidden={false}
-            />
-            <ThemeOverlay
-                visible={showSignOut}
-                onPressBg={() => setShowSignOut(false)}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+            <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} hidden={false} />
+            <ThemeOverlay visible={showSignOut} onPressBg={() => setShowSignOut(false)}>
                 <ThemeCard>
-                    <Text style={styles.text}>
-                        Are you sure you want to sign out?
-                    </Text>
+                    <Text style={styles.text}>Are you sure you want to sign out?</Text>
                     <View style={styles.buttonGroup}>
-                        <ThemeButton title='Yes' onPress={handleSignOutPress} />
-                        <ThemeButton
-                            title='No'
-                            onPress={() => setShowSignOut(false)}
-                        />
+                        <ThemeButton title="Yes" onPress={handleSignOutPress} />
+                        <ThemeButton title="No" onPress={() => setShowSignOut(false)} />
                     </View>
                 </ThemeCard>
             </ThemeOverlay>
             <View style={styles.container}>
-                <ThemeBackButton
-                    navigation={navigation}
-                    customBackAction={() => navigation.jumpTo("Home")}
-                />
+                <ThemeBackButton navigation={navigation} customBackAction={() => navigation.jumpTo('Home')} />
 
                 <ThemeCard>
                     <View style={styles.titleContainer}>
                         <Text style={styles.titleText}>Profile</Text>
-                        <ThemeButton
-                            title='Sign Out'
-                            onPress={handleSignOutPress}
-                        />
-                        <ThemeButton
-                            title='Switch Theme'
-                            onPress={handleSwitchThemePress}
-                        />
+                        <ThemeButton title="Sign Out" onPress={handleSignOutPress} />
+                        <ThemeButton title="Switch Theme" onPress={handleSwitchThemePress} />
                     </View>
                 </ThemeCard>
             </View>

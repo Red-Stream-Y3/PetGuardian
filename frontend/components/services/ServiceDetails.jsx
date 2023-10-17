@@ -1,27 +1,16 @@
-import axios from "axios";
-import {
-    ActivityIndicator,
-    Dimensions,
-    RefreshControl,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from "react-native";
-import Animated, { FadeInDown, FadeInLeft } from "react-native-reanimated";
-import { getAppContext } from "../../context/AppContext";
-import getThemeContext from "../../context/ThemeContext";
-import { useEffect, useState } from "react";
-import ThemeChip from "../common/ThemeChip";
-import ThemeButton from "../common/ThemeButton";
-import { Entypo } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import ThemebackButton from "../common/ThemeBackButton";
-import {
-    getServiceProviderById,
-    getServiceRating,
-} from "../../services/ServiceproviderSerives";
-import Toast from "react-native-toast-message";
+import axios from 'axios';
+import { ActivityIndicator, Dimensions, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import Animated, { FadeInDown, FadeInLeft } from 'react-native-reanimated';
+import { getAppContext } from '../../context/AppContext';
+import getThemeContext from '../../context/ThemeContext';
+import { useEffect, useState } from 'react';
+import ThemeChip from '../common/ThemeChip';
+import ThemeButton from '../common/ThemeButton';
+import { Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import ThemebackButton from '../common/ThemeBackButton';
+import { getServiceProviderById, getServiceRating } from '../../services/ServiceproviderSerives';
+import Toast from 'react-native-toast-message';
 
 const ServiceDetails = ({ navigation, route }) => {
     const { user } = getAppContext();
@@ -36,20 +25,17 @@ const ServiceDetails = ({ navigation, route }) => {
     const getServiceDetails = async () => {
         setLoading(true);
         try {
-            const result = await getServiceProviderById(
-                service._id,
-                user.token
-            );
+            const result = await getServiceProviderById(service._id, user.token);
             setDetails(result);
             setLoading(false);
         } catch (error) {
             Toast.show({
-                type: "error",
-                text1: "Error",
+                type: 'error',
+                text1: 'Error',
                 text2:
                     error?.response?.data?.message || //axios error
                     error.message || //js error
-                    "Could not get service provider", //default
+                    'Could not get service provider', //default
             });
         }
     };
@@ -63,12 +49,12 @@ const ServiceDetails = ({ navigation, route }) => {
             setShowRating(true);
         } catch (error) {
             Toast.show({
-                type: "error",
-                text1: "Error",
+                type: 'error',
+                text1: 'Error',
                 text2:
                     error?.response?.data?.message || //axios error
                     error.message || //js error
-                    "Could not get service provider", //default
+                    'Could not get service provider', //default
             });
             setShowRating(true);
         }
@@ -84,7 +70,7 @@ const ServiceDetails = ({ navigation, route }) => {
     }, []);
 
     const handleBookingPress = () => {
-        navigation.navigate("Booking", { service: details });
+        navigation.navigate('Booking', { service: details });
     };
 
     const styles = StyleSheet.create({
@@ -93,19 +79,19 @@ const ServiceDetails = ({ navigation, route }) => {
             backgroundColor: theme.colors.background,
         },
         scrollViewStyle: {
-            width: "100%",
+            width: '100%',
             flex: 1,
         },
         imageStyle: {
-            width: "100%",
-            height: Dimensions.get("window").height / 4,
-            position: "relative",
+            width: '100%',
+            height: Dimensions.get('window').height / 4,
+            position: 'relative',
             marginBottom: 10,
         },
         textContainer: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             paddingHorizontal: 10,
             borderWidth: 1,
             borderRadius: 10,
@@ -115,9 +101,9 @@ const ServiceDetails = ({ navigation, route }) => {
             color: theme.colors.text,
         },
         descriptionContainer: {
-            position: "relative",
-            width: "100%",
-            minHeight: (Dimensions.get("window").height * 3) / 4,
+            position: 'relative',
+            width: '100%',
+            minHeight: (Dimensions.get('window').height * 3) / 4,
             backgroundColor: theme.colors.surface,
             borderTopEndRadius: 20,
             borderTopStartRadius: 20,
@@ -125,39 +111,39 @@ const ServiceDetails = ({ navigation, route }) => {
             elevation: 5,
         },
         titleContainer: {
-            flexDirection: "row",
+            flexDirection: 'row',
             paddingVertical: 10,
-            justifyContent: "space-between",
-            alignItems: "center",
+            justifyContent: 'space-between',
+            alignItems: 'center',
         },
         titleText: {
             color: theme.colors.text,
             fontSize: 20,
-            fontWeight: "bold",
+            fontWeight: 'bold',
         },
         subtitleText: {
             color: theme.colors.text,
             fontSize: 14,
-            fontWeight: "bold",
+            fontWeight: 'bold',
         },
         ratingContainer: {
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
         },
         text: {
             color: theme.colors.text,
         },
         flexRow: {
-            flexDirection: "row",
+            flexDirection: 'row',
         },
         marginVertical10: {
             marginVertical: 10,
         },
         multiLineTextContainer: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             paddingHorizontal: 10,
             borderWidth: 1,
             borderRadius: 10,
@@ -171,12 +157,12 @@ const ServiceDetails = ({ navigation, route }) => {
         multiLineTextBold: {
             color: theme.colors.text,
             fontSize: 14,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             marginVertical: 10,
         },
         buttonContainer: {
-            flexDirection: "row",
-            justifyContent: "center",
+            flexDirection: 'row',
+            justifyContent: 'center',
             marginTop: 15,
         },
     });
@@ -193,89 +179,66 @@ const ServiceDetails = ({ navigation, route }) => {
                         colors={[theme.colors.servicesPrimary]}
                     />
                 }
-                style={styles.scrollViewStyle}>
+                style={styles.scrollViewStyle}
+            >
                 <Animated.Image
                     style={styles.imageStyle}
                     source={{
-                        uri:
-                            service?.image ||
-                            "https://wallpapercave.com/wp/wp4928162.jpg",
+                        uri: service?.image || 'https://wallpapercave.com/wp/wp4928162.jpg',
                     }}
                     sharedTransitionTag={service?._id}
                 />
 
-                <Animated.View
-                    style={styles.descriptionContainer}
-                    entering={FadeInDown.delay(600).springify()}>
+                <Animated.View style={styles.descriptionContainer} entering={FadeInDown.delay(600).springify()}>
                     <View style={styles.titleContainer}>
                         <View>
-                            <Text style={styles.titleText}>
-                                {details?.firstName + " " + details?.lastName}
-                            </Text>
+                            <Text style={styles.titleText}>{details?.firstName + ' ' + details?.lastName}</Text>
                             <Text style={styles.subtitleText}>
-                                {"Available in : "}
-                                {details?.services?.activeCities
-                                    .map((item) => item)
-                                    .join(", ")}
+                                {'Available in : '}
+                                {details?.services?.activeCities.map((item) => item).join(', ')}
                             </Text>
                         </View>
                         <View>
                             {showRating && (
                                 <Animated.View entering={FadeInLeft}>
                                     <View style={styles.ratingContainer}>
-                                        <Ionicons
-                                            name='paw'
-                                            size={24}
-                                            color={theme.colors.servicesPrimary}
-                                        />
-                                        <Text style={styles.text}>
-                                            {rating?.averageRating}
-                                        </Text>
+                                        <Ionicons name="paw" size={24} color={theme.colors.servicesPrimary} />
+                                        <Text style={styles.text}>{rating?.averageRating}</Text>
                                     </View>
-                                    <Text style={{ color: theme.colors.text }}>
-                                        {rating?.count || "No"} Ratings
-                                    </Text>
+                                    <Text style={{ color: theme.colors.text }}>{rating?.count || 'No'} Ratings</Text>
                                 </Animated.View>
                             )}
                         </View>
                     </View>
 
                     {loading ? (
-                        <ActivityIndicator
-                            color={theme.colors.servicesPrimary}
-                        />
+                        <ActivityIndicator color={theme.colors.servicesPrimary} />
                     ) : (
                         <>
                             <View style={styles.marginVertical10}>
                                 <Text style={styles.H1}>SERVICES</Text>
                                 <View style={styles.flexRow}>
-                                    {details?.services?.serviceTypes.map(
-                                        (item, i) => (
-                                            <ThemeChip key={i} text={item} />
-                                        )
-                                    )}
+                                    {details?.services?.serviceTypes.map((item, i) => (
+                                        <ThemeChip key={i} text={item} />
+                                    ))}
                                 </View>
                             </View>
 
                             <View style={styles.marginVertical10}>
                                 <Text style={styles.H1}>I ACCEPT</Text>
                                 <View style={styles.flexRow}>
-                                    {details?.services?.petTypes.map(
-                                        (item, i) => (
-                                            <ThemeChip key={i} text={item} />
-                                        )
-                                    )}
+                                    {details?.services?.petTypes.map((item, i) => (
+                                        <ThemeChip key={i} text={item} />
+                                    ))}
                                 </View>
                             </View>
 
                             <View style={styles.marginVertical10}>
                                 <Text style={styles.H1}>WORKING DAYS</Text>
                                 <View style={styles.flexRow}>
-                                    {details?.services?.workDays.map(
-                                        (item, i) => (
-                                            <ThemeChip key={i} text={item} />
-                                        )
-                                    )}
+                                    {details?.services?.workDays.map((item, i) => (
+                                        <ThemeChip key={i} text={item} />
+                                    ))}
                                 </View>
                             </View>
 
@@ -283,15 +246,7 @@ const ServiceDetails = ({ navigation, route }) => {
                                 <Text style={styles.H1}>MY RATES</Text>
                                 <View style={styles.flexRow}>
                                     {details?.services?.fees.map((item, i) => (
-                                        <ThemeChip
-                                            key={i}
-                                            text={
-                                                item.tag +
-                                                " " +
-                                                item.price +
-                                                "$/hr"
-                                            }
-                                        />
+                                        <ThemeChip key={i} text={item.tag + ' ' + item.price + '$/hr'} />
                                     ))}
                                 </View>
                             </View>
@@ -299,35 +254,23 @@ const ServiceDetails = ({ navigation, route }) => {
                             <View style={styles.marginVertical10}>
                                 <Text style={styles.H1}>ABOUT ME</Text>
                                 <View style={styles.multiLineTextContainer}>
-                                    <Text style={styles.multiLineText}>
-                                        {details?.services?.description}
-                                    </Text>
+                                    <Text style={styles.multiLineText}>{details?.services?.description}</Text>
                                 </View>
                             </View>
 
                             <View style={styles.multiLineTextContainer}>
                                 <Text style={styles.multiLineTextBold}>
-                                    {"Contact: "}
-                                    {details?.services?.businessPhone
-                                        ?.map((item) => item)
-                                        ?.join(", ")}
+                                    {'Contact: '}
+                                    {details?.services?.businessPhone?.map((item) => item)?.join(', ')}
                                 </Text>
                             </View>
                         </>
                     )}
 
                     <View style={styles.buttonContainer}>
-                        <ThemeButton
-                            textSize={16}
-                            title='Book Now'
-                            onPress={handleBookingPress}
-                        />
+                        <ThemeButton textSize={16} title="Book Now" onPress={handleBookingPress} />
                         <ThemeButton>
-                            <Entypo
-                                name='calendar'
-                                size={24}
-                                color={theme.colors.primaryIcon}
-                            />
+                            <Entypo name="calendar" size={24} color={theme.colors.primaryIcon} />
                         </ThemeButton>
                     </View>
                 </Animated.View>

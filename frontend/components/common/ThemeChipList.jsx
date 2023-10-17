@@ -1,27 +1,22 @@
-import { StyleSheet, View } from "react-native";
-import ThemeChip from "./ThemeChip";
-import { useEffect, useState } from "react";
+import { StyleSheet, View } from 'react-native';
+import ThemeChip from './ThemeChip';
+import { useEffect, useState } from 'react';
 
 const ThemeChipList = ({ data, defaultIndex, multiSelect, activeList }) => {
     const [clickIndex, setClickIndex] = useState(defaultIndex || 0);
-    const [activeChips, setActiveChips] = useState(
-        activeList || new Array(data.length).fill(false)
-    );
+    const [activeChips, setActiveChips] = useState(activeList || new Array(data.length).fill(false));
 
     const styles = StyleSheet.create({
         container: {
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            alignItems: "center",
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            alignItems: 'center',
         },
     });
 
     useEffect(() => {
-        if (multiSelect !== true)
-            setActiveChips(
-                activeChips.map((chip, index) => index === clickIndex)
-            );
+        if (multiSelect !== true) setActiveChips(activeChips.map((chip, index) => index === clickIndex));
     }, [clickIndex]);
 
     return (

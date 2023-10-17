@@ -4,19 +4,21 @@ const hireRequestSchema = new mongoose.Schema(
     {
         user: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: 'User',
             required: true,
         },
         serviceProvider: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: 'User',
             required: true,
         },
-        involvedPets: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Pet",
-            required: true,
-        }],
+        involvedPets: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Pet',
+                required: true,
+            },
+        ],
         status: {
             type: String,
             enum: ['pending', 'accepted', 'rejected', 'completed', 'cancelled'],
@@ -63,7 +65,7 @@ const hireRequestSchema = new mongoose.Schema(
         },
         notes: {
             type: String,
-            default: "",
+            default: '',
         },
         paymentMethod: {
             type: String,
@@ -77,7 +79,7 @@ const hireRequestSchema = new mongoose.Schema(
         },
         review: {
             type: String,
-            default: "",
+            default: '',
         },
         rating: {
             type: Number,
@@ -85,7 +87,7 @@ const hireRequestSchema = new mongoose.Schema(
     },
     {
         timestamps: true,
-    }
+    },
 );
 
 //indexes for getting a user's hire requests

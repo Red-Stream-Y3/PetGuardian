@@ -1,22 +1,16 @@
-import { StatusBar, Text, View } from "react-native";
-import getThemeContext from "../../context/ThemeContext";
-import { ThemeButton } from "../../components";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar, Text, View } from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
+import { ThemeButton } from '../../components';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AdoptionScreen = () => {
     const { theme } = getThemeContext();
     return (
-        <SafeAreaView
-            style={{ flex: 1, backgroundColor: theme.colors.background }}>
-            <StatusBar
-                barStyle={
-                    theme.mode === "dark" ? "light-content" : "dark-content"
-                }
-                hidden={false}
-            />
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+            <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} hidden={false} />
 
             <View>
-                <Text style={{color:theme.colors.text}}>Adoptions</Text>
+                <Text style={{ color: theme.colors.text }}>Adoptions</Text>
                 <ThemeButton title="Services" />
             </View>
         </SafeAreaView>
