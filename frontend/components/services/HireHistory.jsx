@@ -1,28 +1,19 @@
-import React, { Suspense, lazy, useEffect, useState } from "react";
-import {
-    View,
-    Text,
-    ActivityIndicator,
-    StyleSheet,
-    RefreshControl,
-} from "react-native";
-import getThemeContext from "../../context/ThemeContext";
-import { getAppContext } from "../../context/AppContext";
-import axios from "axios";
-import ImageItemCard from "../common/ImageItemCard";
-import Animated from "react-native-reanimated";
-import ThemeBackButton from "../common/ThemeBackButton";
-import ThemeOverlay from "../common/ThemeOverlay";
-import BookingSummary from "./BookingSummary";
-import Toast from "react-native-toast-message";
-import ThemeButton from "../common/ThemeButton";
-import RateService from "./RateService";
-import {
-    cancelBooking,
-    getUserBookings,
-} from "../../services/ServiceproviderSerives";
+import React, { Suspense, lazy, useEffect, useState } from 'react';
+import { View, Text, ActivityIndicator, StyleSheet, RefreshControl } from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
+import { getAppContext } from '../../context/AppContext';
+import axios from 'axios';
+import ImageItemCard from '../common/ImageItemCard';
+import Animated from 'react-native-reanimated';
+import ThemeBackButton from '../common/ThemeBackButton';
+import ThemeOverlay from '../common/ThemeOverlay';
+import BookingSummary from './BookingSummary';
+import Toast from 'react-native-toast-message';
+import ThemeButton from '../common/ThemeButton';
+import RateService from './RateService';
+import { cancelBooking, getUserBookings } from '../../services/ServiceproviderSerives';
 
-const FlatList = lazy(() => import("react-native/Libraries/Lists/FlatList"));
+const FlatList = lazy(() => import('react-native/Libraries/Lists/FlatList'));
 
 const HireHistory = ({ navigation }) => {
     const { theme } = getThemeContext();
@@ -43,12 +34,12 @@ const HireHistory = ({ navigation }) => {
             setLoading(false);
         } catch (error) {
             Toast.show({
-                type: "error",
-                text1: "Error",
+                type: 'error',
+                text1: 'Error',
                 text2:
                     error?.response?.data?.message || //axios error
                     error.message || //js error
-                    "Could not get hire history", //default
+                    'Could not get hire history', //default
             });
             setLoading(false);
         }
@@ -61,18 +52,18 @@ const HireHistory = ({ navigation }) => {
     const styles = StyleSheet.create({
         container: {
             flex: 1,
-            alignItems: "center",
-            width: "100%",
+            alignItems: 'center',
+            width: '100%',
         },
         textTitle: {
             fontSize: 16,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             color: theme.colors.text,
             marginBottom: 5,
         },
         textSubtitle: {
             fontSize: 14,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             color: theme.colors.text,
         },
         textBody: {
@@ -85,25 +76,25 @@ const HireHistory = ({ navigation }) => {
         },
         textHighlightBold: {
             fontSize: 18,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             color: theme.colors.servicesPrimary,
         },
         titleContainer: {
-            width: "100%",
-            alignItems: "center",
+            width: '100%',
+            alignItems: 'center',
         },
         emptyMessage: {
             marginTop: 50,
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
         },
     });
 
     const onPressCancelBooking = async (id) => {
         const data = {
             _id: id,
-            status: "cancelled",
+            status: 'cancelled',
         };
         try {
             const response = await cancelBooking(data, user.token);
@@ -112,19 +103,19 @@ const HireHistory = ({ navigation }) => {
                 setShowSelected(false);
                 setSelected(null);
                 Toast.show({
-                    type: "success",
-                    text1: "Booking Cancelled",
+                    type: 'success',
+                    text1: 'Booking Cancelled',
                 });
                 getHireHistory();
             }
         } catch (error) {
             Toast.show({
-                type: "error",
-                text1: "Error",
+                type: 'error',
+                text1: 'Error',
                 text2:
                     error?.response?.data?.message || //axios error
                     error.message || //js error
-                    "Could not cancel booking", //default
+                    'Could not cancel booking', //default
             });
         }
     };
@@ -139,25 +130,18 @@ const HireHistory = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <ThemeOverlay
-                visible={showRating}
-                onPressBg={() => setShowRating(false)}>
-                <RateService
-                    provider={selected}
-                    handleClose={() => setShowRating(false)}
-                />
+            <ThemeOverlay visible={showRating} onPressBg={() => setShowRating(false)}>
+                <RateService provider={selected} handleClose={() => setShowRating(false)} />
             </ThemeOverlay>
 
-            <ThemeOverlay
-                visible={showSelected}
-                onPressBg={() => setShowSelected(false)}>
+            <ThemeOverlay visible={showSelected} onPressBg={() => setShowSelected(false)}>
                 <BookingSummary
                     booking={selected}
                     closeActionCallback={() => {
                         setShowSelected(false);
                         setSelected(null);
                     }}
-                    actionTitle={"Cancel Booking"}
+                    actionTitle={'Cancel Booking'}
                     actionCallback={() => {
                         onPressCancelBooking(selected._id);
                     }}
@@ -172,80 +156,53 @@ const HireHistory = ({ navigation }) => {
             <Suspense fallback={<ActivityIndicator />}>
                 <FlatList
                     data={history}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={loading}
-                            onRefresh={getHireHistory}
-                        />
-                    }
+                    refreshControl={<RefreshControl refreshing={loading} onRefresh={getHireHistory} />}
                     ListEmptyComponent={
                         <View style={styles.emptyMessage}>
-                            <Text style={styles.textBody}>
-                                No History Found
-                            </Text>
+                            <Text style={styles.textBody}>No History Found</Text>
                         </View>
                     }
                     keyExtractor={(item) => item._id}
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                     renderItem={({ item, i }) => (
                         <Animated.View style={styles.titleContainer}>
                             <ImageItemCard
-                                style={"side"}
+                                style={'side'}
                                 index={i}
                                 onClick={() => {
                                     setSelected(item);
                                     setShowSelected(true);
                                 }}
                                 uri={
-                                    item.serviceProvider.profilePic ||
-                                    "https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg"
+                                    item.serviceProvider.profilePic || 'https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg'
                                 }
                                 body={
                                     <View>
                                         <Text style={styles.textTitle}>
-                                            {item.serviceProvider.firstName}{" "}
-                                            {item.serviceProvider.lastName}
+                                            {item.serviceProvider.firstName} {item.serviceProvider.lastName}
                                         </Text>
                                         <Text style={styles.textBody}>
-                                            {new Date(
-                                                item.startDate
-                                            ).toLocaleDateString()}{" "}
-                                            {item.oneDay
-                                                ? ""
-                                                : ` to ${new Date(
-                                                      item.endDate
-                                                  ).toLocaleDateString()}`}
+                                            {new Date(item.startDate).toLocaleDateString()}{' '}
+                                            {item.oneDay ? '' : ` to ${new Date(item.endDate).toLocaleDateString()}`}
                                         </Text>
                                         <Text style={styles.textBody}>
-                                            {new Date(
-                                                item.startTime
-                                            ).toLocaleTimeString()}{" "}
-                                            {` to ${new Date(
-                                                item.endTime
-                                            ).toLocaleTimeString()}`}
+                                            {new Date(item.startTime).toLocaleTimeString()}{' '}
+                                            {` to ${new Date(item.endTime).toLocaleTimeString()}`}
                                         </Text>
                                         <View
                                             style={{
-                                                flexDirection: "row",
+                                                flexDirection: 'row',
                                                 marginTop: 5,
-                                            }}>
-                                            <Text style={styles.textHighlight}>
-                                                STATUS :{" "}
-                                            </Text>
-                                            <Text
-                                                style={
-                                                    styles.textHighlightBold
-                                                }>
-                                                {item.status}
-                                            </Text>
+                                            }}
+                                        >
+                                            <Text style={styles.textHighlight}>STATUS : </Text>
+                                            <Text style={styles.textHighlightBold}>{item.status}</Text>
                                         </View>
 
-                                        {item.status !== "pending" && (
+                                        {item.status !== 'pending' && (
                                             <ThemeButton
-                                                title={"Rate Service"}
-                                                onPress={() =>
-                                                    handleRatingClick(item)
-                                                }
+                                                title={'Rate Service'}
+                                                onPress={() => handleRatingClick(item)}
                                             />
                                         )}
                                     </View>

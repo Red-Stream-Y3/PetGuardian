@@ -1,26 +1,15 @@
-import React, { useEffect, useState } from "react";
-import {
-    StyleSheet,
-    View,
-    Text,
-    Dimensions,
-    ActivityIndicator,
-} from "react-native";
-import getThemeContext from "../../context/ThemeContext";
-import ThemeButton from "../common/ThemeButton";
-import ThemeChip from "../common/ThemeChip";
-import axios from "axios";
-import { getAppContext } from "../../context/AppContext";
-import Animated, { FadeInDown } from "react-native-reanimated";
-import { getBookingById } from "../../services/ServiceproviderSerives";
-import Toast from "react-native-toast-message";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Text, Dimensions, ActivityIndicator } from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
+import ThemeButton from '../common/ThemeButton';
+import ThemeChip from '../common/ThemeChip';
+import axios from 'axios';
+import { getAppContext } from '../../context/AppContext';
+import Animated, { FadeInDown } from 'react-native-reanimated';
+import { getBookingById } from '../../services/ServiceproviderSerives';
+import Toast from 'react-native-toast-message';
 
-const BookingSummary = ({
-    booking,
-    closeActionCallback,
-    actionTitle,
-    actionCallback,
-}) => {
+const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallback }) => {
     const { theme } = getThemeContext();
     const { user } = getAppContext();
     const [data, setData] = useState(null);
@@ -38,12 +27,12 @@ const BookingSummary = ({
             setLoading(false);
         } catch (error) {
             Toast.show({
-                type: "error",
-                text1: "Error",
+                type: 'error',
+                text1: 'Error',
                 text2:
                     error?.response?.data?.message || //axios error
                     error.message || //js error
-                    "Could not get booking details", //default
+                    'Could not get booking details', //default
             });
             setLoading(false);
         }
@@ -56,14 +45,14 @@ const BookingSummary = ({
     const styles = StyleSheet.create({
         title: {
             fontSize: 16,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             color: theme.colors.text,
             marginBottom: 10,
             marginTop: 10,
         },
         subtitle: {
             fontSize: 14,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             color: theme.colors.text,
         },
         body: {
@@ -76,32 +65,32 @@ const BookingSummary = ({
         },
         highlightBold: {
             fontSize: 18,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             color: theme.colors.servicesPrimary,
         },
         container: {
-            alignItems: "center",
+            alignItems: 'center',
             padding: 10,
             borderRadius: 10,
             backgroundColor: theme.colors.surface,
-            width: Dimensions.get("window").width * 0.8,
+            width: Dimensions.get('window').width * 0.8,
         },
         actionContainer: {
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
             marginTop: 15,
-            width: "100%",
+            width: '100%',
         },
         textContainerRow: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             marginTop: 5,
         },
         textContainer: {
-            justifyContent: "flex-start",
-            alignItems: "center",
+            justifyContent: 'flex-start',
+            alignItems: 'center',
             marginTop: 5,
         },
     });
@@ -120,32 +109,26 @@ const BookingSummary = ({
                 <Animated.View entering={FadeInDown} style={styles.container}>
                     <Text style={styles.title}>Booking Summary</Text>
                     <Text
-                        style={
-                            styles.subtitle
-                        }>{`Booking for ${booking?.serviceProvider?.firstName} ${booking?.serviceProvider?.lastName}`}</Text>
+                        style={styles.subtitle}
+                    >{`Booking for ${booking?.serviceProvider?.firstName} ${booking?.serviceProvider?.lastName}`}</Text>
 
                     <View style={styles.textContainer}>
                         <Text style={styles.body}>
-                            {new Date(booking.startDate).toLocaleDateString()}{" "}
-                            {data?.oneDay
-                                ? ""
-                                : ` to ${new Date(
-                                      booking.endDate
-                                  ).toLocaleDateString()}`}
+                            {new Date(booking.startDate).toLocaleDateString()}{' '}
+                            {data?.oneDay ? '' : ` to ${new Date(booking.endDate).toLocaleDateString()}`}
                         </Text>
                         <Text style={styles.body}>
-                            {new Date(booking.startTime).toLocaleTimeString()}{" "}
-                            {` to ${new Date(
-                                booking.endTime
-                            ).toLocaleTimeString()}`}
+                            {new Date(booking.startTime).toLocaleTimeString()}{' '}
+                            {` to ${new Date(booking.endTime).toLocaleTimeString()}`}
                         </Text>
                     </View>
 
                     <View
                         style={{
                             ...styles.textContainer,
-                            flexDirection: "row",
-                        }}>
+                            flexDirection: 'row',
+                        }}
+                    >
                         <Text style={styles.subtitle}>Pets </Text>
                         {data?.involvedPets?.map((pet, index) => (
                             <ThemeChip key={index} text={pet.name} />
@@ -153,33 +136,19 @@ const BookingSummary = ({
                     </View>
 
                     <Text style={styles.subtitle}>
-                        Total Fee : {data?.totalFee}{" "}
-                        {data?.continuous ? "$/day" : "$"}
+                        Total Fee : {data?.totalFee} {data?.continuous ? '$/day' : '$'}
                     </Text>
 
                     <View style={styles.textContainerRow}>
                         <Text style={styles.highlight}>STATUS : </Text>
-                        <Text style={styles.highlightBold}>
-                            {booking.status}
-                        </Text>
+                        <Text style={styles.highlightBold}>{booking.status}</Text>
                     </View>
 
                     <View style={styles.actionContainer}>
-                        <ThemeButton
-                            variant={"clear"}
-                            title={"Close"}
-                            onPress={closeActionCallback}
-                        />
-                        {booking.status === "pending" && (
-                            <ThemeButton
-                                title={submitting ? "" : actionTitle}
-                                onPress={handleActionPress}>
-                                {submitting && (
-                                    <ActivityIndicator
-                                        color={theme.colors.primaryText}
-                                        size={20}
-                                    />
-                                )}
+                        <ThemeButton variant={'clear'} title={'Close'} onPress={closeActionCallback} />
+                        {booking.status === 'pending' && (
+                            <ThemeButton title={submitting ? '' : actionTitle} onPress={handleActionPress}>
+                                {submitting && <ActivityIndicator color={theme.colors.primaryText} size={20} />}
                             </ThemeButton>
                         )}
                     </View>

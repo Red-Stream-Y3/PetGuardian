@@ -1,21 +1,13 @@
-import {
-    ActivityIndicator,
-    Dimensions,
-    RefreshControl,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from "react-native";
-import Search from "../common/Search";
-import getThemeContext from "../../context/ThemeContext";
-import { getAppContext } from "../../context/AppContext";
-import { Suspense, useState } from "react";
-import axios from "axios";
-import ImageItemCard from "../common/ImageItemCard";
-import ThemeChip from "../common/ThemeChip";
-import { getServiceProviders } from "../../services/ServiceproviderSerives";
-import Toast from "react-native-toast-message";
+import { ActivityIndicator, Dimensions, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import Search from '../common/Search';
+import getThemeContext from '../../context/ThemeContext';
+import { getAppContext } from '../../context/AppContext';
+import { Suspense, useState } from 'react';
+import axios from 'axios';
+import ImageItemCard from '../common/ImageItemCard';
+import ThemeChip from '../common/ThemeChip';
+import { getServiceProviders } from '../../services/ServiceproviderSerives';
+import Toast from 'react-native-toast-message';
 
 const ServicesHome = ({ navigation }) => {
     const { theme } = getThemeContext();
@@ -31,12 +23,12 @@ const ServicesHome = ({ navigation }) => {
             setLoading(false);
         } catch (error) {
             Toast.show({
-                type: "error",
-                text1: "Error",
+                type: 'error',
+                text1: 'Error',
                 text2:
                     error?.response?.data?.message || //axios error
                     error.message || //js error
-                    "Could not get service providers", //default
+                    'Could not get service providers', //default
             });
             setLoading(false);
         }
@@ -48,19 +40,19 @@ const ServicesHome = ({ navigation }) => {
 
     const chips = [
         {
-            text: "All",
+            text: 'All',
         },
         {
-            text: "Walking",
+            text: 'Walking',
         },
         {
-            text: "Sitting",
+            text: 'Sitting',
         },
         {
-            text: "Grooming",
+            text: 'Grooming',
         },
         {
-            text: "Petting",
+            text: 'Petting',
         },
     ];
 
@@ -70,20 +62,20 @@ const ServicesHome = ({ navigation }) => {
             backgroundColor: theme.colors.background,
         },
         chipContainer: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             paddingHorizontal: 20,
             paddingVertical: 5,
         },
         titleText: {
             fontSize: 18,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             color: theme.colors.text,
         },
         subtitleText: {
             fontSize: 14,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             color: theme.colors.text,
         },
         textMargin5: {
@@ -104,41 +96,31 @@ const ServicesHome = ({ navigation }) => {
             </View>
             <Suspense fallback={<ActivityIndicator />}>
                 <ScrollView
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={loading}
-                            onRefresh={getProviders}
-                        />
-                    }
-                    style={{ width: "100%" }}
-                    contentContainerStyle={{ alignItems: "center" }}>
+                    refreshControl={<RefreshControl refreshing={loading} onRefresh={getProviders} />}
+                    style={{ width: '100%' }}
+                    contentContainerStyle={{ alignItems: 'center' }}
+                >
                     {providers.map((provider, i) => (
                         <ImageItemCard
                             key={i}
                             index={i}
-                            width={Dimensions.get("window").width * 0.9}
+                            width={Dimensions.get('window').width * 0.9}
                             onClick={() => {
-                                navigation?.navigate("ServiceDetails", {
+                                navigation?.navigate('ServiceDetails', {
                                     service: provider,
                                 });
                             }}
-                            uri={"https://wallpapercave.com/wp/wp4928162.jpg"}
-                            style='side'
+                            uri={'https://wallpapercave.com/wp/wp4928162.jpg'}
+                            style="side"
                             animationTag={provider._id}
                             body={
                                 <View>
-                                    <Text style={styles.titleText}>
-                                        {provider.firstName}
-                                    </Text>
+                                    <Text style={styles.titleText}>{provider.firstName}</Text>
                                     <Text style={styles.subtitleText}>
-                                        {provider.services?.serviceTypes
-                                            ?.map((serviceType) => serviceType)
-                                            .join(", ")}
+                                        {provider.services?.serviceTypes?.map((serviceType) => serviceType).join(', ')}
                                     </Text>
                                     <Text style={styles.textMargin5}>
-                                        {provider.services?.activeCities
-                                            ?.map((city) => city)
-                                            .join(", ")}
+                                        {provider.services?.activeCities?.map((city) => city).join(', ')}
                                     </Text>
                                 </View>
                             }

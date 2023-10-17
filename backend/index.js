@@ -18,8 +18,8 @@ import postRoutes from './routes/postRoutes.js';
 let dbUri;
 
 if (process.env.NODE_ENV !== 'production') {
-  dotenv.config({ path: findConfig('.env.dev') });
-  dbUri = process.env.MONGO_URI_DEV;
+    dotenv.config({ path: findConfig('.env.dev') });
+    dbUri = process.env.MONGO_URI_DEV;
 } else dbUri = process.env.MONGO_URI;
 
 connectDB(dbUri);
@@ -42,9 +42,9 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port: ${PORT}`.yellow.bold);
-  });
+    app.listen(PORT, () => {
+        console.log(`Server is running on port: ${PORT}`.yellow.bold);
+    });
 }
 
 export default app;

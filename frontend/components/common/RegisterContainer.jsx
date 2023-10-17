@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
     ActivityIndicator,
     Dimensions,
@@ -8,47 +8,38 @@ import {
     KeyboardAvoidingView,
     Platform,
     ScrollView,
-} from "react-native";
-import ThemeTextInput from "./ThemeTextInput";
-import ThemeButton from "./ThemeButton";
-import { Feather } from "@expo/vector-icons";
-import getThemeContext from "../../context/ThemeContext";
-import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
-import axios from "axios";
-import { getAppContext } from "../../context/AppContext";
+} from 'react-native';
+import ThemeTextInput from './ThemeTextInput';
+import ThemeButton from './ThemeButton';
+import { Feather } from '@expo/vector-icons';
+import getThemeContext from '../../context/ThemeContext';
+import Animated, { FadeInUp, FadeOutUp } from 'react-native-reanimated';
+import axios from 'axios';
+import { getAppContext } from '../../context/AppContext';
 
-const RegisterContainer = ({
-    setOverlayOpen,
-    setLoginEmail,
-    setLoginPassword,
-}) => {
+const RegisterContainer = ({ setOverlayOpen, setLoginEmail, setLoginPassword }) => {
     const { theme } = getThemeContext();
     const { SERVER_URL } = getAppContext();
-    const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [phone, setPhone] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [retypePassword, setRetypePassword] = useState("");
+    const [retypePassword, setRetypePassword] = useState('');
     const [showRetypePassword, setShowRetypePassword] = useState(false);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const handleRegister = async () => {
-        if (
-            email === "" ||
-            username === "" ||
-            password === "" ||
-            retypePassword === ""
-        ) {
-            setError("Please fill all required fields");
+        if (email === '' || username === '' || password === '' || retypePassword === '') {
+            setError('Please fill all required fields');
             return;
         }
 
         if (password !== retypePassword) {
-            setError("Passwords do not match");
+            setError('Passwords do not match');
             return;
         }
 
@@ -64,10 +55,7 @@ const RegisterContainer = ({
         setLoading(true);
 
         try {
-            const response = await axios.post(
-                `${SERVER_URL}/api/v1/users`,
-                data
-            );
+            const response = await axios.post(`${SERVER_URL}/api/v1/users`, data);
             if (response) {
                 setLoginEmail(email);
                 setLoginPassword(password);
@@ -75,14 +63,10 @@ const RegisterContainer = ({
             }
             setLoading(false);
         } catch (error) {
-            if (String(error.response.data.error).startsWith("E11000")) {
-                setError("Username or email already exists");
+            if (String(error.response.data.error).startsWith('E11000')) {
+                setError('Username or email already exists');
             } else {
-                setError(
-                    error.response.data.message ||
-                        error.response.data.error ||
-                        error.message
-                );
+                setError(error.response.data.message || error.response.data.error || error.message);
             }
             setLoading(false);
         }
@@ -90,7 +74,7 @@ const RegisterContainer = ({
 
     useEffect(() => {
         if (password !== retypePassword) {
-            setError("Passwords do not match");
+            setError('Passwords do not match');
         } else {
             setError(null);
         }
@@ -98,9 +82,9 @@ const RegisterContainer = ({
 
     const styles = StyleSheet.create({
         container: {
-            justifyContent: "center",
-            alignItems: "center",
-            width: Dimensions.get("window").width * 0.9,
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: Dimensions.get('window').width * 0.9,
             paddingVertical: 10,
             paddingHorizontal: 20,
             backgroundColor: theme.colors.surface,
@@ -109,30 +93,30 @@ const RegisterContainer = ({
         hint: {
             color: theme.colors.text,
             fontSize: 12,
-            alignSelf: "flex-start",
+            alignSelf: 'flex-start',
             marginLeft: 10,
             marginBottom: 10,
         },
         error: {
             color: theme.colors.error,
             fontSize: 12,
-            alignSelf: "flex-start",
+            alignSelf: 'flex-start',
             marginLeft: 10,
             marginBottom: 10,
         },
         header: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: "100%",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '100%',
+            alignItems: 'center',
         },
         scrollContainer: {
-            width: "100%",
+            width: '100%',
             paddingBottom: 20,
         },
         title: {
             fontSize: 18,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             marginBottom: 10,
             marginTop: 10,
             color: theme.colors.text,
@@ -140,105 +124,77 @@ const RegisterContainer = ({
     });
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.container}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.title}>Register</Text>
-                <Feather
-                    name='x'
-                    size={24}
-                    color={theme.colors.icon}
-                    onPress={() => setOverlayOpen(false)}
-                />
+                <Feather name="x" size={24} color={theme.colors.icon} onPress={() => setOverlayOpen(false)} />
             </View>
             <ScrollView style={styles.scrollContainer}>
                 <ThemeTextInput
-                    title='Email*'
-                    placeholder='Email'
+                    title="Email*"
+                    placeholder="Email"
                     value={email}
                     onChange={(text) => setEmail(text)}
-                    keyboardType='email-address'
-                    textContentType='emailAddress'
+                    keyboardType="email-address"
+                    textContentType="emailAddress"
                 />
                 <ThemeTextInput
-                    title='Username*'
-                    placeholder='Username'
+                    title="Username*"
+                    placeholder="Username"
                     value={username}
                     onChange={(text) => setUsername(text)}
-                    textContentType='username'
+                    textContentType="username"
                 />
                 <ThemeTextInput
-                    title='First Name'
-                    placeholder='First Name'
+                    title="First Name"
+                    placeholder="First Name"
                     value={firstName}
                     onChange={(text) => setFirstName(text)}
-                    textContentType='givenName'
+                    textContentType="givenName"
                 />
                 <ThemeTextInput
-                    title='Last Name'
-                    placeholder='Last Name'
+                    title="Last Name"
+                    placeholder="Last Name"
                     value={lastName}
                     onChange={(text) => setLastName(text)}
-                    textContentType='familyName'
+                    textContentType="familyName"
                 />
                 <ThemeTextInput
-                    title='Phone'
-                    keyboardType='phone-pad'
-                    placeholder='Phone'
+                    title="Phone"
+                    keyboardType="phone-pad"
+                    placeholder="Phone"
                     value={phone}
                     onChange={(text) => setPhone(text)}
-                    textContentType='telephoneNumber'
+                    textContentType="telephoneNumber"
                 />
                 <ThemeTextInput
-                    title='Password*'
-                    placeholder='Password'
+                    title="Password*"
+                    placeholder="Password"
                     value={password}
                     onChange={(text) => setPassword(text)}
-                    icon={
-                        <Feather
-                            name={showPassword ? "eye-off" : "eye"}
-                            size={24}
-                            color={theme.colors.icon}
-                        />
-                    }
+                    icon={<Feather name={showPassword ? 'eye-off' : 'eye'} size={24} color={theme.colors.icon} />}
                     onPressIcon={() => setShowPassword(!showPassword)}
                     secureTextEntry={!showPassword}
-                    textContentType='newPassword'
+                    textContentType="newPassword"
                 />
                 <ThemeTextInput
-                    title='Retype Password*'
-                    placeholder='Retype Password'
+                    title="Retype Password*"
+                    placeholder="Retype Password"
                     value={retypePassword}
                     onChange={(text) => setRetypePassword(text)}
-                    icon={
-                        <Feather
-                            name={showPassword ? "eye-off" : "eye"}
-                            size={24}
-                            color={theme.colors.icon}
-                        />
-                    }
-                    onPressIcon={() =>
-                        setShowRetypePassword(!showRetypePassword)
-                    }
+                    icon={<Feather name={showPassword ? 'eye-off' : 'eye'} size={24} color={theme.colors.icon} />}
+                    onPressIcon={() => setShowRetypePassword(!showRetypePassword)}
                     secureTextEntry={!showRetypePassword}
-                    textContentType='newPassword'
+                    textContentType="newPassword"
                 />
                 <Text style={styles.hint}>* Required</Text>
                 {error ? (
-                    <Animated.Text
-                        entering={FadeInUp}
-                        exiting={FadeOutUp}
-                        style={styles.error}>
+                    <Animated.Text entering={FadeInUp} exiting={FadeOutUp} style={styles.error}>
                         {error}
                     </Animated.Text>
                 ) : null}
-                <ThemeButton
-                    title={!loading && "Register"}
-                    onPress={handleRegister}>
-                    {loading && (
-                        <ActivityIndicator color={theme.colors.buttonText} />
-                    )}
+                <ThemeButton title={!loading && 'Register'} onPress={handleRegister}>
+                    {loading && <ActivityIndicator color={theme.colors.buttonText} />}
                 </ThemeButton>
             </ScrollView>
         </KeyboardAvoidingView>

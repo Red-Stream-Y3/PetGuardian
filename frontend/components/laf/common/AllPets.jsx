@@ -1,10 +1,10 @@
-import React, { Suspense, useState } from "react";
-import { ActivityIndicator, ScrollView } from "react-native";
-import { Header } from "../../common/Header";
-import { PetsContainer } from "../../common/PetsContainer";
+import React, { Suspense, useState } from 'react';
+import { ActivityIndicator, ScrollView } from 'react-native';
+import { Header } from '../../common/Header';
+import { PetsContainer } from '../../common/PetsContainer';
 
 const AllPets = ({ title, data }) => {
-    const [filter, setFilter] = useState("All");
+    const [filter, setFilter] = useState('All');
 
     const groupIntoPairs = (data) => {
         const pairs = [];
@@ -18,7 +18,7 @@ const AllPets = ({ title, data }) => {
     const petTypes = [...new Set(data.map((pet) => pet.petType))]; // Get unique pet types
 
     const filteredPetsData = data.filter((pet) => {
-        if (filter === "All") {
+        if (filter === 'All') {
             return true;
         }
         return pet.petType === filter;
@@ -32,14 +32,10 @@ const AllPets = ({ title, data }) => {
 
     return (
         <>
-            <Header
-                title={title}
-                petTypes={petTypes}
-                onFilterPress={handleFilterPress}
-            />
+            <Header title={title} petTypes={petTypes} onFilterPress={handleFilterPress} />
             <Suspense fallback={<ActivityIndicator />}>
                 <ScrollView>
-                    <PetsContainer pairs={petsPairs} screen='Post' />
+                    <PetsContainer pairs={petsPairs} screen="Post" />
                 </ScrollView>
             </Suspense>
         </>
