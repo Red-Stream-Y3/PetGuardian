@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Text,
   View,
   ScrollView,
@@ -17,6 +18,7 @@ const PetsContainer = ({
   component,
   screen,
   fontSize,
+  loading,
 }) => {
   const { theme } = getThemeContext();
   const navigation = useNavigation();
@@ -84,15 +86,18 @@ const PetsContainer = ({
       ) : null}
 
       <ScrollView style={styles.cardContainer}>
+        {loading && (
+          <ActivityIndicator size={50} color={theme.colors.lostPrimary} />
+        )}
         {pairs?.map((pair, index) => (
           <View style={styles.rowContainer} key={index}>
             {pair.map((item) => (
               <ImageItemCard
                 key={item._id}
-                uri={item.images[0].uri}
-                title={item.title}
+                uri={item.images[0]}
+                title={item.pet.name}
                 width="45%"
-                sideTag={item.age}
+                sideTag={item.pet.age}
                 subtitle={
                   item.location.split(' ').length > 4
                     ? `${item.location.split(' ').slice(0, 3).join(' ')} ...`

@@ -1,9 +1,11 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+
 import getThemeContext from '../../context/ThemeContext';
 import PetFilter from './PetFilter';
 
-const Header = ({ title, onFilterPress, petTypes }) => {
+const Header = ({ title, onFilterPress, petTypes, save }) => {
   const { theme } = getThemeContext();
   const navigation = useNavigation();
 
@@ -27,6 +29,14 @@ const Header = ({ title, onFilterPress, petTypes }) => {
             {title}
           </Text>
         </View>
+        {save && (
+          <TouchableOpacity
+            onPress={handleBackPress}
+            style={styles.rightButton}
+          >
+            <Ionicons name="md-send" size={24} color={theme.colors.text} />
+          </TouchableOpacity>
+        )}
       </View>
       {petTypes ? (
         <PetFilter petTypes={petTypes} onFilterPress={onFilterPress} />
@@ -49,6 +59,11 @@ const styles = StyleSheet.create({
   backButton: {
     position: 'absolute',
     left: 10,
+    padding: 5,
+  },
+  rightButton: {
+    position: 'absolute',
+    right: 10,
     padding: 5,
   },
   titleContainer: {

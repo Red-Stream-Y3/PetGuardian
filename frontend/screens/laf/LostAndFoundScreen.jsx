@@ -13,7 +13,7 @@ import {
 
 const LostFoundNavigator = createNativeStackNavigator();
 
-const LostAndFoundScreen = () => {
+const LostAndFoundScreen = ({ navigation }) => {
   const { theme } = getThemeContext();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
@@ -21,37 +21,19 @@ const LostAndFoundScreen = () => {
         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
         hidden={false}
       />
-      <LostFoundNavigator.Navigator initialRouteName="LostFoundHome">
+      <LostFoundNavigator.Navigator
+        initialRouteName="LostFoundHome"
+        screenOptions={{ headerShown: false }}
+      >
         <LostFoundNavigator.Screen
           name="LostFoundHome"
           component={LostFoundHome}
-          options={{ headerShown: false }}
         />
-        <LostFoundNavigator.Screen
-          name="LostHome"
-          component={LostHome}
-          options={{ headerShown: false }}
-        />
-        <LostFoundNavigator.Screen
-          name="FoundHome"
-          component={FoundHome}
-          options={{ headerShown: false }}
-        />
-        <LostFoundNavigator.Screen
-          name="Post"
-          component={Post}
-          options={{ headerShown: false }}
-        />
-        <LostFoundNavigator.Screen
-          name="Profile"
-          component={Profile}
-          options={{ headerShown: false }}
-        />
-        <LostFoundNavigator.Screen
-          name="LostPost"
-          component={LostPost}
-          options={{ headerShown: false }}
-        />
+        <LostFoundNavigator.Screen name="LostHome" component={LostHome} />
+        <LostFoundNavigator.Screen name="FoundHome" component={FoundHome} />
+        <LostFoundNavigator.Screen name="Post" component={Post} />
+        <LostFoundNavigator.Screen name="Profile" component={Profile} />
+        <LostFoundNavigator.Screen name="LostPost" component={LostPost} />
       </LostFoundNavigator.Navigator>
     </SafeAreaView>
   );
