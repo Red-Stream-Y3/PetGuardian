@@ -4,7 +4,7 @@ import ThemeButton from "./ThemeButton";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 
-const ThemebackButton = ({ navigation }) => {
+const ThemebackButton = ({ navigation, customBackAction }) => {
     const { theme } = getThemeContext();
 
     const styles = StyleSheet.create({
@@ -22,12 +22,17 @@ const ThemebackButton = ({ navigation }) => {
             style={styles.container}
             entering={FadeInLeft.delay(700).springify()}
             exiting={FadeOutLeft.delay(100).springify()}>
-            <ThemeButton borderRadius={50}>
+            <ThemeButton
+                borderRadius={50}
+                onPress={
+                    customBackAction
+                        ? () => customBackAction()
+                        : () => navigation.goBack()
+                }>
                 <Ionicons
                     name='arrow-back'
                     size={24}
                     color={theme.colors.primaryIcon}
-                    onPress={() => navigation.goBack()}
                 />
             </ThemeButton>
         </Animated.View>

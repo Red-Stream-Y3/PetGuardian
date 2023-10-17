@@ -1,6 +1,7 @@
 import {
     ActivityIndicator,
     Dimensions,
+    RefreshControl,
     ScrollView,
     StyleSheet,
     Text,
@@ -13,22 +14,32 @@ import { Suspense, useState } from "react";
 import axios from "axios";
 import ImageItemCard from "../common/ImageItemCard";
 import ThemeChip from "../common/ThemeChip";
+import { getServiceProviders } from "../../services/ServiceproviderSerives";
+import Toast from "react-native-toast-message";
 
 const ServicesHome = ({ navigation }) => {
     const { theme } = getThemeContext();
-    const { SERVER_URL } = getAppContext();
+    const { user } = getAppContext();
     const [providers, setProviders] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const getProviders = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${SERVER_URL}/api/v1/services`);
-            setProviders(response.data);
+            const response = await getServiceProviders(user.token);
+            setProviders(response);
+            setLoading(false);
         } catch (error) {
-            console.error(error);
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not get service providers", //default
+            });
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     useState(() => {
@@ -93,14 +104,14 @@ const ServicesHome = ({ navigation }) => {
             </View>
             <Suspense fallback={<ActivityIndicator />}>
                 <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={loading}
+                            onRefresh={getProviders}
+                        />
+                    }
                     style={{ width: "100%" }}
                     contentContainerStyle={{ alignItems: "center" }}>
-                    {loading && (
-                        <ActivityIndicator
-                            size={50}
-                            color={theme.colors.servicesPrimary}
-                        />
-                    )}
                     {providers.map((provider, i) => (
                         <ImageItemCard
                             key={i}

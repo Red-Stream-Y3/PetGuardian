@@ -1,31 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Dimensions, ActivityIndicator } from 'react-native';
-import getThemeContext from '../../context/ThemeContext';
-import ThemeButton from '../common/ThemeButton';
-import ThemeChip from '../common/ThemeChip';
-import axios from 'axios';
-import { getAppContext } from '../../context/AppContext';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import React, { useEffect, useState } from "react";
+import {
+    StyleSheet,
+    View,
+    Text,
+    Dimensions,
+    ActivityIndicator,
+} from "react-native";
+import getThemeContext from "../../context/ThemeContext";
+import ThemeButton from "../common/ThemeButton";
+import ThemeChip from "../common/ThemeChip";
+import axios from "axios";
+import { getAppContext } from "../../context/AppContext";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { getBookingById } from "../../services/ServiceproviderSerives";
+import Toast from "react-native-toast-message";
 
-const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallback }) => {
-
+const BookingSummary = ({
+    booking,
+    closeActionCallback,
+    actionTitle,
+    actionCallback,
+}) => {
     const { theme } = getThemeContext();
-    const { SERVER_URL } = getAppContext();
+    const { user } = getAppContext();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
 
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${SERVER_URL}/api/v1/services/hire/getbyid/${booking._id}`);
+            const response = await getBookingById(booking._id, user.token);
 
-            if (response.data) {
-                setData(response.data[0]);
-                setLoading(false);
+            if (response) {
+                setData(response);
             }
-
+            setLoading(false);
         } catch (error) {
-            console.error(error);
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not get booking details", //default
+            });
             setLoading(false);
         }
     };
@@ -37,14 +56,14 @@ const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallb
     const styles = StyleSheet.create({
         title: {
             fontSize: 16,
-            fontWeight: 'bold',
+            fontWeight: "bold",
             color: theme.colors.text,
             marginBottom: 10,
             marginTop: 10,
         },
         subtitle: {
             fontSize: 14,
-            fontWeight: 'bold',
+            fontWeight: "bold",
             color: theme.colors.text,
         },
         body: {
@@ -57,40 +76,40 @@ const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallb
         },
         highlightBold: {
             fontSize: 18,
-            fontWeight: 'bold',
+            fontWeight: "bold",
             color: theme.colors.servicesPrimary,
         },
         container: {
-            alignItems: 'center',
+            alignItems: "center",
             padding: 10,
             borderRadius: 10,
             backgroundColor: theme.colors.surface,
-            width: Dimensions.get('window').width * 0.8,
+            width: Dimensions.get("window").width * 0.8,
         },
         actionContainer: {
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            alignItems: "center",
             marginTop: 15,
-            width: '100%',
+            width: "100%",
         },
         textContainerRow: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
             marginTop: 5,
         },
         textContainer: {
-            justifyContent: 'flex-start',
-            alignItems: 'center',
+            justifyContent: "flex-start",
+            alignItems: "center",
             marginTop: 5,
         },
     });
 
     const handleActionPress = async () => {
-        setLoading(true);
+        setSubmitting(true);
         await actionCallback();
-        setLoading(false);
+        setSubmitting(false);
     };
 
     return (
@@ -153,9 +172,15 @@ const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallb
                         />
                         {booking.status === "pending" && (
                             <ThemeButton
-                                title={actionTitle}
-                                onPress={handleActionPress}
-                            />
+                                title={submitting ? "" : actionTitle}
+                                onPress={handleActionPress}>
+                                {submitting && (
+                                    <ActivityIndicator
+                                        color={theme.colors.primaryText}
+                                        size={20}
+                                    />
+                                )}
+                            </ThemeButton>
                         )}
                     </View>
                 </Animated.View>

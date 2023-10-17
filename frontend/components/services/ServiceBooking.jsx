@@ -26,13 +26,17 @@ import DailyBooking from "./DailyBooking";
 import WeeklyBooking from "./WeeklyBooking";
 import axios from "axios";
 import Toast from "react-native-toast-message";
+import {
+    checkBookingTimeAvailability,
+    createServiceBooking,
+} from "../../services/ServiceproviderSerives";
 
 const BOOKING_TYPES = ["ONE_TIME", "DAILY", "WEEKLY"];
 
 const ServiceBooking = ({ navigation, route }) => {
     const { theme } = getThemeContext();
     const { service } = route.params;
-    const { SERVER_URL, USER } = getAppContext();
+    const { user } = getAppContext();
     const [loading, setLoading] = useState(false);
     const [bookingType, setBookingType] = useState(BOOKING_TYPES[0]);
     const [prevType, setPrevType] = useState(BOOKING_TYPES[0]); //for animation [0,1,2]
@@ -114,7 +118,7 @@ const ServiceBooking = ({ navigation, route }) => {
         );
 
         const reqData = {
-            user: USER._id,
+            user: user._id,
             serviceProvider: service._id,
             involvedPets: [], //TODO: input.pets.map((pet) => pet._id),
             startDate: input.startDateTime.toISOString().split("T")[0],
@@ -147,12 +151,12 @@ const ServiceBooking = ({ navigation, route }) => {
 
         try {
             //check if booking time is available
-            const checkResponse = await axios.post(
-                `${SERVER_URL}/api/v1/services/hire/check`,
-                reqData
+            const checkResponse = await checkBookingTimeAvailability(
+                reqData,
+                user.token
             );
 
-            if (checkResponse.data?.length > 0) {
+            if (checkResponse?.length > 0) {
                 setLoading(false);
                 Toast.show({
                     type: "error",
@@ -162,21 +166,41 @@ const ServiceBooking = ({ navigation, route }) => {
                 return;
             }
             //add booking
-            const response = await axios.post(
-                `${SERVER_URL}/api/v1/services/hire`,
-                reqData
-            );
+            const response = await createServiceBooking(reqData, user.token);
 
             setLoading(false);
 
-            if (response.status === 201) {
-                navigation.goBack();
+            if (response) {
+                navigation.reset({
+                    index: 0,
+                    routes: [
+                        { name: "Services" },
+                        {
+                            name: "ServiceDetails",
+                            params: {
+                                service: service,
+                            },
+                        },
+                    ],
+                });
+                navigation.getParent().getParent().jumpTo("Hire History");
                 // response.data.message;
             } else {
-                console.log(response.data.error);
+                Toast.show({
+                    type: "error",
+                    text1: "Error",
+                    text2: response.data.error || "Could not hire service",
+                });
             }
         } catch (error) {
-            console.debug(error);
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not hire service", //default
+            });
             setLoading(false);
         }
     };

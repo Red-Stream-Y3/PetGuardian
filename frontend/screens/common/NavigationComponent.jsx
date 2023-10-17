@@ -10,9 +10,12 @@ import {
 import getThemeContext from "../../context/ThemeContext";
 import DrawerNavigator from "./DrawerNavigator";
 import { BottomBar } from "../../components";
+import { getAppContext } from "../../context/AppContext";
+import LoginScreen from "./LoginScreen";
 
 const NavigationComponent = () => {
     const { theme } = getThemeContext();
+    const { user, loadingUser } = getAppContext();
 
     return (
         <NavigationContainer
@@ -20,8 +23,14 @@ const NavigationComponent = () => {
             <SafeAreaProvider>
                 <View style={{ flex: 1 }}>
                     <StatusBar style='auto' />
-                    <DrawerNavigator />
-                    <BottomBar />
+                    {!user?._id || !user?.token ? (
+                        <LoginScreen />
+                    ) : (
+                        <>
+                            <DrawerNavigator />
+                            <BottomBar />
+                        </>
+                    )}
                     <Toast />
                 </View>
             </SafeAreaProvider>
