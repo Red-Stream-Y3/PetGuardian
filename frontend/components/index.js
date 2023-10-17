@@ -29,3 +29,7 @@ export { default as ServiceDetails } from './services/ServiceDetails';
 export { default as ServiceBooking } from './services/ServiceBooking';
 export { default as HireHistoy } from './services/HireHistory';
 
+//adoption
+export { default as AdoptionHome } from './adoption/AdoptionHome';
+export { default as AdoptionList } from './adoption/AdoptionList';
+

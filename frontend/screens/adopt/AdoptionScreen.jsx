@@ -1,9 +1,12 @@
 import { StatusBar, Text, View } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
-import { ThemeButton } from "../../components";
+import { AdoptionHome, AdoptionList, ThemeButton } from "../../components";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const AdoptionScreen = () => {
+const AdoptionNavigator = createNativeStackNavigator();
+
+const AdoptionScreen = (navigation) => {
     const { theme } = getThemeContext();
     return (
         <SafeAreaView
@@ -14,11 +17,13 @@ const AdoptionScreen = () => {
                 }
                 hidden={false}
             />
+            <AdoptionNavigator.Navigator
+                initialRouteName="Adoptions"
+                screenOptions={{ headerShown: false }}>
+                <AdoptionNavigator.Screen name="Adoptions" component={AdoptionHome} />
+                <AdoptionNavigator.Screen name="AdoptionList" component={AdoptionList}/>
+            </AdoptionNavigator.Navigator>
 
-            <View>
-                <Text style={{color:theme.colors.text}}>Adoptions</Text>
-                <ThemeButton title="Services" />
-            </View>
         </SafeAreaView>
     );
 };
