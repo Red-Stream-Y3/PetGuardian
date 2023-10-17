@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "format": "prettier --write '**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc.yml"
   },
   "dependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.0.0-0",
@@ -42,7 +43,8 @@
     "yarn": "^1.22.19"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "prettier": "3.0.3"
   },
   "private": true
 }
