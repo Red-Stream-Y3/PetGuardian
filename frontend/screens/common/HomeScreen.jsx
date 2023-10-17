@@ -1,8 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, Switch, Dimensions, StatusBar, SafeAreaView } from 'react-native';
-import { ImageItemCard, ThemeButton } from '../../components';
-import getThemeContext from '../../context/ThemeContext';
-import { AntDesign } from '@expo/vector-icons';
+import React, { useEffect, useState } from "react";
+import {
+    View,
+    Text,
+    ScrollView,
+    Switch,
+    Dimensions,
+    StatusBar,
+    SafeAreaView,
+} from "react-native";
+import {
+    FloatingMenuButton,
+    ImageItemCard,
+    ThemeButton,
+} from "../../components";
+import getThemeContext from "../../context/ThemeContext";
+import { AntDesign } from "@expo/vector-icons";
 
 const HomeScreen = () => {
     const { theme, toggleTheme } = getThemeContext();
@@ -116,23 +128,27 @@ const HomeScreen = () => {
             <View style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
                 <View
                     style={{
-                        flexDirection: 'row',
-                        width: '100%',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        paddingHorizontal: '5%',
-                    }}
-                >
-                    <Text style={{ color: theme.colors.text }}>Feed</Text>
+                        flexDirection: "row",
+                        width: "100%",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        paddingHorizontal: "5%",
+                    }}>
+                    <Text
+                        style={{
+                            color: theme.colors.text,
+                            fontSize: 18,
+                            fontWeight: "bold",
+                        }}>
+                        Feed
+                    </Text>
                     <View
                         style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Text style={{ color: theme.colors.text }}>Dark Mode</Text>
-                        <Switch onValueChange={changeTheme} value={themeSwitch} />
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                        }}>
+                        <FloatingMenuButton />
                     </View>
                 </View>
                 <ScrollView style={{ width: '100%' }} contentContainerStyle={{ alignItems: 'center' }}>
