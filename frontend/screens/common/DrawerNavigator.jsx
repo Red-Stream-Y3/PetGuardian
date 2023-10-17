@@ -5,6 +5,7 @@ import ProfileScreen from "./ProfileScreen.jsx";
 import StackNavigator from "./StackNavigator.jsx";
 import HireHistoryScreen from "../services/HireHistoryScreen.jsx";
 import { getAppContext } from "../../context/AppContext.jsx";
+import MyServiceScreen from "../services/MyServiceScreen.jsx";
 
 const Drawer = createDrawerNavigator();
 
@@ -28,7 +29,20 @@ const DrawerNavigator = () => {
             }}>
             <Drawer.Screen name='Home' component={StackNavigator} />
             <Drawer.Screen name='Profile' component={ProfileScreen} />
-            <Drawer.Screen name='Hire History' component={HireHistoryScreen} />
+            <Drawer.Screen
+                name='Hire History'
+                component={HireHistoryScreen}
+                options={{
+                    animation: "fade",
+                }}
+            />
+            <Drawer.Screen
+                name='My Services'
+                component={MyServiceScreen}
+                options={{
+                    animation: "fade",
+                }}
+            />
             {/* <Drawer.Screen name="Settings" component={SettingsScreen} /> */}
         </Drawer.Navigator>
     );

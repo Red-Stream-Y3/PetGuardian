@@ -33,6 +33,7 @@ const ProfileScreen = ({ navigation }) => {
             marginTop: StatusBar.currentHeight,
         },
         titleText: {
+            color: theme.colors.text,
             fontSize: 20,
             fontWeight: "bold",
             marginStart: 10,

@@ -1,9 +1,8 @@
-
-import { SafeAreaView, Text, View, StatusBar } from "react-native";
+import { SafeAreaView, View, StatusBar } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import { HireHistoy } from "../../components";
 
-const HireHistoryScreen = ({navigation}) => {
+const HireHistoryScreen = ({ navigation }) => {
     const { theme } = getThemeContext();
 
     return (
@@ -15,10 +14,9 @@ const HireHistoryScreen = ({navigation}) => {
                 }
                 hidden={false}
             />
-            <View style={{flex:1, marginTop:StatusBar.currentHeight }}>
+            <View style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
                 <HireHistoy navigation={navigation} />
             </View>
-
         </SafeAreaView>
     );
 };

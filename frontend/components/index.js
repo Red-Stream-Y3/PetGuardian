@@ -16,6 +16,7 @@ export { default as SelectPets } from "./common/SelectPets";
 export { default as RegisterContainer } from "./common/RegisterContainer";
 export { default as ThemeCard } from "./common/ThemeCard";
 export { default as ThemeOverlay } from "./common/ThemeOverlay";
+export { default as FloatingMenuButton } from "./common/FloatingMenuButton";
 
 // Lost and Found
 export { default as LostFoundHome } from "./laf/LostFoundHome";
@@ -31,3 +32,5 @@ export { default as ServicesHome } from "./services/ServicesHome";
 export { default as ServiceDetails } from "./services/ServiceDetails";
 export { default as ServiceBooking } from "./services/ServiceBooking";
 export { default as HireHistoy } from "./services/HireHistory";
+export { default as RegisterServiceProvider } from "./services/RegisterServiceProvider";
+export { default as MyServicesContainer } from "./services/MyServicesContainer";

@@ -5,6 +5,7 @@ import {
     ActivityIndicator,
     StyleSheet,
     RefreshControl,
+    Dimensions,
 } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import { getAppContext } from "../../context/AppContext";
@@ -93,7 +94,7 @@ const HireHistory = ({ navigation }) => {
             alignItems: "center",
         },
         emptyMessage: {
-            marginTop: 50,
+            marginTop: Dimensions.get("window").height / 3,
             justifyContent: "center",
             alignItems: "center",
             width: "100%",

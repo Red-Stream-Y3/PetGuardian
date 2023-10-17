@@ -105,6 +105,8 @@ const BottomBar = ({}) => {
             flexDirection: "row",
             justifyContent: "space-evenly",
             backgroundColor: backgroundColor,
+            borderTopEndRadius: 10,
+            borderTopStartRadius: 10,
         },
     });
 
