@@ -13,7 +13,11 @@ import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
 import ThemeButton from "../common/ThemeButton";
 import { getAppContext } from "../../context/AppContext";
 import axios from "axios";
-import { getServiceRatingByUser } from "../../services/ServiceproviderSerives";
+import {
+    createServiceRating,
+    getServiceRatingByUser,
+    updateServiceRating,
+} from "../../services/ServiceproviderSerives";
 
 const RateService = ({ provider, handleClose }) => {
     const { theme } = getThemeContext();
@@ -121,25 +125,19 @@ const RateService = ({ provider, handleClose }) => {
             const data = {
                 rating: parseInt(rating),
                 review: review,
-                user: USER._id,
+                user: user._id,
                 serviceProvider: provider.serviceProvider._id,
             };
 
-            let response;
+            let response = null;
 
             if (action === "UPDATE") {
-                response = await axios.put(
-                    `${SERVER_URL}/api/v1/ratings/user/${USER._id}/${provider.serviceProvider._id}`,
-                    data
-                );
+                response = await updateServiceRating(data, user.token);
             } else {
-                response = await axios.post(
-                    `${SERVER_URL}/api/v1/ratings/`,
-                    data
-                );
+                response = await createServiceRating(data, user.token);
             }
 
-            if (response.data) {
+            if (response !== null) {
                 Toast.show({
                     type: "success",
                     text1: "Rating Submitted",
@@ -164,7 +162,9 @@ const RateService = ({ provider, handleClose }) => {
             ) : (
                 <View style={styles.container}>
                     <Text style={styles.title}>
-                        Rate {provider?.serviceProvider.firstName}
+                        {action === "NEW"
+                            ? `Rate your experience with ${provider?.serviceProvider.firstName}`
+                            : `Update your rating for ${provider?.serviceProvider.firstName}`}
                     </Text>
                     {error && (
                         <Animated.Text

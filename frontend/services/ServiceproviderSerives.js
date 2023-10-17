@@ -50,7 +50,43 @@ export const getServiceRating = async (id, token) => {
     return response.data[0];
 };
 
-export const getServiceRatingByUser = async (id, user, token) => {
+export const updateServiceRating = async (data, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    const response = await axios.put(
+        `${BASE}/api/v1/ratings/user/${data.user}/${data.serviceProvider}`,
+        data,
+        config
+    );
+
+    if (response.status !== 200) {
+        throw new Error("Failed to update service rating");
+    }
+
+    return response.data;
+};
+
+export const createServiceRating = async (data, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    const response = await axios.post(`${BASE}/api/v1/ratings`, data, config);
+
+    if (response.status !== 201) {
+        throw new Error("Failed to create service rating");
+    }
+
+    return response.data;
+};
+
+export const getServiceRatingByUser = async (user, id, token) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -123,6 +159,45 @@ export const getUserBookings = async (id, token) => {
 
     if (response.status !== 200) {
         throw new Error("Failed to fetch user bookings");
+    }
+
+    return response.data;
+};
+
+export const getBookingById = async (id, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    const response = await axios.get(
+        `${BASE}/api/v1/services/hire/getbyid/${id}`,
+        config
+    );
+
+    if (response.status !== 200) {
+        throw new Error("Failed to fetch user bookings");
+    }
+
+    return response.data[0];
+};
+
+export const cancelBooking = async (data, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    const response = await axios.put(
+        `${BASE}/api/v1/services/hire`,
+        data,
+        config
+    );
+
+    if (response.status !== 200) {
+        throw new Error("Failed to cancel booking");
     }
 
     return response.data;

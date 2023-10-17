@@ -15,6 +15,7 @@ export { default as PetsContainer } from "./common/PetsContainer";
 export { default as SelectPets } from "./common/SelectPets";
 export { default as RegisterContainer } from "./common/RegisterContainer";
 export { default as ThemeCard } from "./common/ThemeCard";
+export { default as ThemeOverlay } from "./common/ThemeOverlay";
 
 // Lost and Found
 export { default as LostFoundHome } from "./laf/LostFoundHome";

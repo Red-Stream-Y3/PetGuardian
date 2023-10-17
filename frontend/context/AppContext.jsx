@@ -104,7 +104,6 @@ export const AppContextProvider = ({ children, value }) => {
                 setSelectedTab,
                 SERVER_URL,
                 tabColor,
-                USER: user, //TODO: depricated, remove
                 user,
                 loadingUser,
                 setLoadingUser,

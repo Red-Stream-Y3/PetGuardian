@@ -17,7 +17,10 @@ import BookingSummary from "./BookingSummary";
 import Toast from "react-native-toast-message";
 import ThemeButton from "../common/ThemeButton";
 import RateService from "./RateService";
-import { getUserBookings } from "../../services/ServiceproviderSerives";
+import {
+    cancelBooking,
+    getUserBookings,
+} from "../../services/ServiceproviderSerives";
 
 const FlatList = lazy(() => import("react-native/Libraries/Lists/FlatList"));
 
@@ -90,7 +93,7 @@ const HireHistory = ({ navigation }) => {
             alignItems: "center",
         },
         emptyMessage: {
-            marginTop: 20,
+            marginTop: 50,
             justifyContent: "center",
             alignItems: "center",
             width: "100%",
@@ -98,27 +101,31 @@ const HireHistory = ({ navigation }) => {
     });
 
     const onPressCancelBooking = async (id) => {
-        setLoading(true);
+        const data = {
+            _id: id,
+            status: "cancelled",
+        };
         try {
-            const response = await axios.put(
-                `${SERVER_URL}/api/v1/services/hire`,
-                { _id: id, status: "cancelled" }
-            );
+            const response = await cancelBooking(data, user.token);
 
-            if (response.data) {
+            if (response) {
+                setShowSelected(false);
+                setSelected(null);
                 Toast.show({
                     type: "success",
                     text1: "Booking Cancelled",
                 });
                 getHireHistory();
-                setShowSelected(false);
-                setSelected(null);
             }
-
-            setLoading(false);
         } catch (error) {
-            console.error(error);
-            setLoading(false);
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not cancel booking", //default
+            });
         }
     };
 
