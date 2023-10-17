@@ -9,7 +9,7 @@ import { getAppContext } from "../../context/AppContext.jsx";
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
-    const { selectedTab } = getAppContext();
+    const { selectedTab, tabColor } = getAppContext();
 
     //if selected tab changes, set drawer to home
     useEffect(() => {
@@ -18,9 +18,13 @@ const DrawerNavigator = () => {
 
     return (
         <Drawer.Navigator
+            initialRouteName='Home'
+            drawerType='slide'
             screenOptions={{
                 headerShown: false,
                 drawerPosition: "right",
+                drawerActiveTintColor: "#fff",
+                drawerActiveBackgroundColor: tabColor,
             }}>
             <Drawer.Screen name='Home' component={StackNavigator} />
             <Drawer.Screen name='Profile' component={ProfileScreen} />

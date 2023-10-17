@@ -2,6 +2,7 @@ import axios from "axios";
 import {
     ActivityIndicator,
     Dimensions,
+    RefreshControl,
     ScrollView,
     StyleSheet,
     Text,
@@ -16,9 +17,14 @@ import ThemeButton from "../common/ThemeButton";
 import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import ThemebackButton from "../common/ThemeBackButton";
+import {
+    getServiceProviderById,
+    getServiceRating,
+} from "../../services/ServiceproviderSerives";
+import Toast from "react-native-toast-message";
 
 const ServiceDetails = ({ navigation, route }) => {
-    const { SERVER_URL } = getAppContext();
+    const { user } = getAppContext();
     const { theme } = getThemeContext();
     const [details, setDetails] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -29,32 +35,52 @@ const ServiceDetails = ({ navigation, route }) => {
 
     const getServiceDetails = async () => {
         setLoading(true);
-        const result = await axios.get(
-            `${SERVER_URL}/api/v1/services/${service._id}`
-        );
-        setDetails(result.data[0]);
-        setLoading(false);
+        try {
+            const result = await getServiceProviderById(
+                service._id,
+                user.token
+            );
+            setDetails(result);
+            setLoading(false);
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not get service provider", //default
+            });
+        }
     };
 
     const fetchRating = async () => {
         setShowRating(false);
         try {
-            const result = await axios.get(
-                `${SERVER_URL}/api/v1/ratings/${service._id}`
-            );
+            const result = await getServiceRating(service._id, user.token);
 
-            if (result.data && result.data.length > 0)
-                setRating(result.data[0]);
+            if (result) setRating(result);
             setShowRating(true);
         } catch (error) {
-            console.error(error);
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not get service provider", //default
+            });
             setShowRating(true);
         }
     };
 
+    const handleRefresh = async () => {
+        await getServiceDetails();
+        await fetchRating();
+    };
+
     useEffect(() => {
-        if (!details?._id) getServiceDetails();
-        if (!rating?.averageRating) fetchRating();
+        if (!details?._id || !rating?.averageRating) handleRefresh();
     }, []);
 
     const handleBookingPress = () => {
@@ -159,7 +185,15 @@ const ServiceDetails = ({ navigation, route }) => {
         <View style={styles.container}>
             <ThemebackButton navigation={navigation} />
 
-            <ScrollView style={styles.scrollViewStyle}>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={loading}
+                        onRefresh={handleRefresh}
+                        colors={[theme.colors.servicesPrimary]}
+                    />
+                }
+                style={styles.scrollViewStyle}>
                 <Animated.Image
                     style={styles.imageStyle}
                     source={{

@@ -13,10 +13,11 @@ import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
 import ThemeButton from "../common/ThemeButton";
 import { getAppContext } from "../../context/AppContext";
 import axios from "axios";
+import { getServiceRatingByUser } from "../../services/ServiceproviderSerives";
 
 const RateService = ({ provider, handleClose }) => {
     const { theme } = getThemeContext();
-    const { SERVER_URL, USER, tabColor } = getAppContext();
+    const { user, tabColor } = getAppContext();
     const [rating, setRating] = useState("");
     const [review, setReview] = useState("");
     const [loading, setLoading] = useState(false);
@@ -27,19 +28,25 @@ const RateService = ({ provider, handleClose }) => {
         setLoading(true);
 
         try {
-            const response = await axios.get(
-                `${SERVER_URL}/api/v1/ratings/user/${USER._id}/${provider.serviceProvider._id}`
+            const response = await getServiceRatingByUser(
+                user._id,
+                provider.serviceProvider._id,
+                user.token
             );
 
-            if (response.data) {
-                setRating(`${response.data.rating}`);
-                setReview(response.data.review);
+            if (response) {
+                setRating(`${response.rating}`);
+                setReview(response.review);
                 setAction("UPDATE");
             }
 
             setLoading(false);
         } catch (error) {
-            setError(error.message);
+            setError(
+                error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not get rating" //default
+            );
             setLoading(false);
         }
     };

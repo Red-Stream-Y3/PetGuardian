@@ -18,6 +18,10 @@ const ThemeTextInput = ({
     multiline,
     numOfLines,
     maxLength,
+    onFocus,
+    onFocusLoss,
+    secureTextEntry,
+    textContentType,
 }) => {
     const { theme } = getThemeContext();
     const { tabColor } = getAppContext();
@@ -77,7 +81,11 @@ const ThemeTextInput = ({
             {title && <Text style={styles.titleText}>{title}</Text>}
             <TextInput
                 value={value}
+                onFocus={onFocus}
+                onBlur={onFocusLoss}
                 placeholder={placeholder}
+                textContentType={textContentType || null}
+                secureTextEntry={secureTextEntry || false}
                 placeholderTextColor={disabled ? "#888" : theme.colors.text}
                 keyboardType={keyboardType || null}
                 editable={(editable === false ? false : true) && !disabled}

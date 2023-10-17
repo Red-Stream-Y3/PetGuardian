@@ -175,8 +175,8 @@ const OneTimeBooking = ({
                 multiline={true}
                 numOfLines={5}
                 maxLength={200}
-                onChange={(e) => {
-                    setInput({ ...input, notes: e.target.value });
+                onChange={(text) => {
+                    setInput({ ...input, notes: text });
                 }}
             />
         </View>
