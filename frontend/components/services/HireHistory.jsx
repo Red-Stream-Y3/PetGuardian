@@ -4,6 +4,7 @@ import {
     Text,
     ActivityIndicator,
     StyleSheet,
+    RefreshControl,
 } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import { getAppContext } from "../../context/AppContext";
@@ -16,12 +17,13 @@ import BookingSummary from "./BookingSummary";
 import Toast from "react-native-toast-message";
 import ThemeButton from "../common/ThemeButton";
 import RateService from "./RateService";
+import { getUserBookings } from "../../services/ServiceproviderSerives";
 
 const FlatList = lazy(() => import("react-native/Libraries/Lists/FlatList"));
 
 const HireHistory = ({ navigation }) => {
     const { theme } = getThemeContext();
-    const { SERVER_URL, USER } = getAppContext();
+    const { SERVER_URL, user } = getAppContext();
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showSelected, setShowSelected] = useState(false);
@@ -31,15 +33,20 @@ const HireHistory = ({ navigation }) => {
     const getHireHistory = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(
-                `${SERVER_URL}/api/v1/services/hire/${USER._id}`
-            );
+            const response = await getUserBookings(user._id, user.token);
 
-            if (response.data) setHistory(response.data);
+            if (response) setHistory(response);
 
             setLoading(false);
         } catch (error) {
-            console.error(error);
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not get hire history", //default
+            });
             setLoading(false);
         }
     };
@@ -81,6 +88,12 @@ const HireHistory = ({ navigation }) => {
         titleContainer: {
             width: "100%",
             alignItems: "center",
+        },
+        emptyMessage: {
+            marginTop: 20,
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
         },
     });
 
@@ -148,15 +161,23 @@ const HireHistory = ({ navigation }) => {
                 <ThemeBackButton navigation={navigation} />
                 <Text style={styles.textTitle}>Hire History</Text>
             </View>
-            {loading && (
-                <ActivityIndicator
-                    size={50}
-                    color={theme.colors.servicesPrimary}
-                />
-            )}
+
             <Suspense fallback={<ActivityIndicator />}>
                 <FlatList
                     data={history}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={loading}
+                            onRefresh={getHireHistory}
+                        />
+                    }
+                    ListEmptyComponent={
+                        <View style={styles.emptyMessage}>
+                            <Text style={styles.textBody}>
+                                No History Found
+                            </Text>
+                        </View>
+                    }
                     keyExtractor={(item) => item._id}
                     style={{ width: "100%" }}
                     renderItem={({ item, i }) => (

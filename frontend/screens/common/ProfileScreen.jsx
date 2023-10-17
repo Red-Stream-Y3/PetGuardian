@@ -1,8 +1,56 @@
-import { SafeAreaView, Text, View, StatusBar } from "react-native";
+import { SafeAreaView, Text, View, StatusBar, StyleSheet } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
+import {
+    ThemeBackButton,
+    ThemeButton,
+    ThemeCard,
+    ThemeOverlay,
+} from "../../components";
+import { getAppContext } from "../../context/AppContext";
+import { useState } from "react";
 
-const ProfileScreen = () => {
-    const { theme } = getThemeContext();
+const ProfileScreen = ({ navigation }) => {
+    const { theme, toggleTheme } = getThemeContext();
+    const { removeUser } = getAppContext();
+    const [showSignOut, setShowSignOut] = useState(false);
+
+    const handleSignOutPress = async () => {
+        if (!showSignOut) {
+            setShowSignOut(true);
+            return;
+        }
+
+        await removeUser();
+    };
+
+    const handleSwitchThemePress = () => {
+        toggleTheme();
+    };
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            marginTop: StatusBar.currentHeight,
+        },
+        titleText: {
+            fontSize: 20,
+            fontWeight: "bold",
+            marginStart: 10,
+        },
+        titleContainer: {
+            flexDirection: "row",
+            alignItems: "center",
+        },
+        text: {
+            color: theme.colors.text,
+            fontSize: 14,
+        },
+        buttonGroup: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: 10,
+        },
+    });
 
     return (
         <SafeAreaView
@@ -13,8 +61,41 @@ const ProfileScreen = () => {
                 }
                 hidden={false}
             />
-            <View style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
-                <Text>Profile Screen</Text>
+            <ThemeOverlay
+                visible={showSignOut}
+                onPressBg={() => setShowSignOut(false)}>
+                <ThemeCard>
+                    <Text style={styles.text}>
+                        Are you sure you want to sign out?
+                    </Text>
+                    <View style={styles.buttonGroup}>
+                        <ThemeButton title='Yes' onPress={handleSignOutPress} />
+                        <ThemeButton
+                            title='No'
+                            onPress={() => setShowSignOut(false)}
+                        />
+                    </View>
+                </ThemeCard>
+            </ThemeOverlay>
+            <View style={styles.container}>
+                <ThemeBackButton
+                    navigation={navigation}
+                    customBackAction={() => navigation.jumpTo("Home")}
+                />
+
+                <ThemeCard>
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.titleText}>Profile</Text>
+                        <ThemeButton
+                            title='Sign Out'
+                            onPress={handleSignOutPress}
+                        />
+                        <ThemeButton
+                            title='Switch Theme'
+                            onPress={handleSwitchThemePress}
+                        />
+                    </View>
+                </ThemeCard>
             </View>
         </SafeAreaView>
     );
