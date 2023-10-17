@@ -1,7 +1,7 @@
-import User from "../models/userModel.js";
-import HireRequest from "../models/hireRequestModel.js";
-import asyncHandler from "express-async-handler";
-import mongoose from "mongoose";
+import User from '../models/userModel.js';
+import HireRequest from '../models/hireRequestModel.js';
+import asyncHandler from 'express-async-handler';
+import mongoose from 'mongoose';
 
 // @desc    Get all service providers
 // @route   GET /api/v1/services/
@@ -21,7 +21,7 @@ const getProviders = asyncHandler(async (req, res) => {
         ]).hint({ _id: 1, firstName: 1, lastName: 1, services: 1 });
         res.json(providers);
     } catch (error) {
-        res.status(404).send({error:"No service providers found"});
+        res.status(404).send({ error: 'No service providers found' });
     }
 });
 
@@ -34,8 +34,9 @@ const getProviderById = asyncHandler(async (req, res) => {
             {
                 $match: {
                     _id: new mongoose.Types.ObjectId(req.params.id),
-                }
-            },{
+                },
+            },
+            {
                 $project: {
                     _id: 1,
                     firstName: 1,
@@ -48,10 +49,10 @@ const getProviderById = asyncHandler(async (req, res) => {
         if (provider) {
             res.json(provider);
         } else {
-            throw new Error("User not found");
+            throw new Error('User not found');
         }
     } catch (error) {
-        res.status(404).send({error:error.message});
+        res.status(404).send({ error: error.message });
     }
 });
 
@@ -81,11 +82,11 @@ const hireProvider = asyncHandler(async (req, res) => {
         user,
         serviceProvider,
         involvedPets,
-        status: "pending",
+        status: 'pending',
         startDate: new Date(startDate),
         endDate: new Date(endDate),
-        startTime: new Date(startDate + "T" + startTime),
-        endTime: new Date(startDate + "T" + endTime),
+        startTime: new Date(startDate + 'T' + startTime),
+        endTime: new Date(startDate + 'T' + endTime),
         daily,
         weekly,
         days,
@@ -94,14 +95,14 @@ const hireProvider = asyncHandler(async (req, res) => {
         totalFee,
         notes,
         paymentMethod,
-        paymentStatus: "pending",
+        paymentStatus: 'pending',
     });
 
     try {
         const createdHireRequest = await hireRequest.save();
-        res.status(201).json({message:'Hire request created'});
+        res.status(201).json({ message: 'Hire request created' });
     } catch (error) {
-        res.json({error:error.message});
+        res.json({ error: error.message });
     }
 });
 
@@ -114,17 +115,18 @@ const getHireRequests = asyncHandler(async (req, res) => {
             {
                 $match: {
                     user: new mongoose.Types.ObjectId(req.params.id),
-                }
+                },
             },
             {
                 $lookup: {
-                    from: "users",
-                    localField: "serviceProvider",
-                    foreignField: "_id",
-                    as: "serviceProvider",
-                }
-            },{
-                $unwind: "$serviceProvider",
+                    from: 'users',
+                    localField: 'serviceProvider',
+                    foreignField: '_id',
+                    as: 'serviceProvider',
+                },
+            },
+            {
+                $unwind: '$serviceProvider',
             },
             {
                 $project: {
@@ -143,11 +145,11 @@ const getHireRequests = asyncHandler(async (req, res) => {
                         profilePic: 1,
                     },
                 },
-            }
+            },
         ]).hint({ user: 1, serviceProvider: 1 });
         res.json(hireRequests);
     } catch (error) {
-        res.json({error:error.message});
+        res.json({ error: error.message });
     }
 });
 
@@ -160,17 +162,20 @@ const getMyHireRequests = asyncHandler(async (req, res) => {
             {
                 $match: {
                     serviceProvider: new mongoose.Types.ObjectId(req.params.id),
-                }
-            },{
+                },
+            },
+            {
                 $lookup: {
-                    from: "users",
-                    localField: "user",
-                    foreignField: "_id",
-                    as: "user",
-                }
-            },{
-                $unwind: "$user",
-            },{
+                    from: 'users',
+                    localField: 'user',
+                    foreignField: '_id',
+                    as: 'user',
+                },
+            },
+            {
+                $unwind: '$user',
+            },
+            {
                 $project: {
                     _id: 1,
                     status: 1,
@@ -186,11 +191,11 @@ const getMyHireRequests = asyncHandler(async (req, res) => {
                         profilePic: 1,
                     },
                 },
-            }
-        ]).hint({ user: 1, serviceProvider: 1 })
+            },
+        ]).hint({ user: 1, serviceProvider: 1 });
         res.json(hireRequests);
     } catch (error) {
-        res.json({error:error.message});
+        res.json({ error: error.message });
     }
 });
 
@@ -204,7 +209,7 @@ const checkHireRequests = asyncHandler(async (req, res) => {
             {
                 $match: {
                     serviceProvider: new mongoose.Types.ObjectId(serviceProvider),
-                }
+                },
             },
             {
                 $match: {
@@ -238,26 +243,28 @@ const checkHireRequests = asyncHandler(async (req, res) => {
                     startTime: 1,
                     endTime: 1,
                 },
-            }
+            },
         ]).hint({ serviceProvider: 1, startDate: 1, endDate: 1, startTime: 1, endTime: 1 });
-        
+
         const hireRequestsFiltered = hireRequests.filter((hireRequest) => {
-            const hireRequestStartTime = new Date(startDate + "T" + new Date(hireRequest.startTime).toISOString().split("T")[1]);
-            const hireRequestEndTime = new Date(startDate + "T" + new Date(hireRequest.endTime).toISOString().split("T")[1]);
-            const startTimeDate = new Date(startDate + "T" + startTime);
-            const endTimeDate = new Date(endDate + "T" + endTime);
+            const hireRequestStartTime = new Date(
+                startDate + 'T' + new Date(hireRequest.startTime).toISOString().split('T')[1],
+            );
+            const hireRequestEndTime = new Date(
+                startDate + 'T' + new Date(hireRequest.endTime).toISOString().split('T')[1],
+            );
+            const startTimeDate = new Date(startDate + 'T' + startTime);
+            const endTimeDate = new Date(endDate + 'T' + endTime);
 
             return (
-                (hireRequestStartTime >= startTimeDate &&
-                    hireRequestStartTime < endTimeDate) ||
-                (hireRequestEndTime > startTimeDate &&
-                    hireRequestEndTime <= endTimeDate)
+                (hireRequestStartTime >= startTimeDate && hireRequestStartTime < endTimeDate) ||
+                (hireRequestEndTime > startTimeDate && hireRequestEndTime <= endTimeDate)
             );
         });
-        
+
         res.json(hireRequestsFiltered);
     } catch (error) {
-        res.json({error:error.message});
+        res.json({ error: error.message });
     }
 });
 
@@ -273,13 +280,12 @@ const updateHireRequest = asyncHandler(async (req, res) => {
         if (result) {
             result.status = status;
             result.save();
-            res.json({message:'Hire request updated'});
+            res.json({ message: 'Hire request updated' });
         } else {
-            throw new Error("Hire request not found");
+            throw new Error('Hire request not found');
         }
-
     } catch (error) {
-        res.status(404).json({error:error.message});
+        res.status(404).json({ error: error.message });
     }
 });
 
@@ -290,25 +296,25 @@ const getHireRequestById = asyncHandler(async (req, res) => {
     try {
         const hireRequest = await HireRequest.aggregate([
             {
-                $match: {_id: new mongoose.Types.ObjectId(req.params.id)}
+                $match: { _id: new mongoose.Types.ObjectId(req.params.id) },
             },
             {
                 $lookup: {
-                    from: "pets",
-                    localField: "involvedPets",
-                    foreignField: "_id",
-                    as: "involvedPets",
-                }
-            }
+                    from: 'pets',
+                    localField: 'involvedPets',
+                    foreignField: '_id',
+                    as: 'involvedPets',
+                },
+            },
         ]);
 
         if (hireRequest) {
             res.json(hireRequest);
         } else {
-            res.json({error:"Hire request not found"});
+            res.json({ error: 'Hire request not found' });
         }
     } catch (error) {
-        res.status(404).json({error:error.message});
+        res.status(404).json({ error: error.message });
     }
 });
 

@@ -1,37 +1,25 @@
-import React, { useState } from "react";
-import {
-    KeyboardAvoidingView,
-    Text,
-    StyleSheet,
-    Platform,
-    ActivityIndicator,
-    View,
-} from "react-native";
-import {
-    RegisterContainer,
-    ThemeButton,
-    ThemeOverlay,
-    ThemeTextInput,
-} from "../../components";
-import { Feather } from "@expo/vector-icons";
-import axios from "axios";
-import getThemeContext from "../../context/ThemeContext";
-import { getAppContext } from "../../context/AppContext";
-import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
+import React, { useState } from 'react';
+import { KeyboardAvoidingView, Text, StyleSheet, Platform, ActivityIndicator, View } from 'react-native';
+import { RegisterContainer, ThemeButton, ThemeOverlay, ThemeTextInput } from '../../components';
+import { Feather } from '@expo/vector-icons';
+import axios from 'axios';
+import getThemeContext from '../../context/ThemeContext';
+import { getAppContext } from '../../context/AppContext';
+import Animated, { FadeInUp, FadeOutUp } from 'react-native-reanimated';
 
 const LoginScreen = ({ navigation }) => {
     const { theme } = getThemeContext();
     const { SERVER_URL, storeUser, APP_NAME } = getAppContext();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showRegister, setShowRegister] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const handleLogin = async () => {
-        if (email === "" || password === "") {
-            setError("Please fill all fields");
+        if (email === '' || password === '') {
+            setError('Please fill all fields');
             return;
         }
 
@@ -43,10 +31,7 @@ const LoginScreen = ({ navigation }) => {
         setLoading(true);
 
         try {
-            const response = await axios.post(
-                `${SERVER_URL}/api/v1/users/login`,
-                data
-            );
+            const response = await axios.post(`${SERVER_URL}/api/v1/users/login`, data);
 
             if (response) {
                 storeUser(response.data);
@@ -64,7 +49,7 @@ const LoginScreen = ({ navigation }) => {
     };
 
     const handleModalBgPress = () => {
-        if (Platform.OS === "web") {
+        if (Platform.OS === 'web') {
             return;
         }
         setShowRegister(false);
@@ -73,36 +58,36 @@ const LoginScreen = ({ navigation }) => {
     const styles = StyleSheet.create({
         container: {
             flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
             paddingHorizontal: 20,
             backgroundColor: theme.colors.background,
         },
         title: {
             fontSize: 24,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             marginBottom: 20,
             color: theme.colors.text,
         },
         error: {
             color: theme.colors.error,
             fontSize: 12,
-            alignSelf: "flex-start",
+            alignSelf: 'flex-start',
             marginLeft: 10,
             marginBottom: 10,
         },
         scrollStyle: {
             flex: 1,
-            width: "100%",
+            width: '100%',
         },
         scrollContentStyle: {
             flexGrow: 1,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
         },
         registerContainer: {
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             marginTop: 20,
         },
         text: {
@@ -112,12 +97,8 @@ const LoginScreen = ({ navigation }) => {
     });
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.container}>
-            <ThemeOverlay
-                visible={showRegister}
-                onPressBg={() => handleModalBgPress}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+            <ThemeOverlay visible={showRegister} onPressBg={() => handleModalBgPress}>
                 <RegisterContainer
                     setOverlayOpen={setShowRegister}
                     setLoginEmail={setEmail}
@@ -127,60 +108,43 @@ const LoginScreen = ({ navigation }) => {
             <Animated.ScrollView
                 entering={FadeInUp}
                 exiting={FadeOutUp}
-                keyboardShouldPersistTaps='handled'
+                keyboardShouldPersistTaps="handled"
                 style={styles.scrollStyle}
-                contentContainerStyle={styles.scrollContentStyle}>
+                contentContainerStyle={styles.scrollContentStyle}
+            >
                 <Text style={styles.title}>{APP_NAME}</Text>
 
                 {error && (
-                    <Animated.Text
-                        entering={FadeInUp}
-                        exiting={FadeOutUp}
-                        style={styles.error}>
+                    <Animated.Text entering={FadeInUp} exiting={FadeOutUp} style={styles.error}>
                         {error}
                     </Animated.Text>
                 )}
 
                 <ThemeTextInput
-                    title='Email'
-                    placeholder='Enter your email'
+                    title="Email"
+                    placeholder="Enter your email"
                     value={email}
                     onChange={(text) => setEmail(text)}
-                    keyboardType='email-address'
-                    textContentType='emailAddress'
+                    keyboardType="email-address"
+                    textContentType="emailAddress"
                 />
                 <ThemeTextInput
-                    title='Password'
-                    placeholder='Enter your password'
+                    title="Password"
+                    placeholder="Enter your password"
                     value={password}
                     onChange={(text) => setPassword(text)}
-                    icon={
-                        <Feather
-                            name={showPassword ? "eye-off" : "eye"}
-                            size={24}
-                            color={theme.colors.icon}
-                        />
-                    }
+                    icon={<Feather name={showPassword ? 'eye-off' : 'eye'} size={24} color={theme.colors.icon} />}
                     onPressIcon={() => setShowPassword(!showPassword)}
                     secureTextEntry={!showPassword}
-                    textContentType='password'
+                    textContentType="password"
                 />
-                <ThemeButton
-                    title={!loading && "Sign In"}
-                    textSize={16}
-                    onPress={handleLogin}>
-                    {loading && (
-                        <ActivityIndicator color={theme.colors.buttonText} />
-                    )}
+                <ThemeButton title={!loading && 'Sign In'} textSize={16} onPress={handleLogin}>
+                    {loading && <ActivityIndicator color={theme.colors.buttonText} />}
                 </ThemeButton>
 
                 <View style={styles.registerContainer}>
                     <Text style={styles.text}>Don't have an account?</Text>
-                    <ThemeButton
-                        title='Register'
-                        onPress={handleRegister}
-                        variant={"clear"}
-                    />
+                    <ThemeButton title="Register" onPress={handleRegister} variant={'clear'} />
                 </View>
             </Animated.ScrollView>
         </KeyboardAvoidingView>

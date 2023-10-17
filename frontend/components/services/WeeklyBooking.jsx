@@ -1,17 +1,9 @@
-import { Switch, Text, View } from "react-native";
-import ThemeTextInput from "../common/ThemeTextInput";
-import { FontAwesome5 } from "@expo/vector-icons";
-import ThemeChipList from "../common/ThemeChipList";
+import { Switch, Text, View } from 'react-native';
+import ThemeTextInput from '../common/ThemeTextInput';
+import { FontAwesome5 } from '@expo/vector-icons';
+import ThemeChipList from '../common/ThemeChipList';
 
-const WeeklyBooking = ({
-    styles,
-    setDatePicker,
-    input,
-    setInput,
-    allDay,
-    setAllDay,
-    theme,
-}) => {
+const WeeklyBooking = ({ styles, setDatePicker, input, setInput, allDay, setAllDay, theme }) => {
     const setDays = (index) => {
         const newDays = [...input.days];
         newDays[index] = !newDays[index];
@@ -20,43 +12,43 @@ const WeeklyBooking = ({
 
     const daysOfTheWeek = [
         {
-            text: "Monday",
+            text: 'Monday',
             onClick: () => {
                 setDays(0);
             },
         },
         {
-            text: "Tuesday",
+            text: 'Tuesday',
             onClick: () => {
                 setDays(1);
             },
         },
         {
-            text: "Wednesday",
+            text: 'Wednesday',
             onClick: () => {
                 setDays(2);
             },
         },
         {
-            text: "Thursday",
+            text: 'Thursday',
             onClick: () => {
                 setDays(3);
             },
         },
         {
-            text: "Friday",
+            text: 'Friday',
             onClick: () => {
                 setDays(4);
             },
         },
         {
-            text: "Saturday",
+            text: 'Saturday',
             onClick: () => {
                 setDays(5);
             },
         },
         {
-            text: "Sunday",
+            text: 'Sunday',
             onClick: () => {
                 setDays(6);
             },
@@ -66,83 +58,61 @@ const WeeklyBooking = ({
     return (
         <View
             style={{
-                width: "100%",
+                width: '100%',
                 paddingHorizontal: 20,
-            }}>
-            <Text style={styles.textH1}>{"Days of the week"}</Text>
-            <ThemeChipList
-                multiSelect={true}
-                data={daysOfTheWeek}
-                activeList={input.days}
-            />
+            }}
+        >
+            <Text style={styles.textH1}>{'Days of the week'}</Text>
+            <ThemeChipList multiSelect={true} data={daysOfTheWeek} activeList={input.days} />
 
-            <Text style={styles.textH1}>{"Time"}</Text>
+            <Text style={styles.textH1}>{'Time'}</Text>
             <View
                 style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                }}>
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                }}
+            >
                 <ThemeTextInput
-                    title='From'
+                    title="From"
                     onPressIcon={() => {
                         setDatePicker({
                             show: true,
-                            mode: "time",
+                            mode: 'time',
                             inputCallback: (date) => {
                                 setInput({ ...input, startDateTime: date });
                             },
                             date: input.startDateTime,
                         });
                     }}
-                    value={
-                        allDay
-                            ? "12:00:00 AM"
-                            : input.startDateTime.toLocaleTimeString()
-                    }
-                    width={"45%"}
+                    value={allDay ? '12:00:00 AM' : input.startDateTime.toLocaleTimeString()}
+                    width={'45%'}
                     editable={false}
                     disabled={allDay}
-                    icon={
-                        <FontAwesome5
-                            name='clock'
-                            size={24}
-                            color={allDay ? "#888" : theme.colors.icon}
-                        />
-                    }
+                    icon={<FontAwesome5 name="clock" size={24} color={allDay ? '#888' : theme.colors.icon} />}
                 />
-                <Text style={styles.textBody}>{" _ "}</Text>
+                <Text style={styles.textBody}>{' _ '}</Text>
                 <ThemeTextInput
-                    title='To'
-                    width={"45%"}
+                    title="To"
+                    width={'45%'}
                     editable={false}
                     disabled={allDay}
                     onPressIcon={() => {
                         setDatePicker({
                             show: true,
-                            mode: "time",
+                            mode: 'time',
                             inputCallback: (date) => {
                                 setInput({ ...input, endDateTime: date });
                             },
                             date: input.endDateTime,
                         });
                     }}
-                    value={
-                        allDay
-                            ? "11:59:59 PM"
-                            : input.endDateTime.toLocaleTimeString()
-                    }
-                    icon={
-                        <FontAwesome5
-                            name='clock'
-                            size={24}
-                            color={allDay ? "#888" : theme.colors.icon}
-                        />
-                    }
+                    value={allDay ? '11:59:59 PM' : input.endDateTime.toLocaleTimeString()}
+                    icon={<FontAwesome5 name="clock" size={24} color={allDay ? '#888' : theme.colors.icon} />}
                 />
             </View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text style={styles.textBody}>{"All Day"}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={styles.textBody}>{'All Day'}</Text>
                 <Switch
                     value={allDay}
                     onChange={() => {
@@ -151,16 +121,14 @@ const WeeklyBooking = ({
                 />
             </View>
 
-            <Text style={styles.textH1}>{"Pets"}</Text>
+            <Text style={styles.textH1}>{'Pets'}</Text>
             <View>
-                <Text style={styles.textBody}>
-                    {"Pet selection component here"}
-                </Text>
+                <Text style={styles.textBody}>{'Pet selection component here'}</Text>
             </View>
 
-            <Text style={styles.textH1}>{"Notes"}</Text>
+            <Text style={styles.textH1}>{'Notes'}</Text>
             <ThemeTextInput
-                placeholder={"Special notes..."}
+                placeholder={'Special notes...'}
                 value={input.notes}
                 multiline={true}
                 numOfLines={5}

@@ -1,23 +1,23 @@
-import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 export const userSchema = mongoose.Schema(
     {
         username: {
             type: String,
             required: true,
-            pattern: "^[a-zA-Z0-9_]*$",
+            pattern: '^[a-zA-Z0-9_]*$',
             unique: true,
         },
         firstName: {
             type: String,
-            pattern: "^[a-zA-Z]*$",
-            default: "",
+            pattern: '^[a-zA-Z]*$',
+            default: '',
         },
         lastName: {
             type: String,
-            pattern: "^[a-zA-Z]*$",
-            default: "",
+            pattern: '^[a-zA-Z]*$',
+            default: '',
         },
         email: {
             type: String,
@@ -29,21 +29,21 @@ export const userSchema = mongoose.Schema(
             required: true,
         },
         address: {
-            street: { type: String, default: "" },
-            city: { type: String, default: "" },
-            state: { type: String, default: "" },
-            zip: { type: String, default: "" },
-            country: { type: String, default: "" },
+            street: { type: String, default: '' },
+            city: { type: String, default: '' },
+            state: { type: String, default: '' },
+            zip: { type: String, default: '' },
+            country: { type: String, default: '' },
         },
         phone: {
             type: String,
-            default: "",
-            pattern: "^[0-9]*$",
+            default: '',
+            pattern: '^[0-9]*$',
         },
         profilePic: {
             type: String,
             default:
-                "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80",
+                'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80',
         },
         // role: {
         //   type: String,
@@ -62,8 +62,8 @@ export const userSchema = mongoose.Schema(
             businessPhone: [
                 {
                     type: String,
-                    default: "",
-                    pattern: "^[0-9]*$",
+                    default: '',
+                    pattern: '^[0-9]*$',
                 },
             ],
             activeCities: [String],
@@ -77,13 +77,13 @@ export const userSchema = mongoose.Schema(
     },
     {
         timestamps: true,
-    }
+    },
 );
 
 //create compound index for service providers
 userSchema.index(
     { _id: 1, firstName: 1, lastName: 1, services: 1 },
-    { partialFilterExpression: { services: { $exists: true } } }
+    { partialFilterExpression: { services: { $exists: true } } },
 );
 
 userSchema.index({ email: 1 }, { unique: true });
@@ -93,8 +93,8 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 // Hash the password before saving it to the database
-userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) {
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
         // if the password is not modified, then do not hash it again
         next();
     }
@@ -103,6 +103,6 @@ userSchema.pre("save", async function (next) {
     this.password = await bcrypt.hash(this.password, salt); // hash the password with salt value
 });
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 export default User;

@@ -2,73 +2,70 @@ import mongoose from 'mongoose';
 
 const requestSchema = mongoose.Schema(
     {
-        user:{
+        user: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             ref: 'User',
         },
-        pets:[
+        pets: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 required: true,
                 ref: 'Pet',
             },
         ],
-        status:{
+        status: {
             type: String,
             required: true,
             default: 'pending',
         },
-        description:{
+        description: {
             type: String,
         },
-        contactNo:{
+        contactNo: {
             type: String,
             required: true,
         },
     },
     {
         timestamps: true,
-    }
+    },
 );
 
 const playdateSchema = mongoose.Schema(
     {
-        date:{
+        date: {
             type: Date,
             required: true,
         },
-        time:{
+        time: {
             type: String,
             required: true,
         },
-        location:{
+        location: {
             type: String,
             required: true,
         },
-        description:
-        {
+        description: {
             type: String,
         },
-        user:{
+        user: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             ref: 'User',
         },
-        pets:[
+        pets: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 required: true,
                 ref: 'Pet',
             },
         ],
-        requests:[
-            requestSchema,
-        ],
+        requests: [requestSchema],
     },
     {
         timestamps: true,
-    }
+    },
 );
 
 const Playdate = mongoose.model('Playdate', playdateSchema);

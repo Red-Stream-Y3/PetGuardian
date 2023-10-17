@@ -1,28 +1,30 @@
 import mongoose from 'mongoose';
 
-const ratingSchema = new mongoose.Schema({
-    rating: {
-        type: Number,
-        required: true
+const ratingSchema = new mongoose.Schema(
+    {
+        rating: {
+            type: Number,
+            required: true,
+        },
+        review: {
+            type: String,
+            required: true,
+        },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
+        serviceProvider: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
     },
-    review: {
-        type: String,
-        required: true
+    {
+        timestamps: true,
     },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    serviceProvider: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-},
-{
-    timestamps: true
-});
+);
 
 //indexes
 ratingSchema.index({ user: 1, serviceProvider: 1 }, { unique: true });

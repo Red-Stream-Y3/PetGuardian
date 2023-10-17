@@ -8,22 +8,18 @@ import {
     getProviders,
     hireProvider,
     updateHireRequest,
-} from "../controllers/servicesController.js";
+} from '../controllers/servicesController.js';
 
 const router = express.Router();
 
 router.route('/').get(getProviders);
 router.route('/:id').get(getProviderById);
 
-router.route('/hire')
-    .post(hireProvider)
-    .put(updateHireRequest);
+router.route('/hire').post(hireProvider).put(updateHireRequest);
 
-router.route('/hire/:id')
-    .get(getHireRequests);
+router.route('/hire/:id').get(getHireRequests);
 
-router.route('/myhire/:id')
-    .get(getMyHireRequests);
+router.route('/myhire/:id').get(getMyHireRequests);
 
 router.route('/hire/getbyid/:id').get(getHireRequestById);
 

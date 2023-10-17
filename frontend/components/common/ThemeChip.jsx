@@ -1,23 +1,14 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import getThemeContext from "../../context/ThemeContext";
-import { getAppContext } from "../../context/AppContext";
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
+import { getAppContext } from '../../context/AppContext';
 
-const ThemeChip = ({
-    children,
-    clickable,
-    onClick,
-    text,
-    disableRipple,
-    filled,
-    color,
-    active,
-}) => {
+const ThemeChip = ({ children, clickable, onClick, text, disableRipple, filled, color, active }) => {
     const { theme } = getThemeContext();
     const { tabColor } = getAppContext();
 
     const styles = StyleSheet.create({
         container: {
-            overflow: "hidden",
+            overflow: 'hidden',
             borderRadius: 20,
             borderWidth: 1,
             marginHorizontal: 1,
@@ -31,10 +22,10 @@ const ThemeChip = ({
             paddingHorizontal: 10,
             paddingVertical: 5,
             backgroundColor: active ? color || tabColor : theme.colors.surface,
-            alignItems: "center",
+            alignItems: 'center',
         },
         text: {
-            fontWeight: "bold",
+            fontWeight: 'bold',
             color: active ? theme.colors.primaryText : theme.colors.text,
             paddingHorizontal: 5,
         },
@@ -49,7 +40,8 @@ const ThemeChip = ({
                     if (clickable) {
                         if (onClick) onClick();
                     }
-                }}>
+                }}
+            >
                 {children}
 
                 <Text style={styles.text}>{text}</Text>
