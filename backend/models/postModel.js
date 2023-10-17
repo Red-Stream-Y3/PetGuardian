@@ -35,6 +35,11 @@ const postSchema = mongoose.Schema(
       default: '',
       required: true,
     },
+    status: {
+      type: String,
+      enum: ['open', 'closed'],
+      default: 'open',
+    },
   },
   {
     timestamps: true,

@@ -21,7 +21,7 @@ const getPosts = asyncHandler(async (req, res) => {
 
 const getPostsByUser = asyncHandler(async (req, res) => {
   try {
-    const posts = await Post.find({ user: req.params.id });
+    const posts = await Post.find({ user: req.params.id }).populate('user pet');
     res.json(posts);
   } catch (error) {
     res.status(404);
