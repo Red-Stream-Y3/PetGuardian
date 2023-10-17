@@ -1,11 +1,12 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
+import { getAppContext } from '../../context/AppContext';
 
 import Search from '../common/Search';
 import PetsContainer from '../common/PetsContainer';
 
-import { getPostByUser } from '../../services/PostServices';
+import { getAllPosts } from '../../services/PostServices';
 
 const LostFoundHome = ({ navigation }) => {
     const { theme } = getThemeContext();
@@ -17,7 +18,7 @@ const LostFoundHome = ({ navigation }) => {
     const getPosts = async () => {
         try {
             setLoading(true);
-            const response = await getPostByUser(user._id, user.token);
+            const response = await getAllPosts(user.token);
             const lostPosts = response.filter((post) => post.type === 'Lost');
             setLostPosts(lostPosts);
 

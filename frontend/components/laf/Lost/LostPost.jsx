@@ -1,6 +1,7 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { ActivityIndicator, View, StyleSheet, ScrollView } from 'react-native';
 import getThemeContext from '../../../context/ThemeContext';
+import { getAppContext } from '../../../context/AppContext';
 
 import Header from '../../common/Header';
 import SelectPets from '../../common/SelectPets';
