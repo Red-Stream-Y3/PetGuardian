@@ -1,6 +1,6 @@
-import Rating from "../models/ratingModel.js";
-import asyncHandler from "express-async-handler";
-import mongoose from "mongoose";
+import Rating from '../models/ratingModel.js';
+import asyncHandler from 'express-async-handler';
+import mongoose from 'mongoose';
 
 // @desc    Get all ratings for a service provider
 // @route   GET /api/v1/ratings/:id
@@ -8,24 +8,24 @@ import mongoose from "mongoose";
 const getRatingById = asyncHandler(async (req, res) => {
     const rating = await Rating.aggregate([
         {
-            $match: { serviceProvider: req.params.id }
+            $match: { serviceProvider: req.params.id },
         },
         {
-            $sort: { createdAt: -1 }
+            $sort: { createdAt: -1 },
         },
         {
             $lookup: {
-                from: "users",
-                localField: "user",
-                foreignField: "_id",
-                as: "user",
-            }
+                from: 'users',
+                localField: 'user',
+                foreignField: '_id',
+                as: 'user',
+            },
         },
         {
-            $unwind: "$user"
+            $unwind: '$user',
         },
         {
-            $limit: 10
+            $limit: 10,
         },
         {
             $project: {
@@ -38,15 +38,15 @@ const getRatingById = asyncHandler(async (req, res) => {
                     name: 1,
                     email: 1,
                     image: 1,
-                }
-            }
-        }
+                },
+            },
+        },
     ]).hint({ serviceProvider: 1, createdAt: 1, rating: 1 });
 
     if (rating) {
         res.json(rating);
     } else {
-        res.status(404).json({ message: "Rating not found" });
+        res.status(404).json({ message: 'Rating not found' });
     }
 });
 
@@ -63,9 +63,9 @@ const createRating = asyncHandler(async (req, res) => {
             user,
             serviceProvider,
         });
-    
+
         const createdRating = await newRating.save();
-    
+
         res.status(201).json(createdRating);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -81,22 +81,22 @@ const getRatingByServiceProvider = asyncHandler(async (req, res) => {
     try {
         const ratings = await Rating.aggregate([
             {
-                $match: { serviceProvider: new mongoose.Types.ObjectId(serviceProvider) }
+                $match: { serviceProvider: new mongoose.Types.ObjectId(serviceProvider) },
             },
             {
                 $group: {
-                    _id: "$serviceProvider",
-                    averageRating: { $avg: "$rating" },
+                    _id: '$serviceProvider',
+                    averageRating: { $avg: '$rating' },
                     count: { $sum: 1 },
-                }
+                },
             },
             {
                 $project: {
                     _id: 0,
                     averageRating: 1,
                     count: 1,
-                }
-            }
+                },
+            },
         ]).hint({ serviceProvider: 1, createdAt: 1, rating: 1 });
 
         res.status(200).json(ratings);
@@ -112,7 +112,7 @@ const getRatingByUserAndServiceProvider = asyncHandler(async (req, res) => {
     const { uid, sid } = req.params;
 
     try {
-        const rating = await Rating.findOne({ user:uid, serviceProvider:sid }).hint({ user: 1, serviceProvider: 1 });
+        const rating = await Rating.findOne({ user: uid, serviceProvider: sid }).hint({ user: 1, serviceProvider: 1 });
 
         res.status(200).json(rating);
     } catch (error) {
@@ -128,7 +128,10 @@ const updateRatingByUserAndServiceProvider = asyncHandler(async (req, res) => {
     const { rating, review } = req.body;
 
     try {
-        const updatedRating = await Rating.findOne({ user:uid, serviceProvider:sid }).hint({ user: 1, serviceProvider: 1 });
+        const updatedRating = await Rating.findOne({ user: uid, serviceProvider: sid }).hint({
+            user: 1,
+            serviceProvider: 1,
+        });
 
         updatedRating.rating = rating;
         updatedRating.review = review;

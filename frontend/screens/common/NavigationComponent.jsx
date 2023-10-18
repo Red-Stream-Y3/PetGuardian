@@ -1,5 +1,5 @@
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Toast from "react-native-toast-message";
 import {
@@ -10,18 +10,33 @@ import {
 import getThemeContext from "../../context/ThemeContext";
 import DrawerNavigator from "./DrawerNavigator";
 import { BottomBar } from "../../components";
+import { getAppContext } from "../../context/AppContext";
+import LoginScreen from "./LoginScreen";
 
 const NavigationComponent = () => {
     const { theme } = getThemeContext();
+    const { user, loadingUser } = getAppContext();
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            backgroundColor: theme.colors.background,
+        },
+    });
 
     return (
-        <NavigationContainer
-            theme={theme.mode === "dark" ? DarkTheme : DefaultTheme}>
+        <NavigationContainer theme={theme.mode === 'dark' ? DarkTheme : DefaultTheme}>
             <SafeAreaProvider>
-                <View style={{ flex: 1 }}>
+                <View style={styles.container}>
                     <StatusBar style='auto' />
-                    <DrawerNavigator />
-                    <BottomBar />
+                    {!user?._id || !user?.token ? (
+                        <LoginScreen />
+                    ) : (
+                        <>
+                            <DrawerNavigator />
+                            <BottomBar />
+                        </>
+                    )}
                     <Toast />
                 </View>
             </SafeAreaProvider>

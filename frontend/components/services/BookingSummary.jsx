@@ -6,26 +6,34 @@ import ThemeChip from '../common/ThemeChip';
 import axios from 'axios';
 import { getAppContext } from '../../context/AppContext';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { getBookingById } from '../../services/ServiceproviderSerives';
+import Toast from 'react-native-toast-message';
 
 const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallback }) => {
-
     const { theme } = getThemeContext();
-    const { SERVER_URL } = getAppContext();
+    const { user } = getAppContext();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
 
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${SERVER_URL}/api/v1/services/hire/getbyid/${booking._id}`);
+            const response = await getBookingById(booking._id, user.token);
 
-            if (response.data) {
-                setData(response.data[0]);
-                setLoading(false);
+            if (response) {
+                setData(response);
             }
-
+            setLoading(false);
         } catch (error) {
-            console.error(error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    'Could not get booking details', //default
+            });
             setLoading(false);
         }
     };
@@ -88,9 +96,9 @@ const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallb
     });
 
     const handleActionPress = async () => {
-        setLoading(true);
+        setSubmitting(true);
         await actionCallback();
-        setLoading(false);
+        setSubmitting(false);
     };
 
     return (
@@ -101,32 +109,26 @@ const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallb
                 <Animated.View entering={FadeInDown} style={styles.container}>
                     <Text style={styles.title}>Booking Summary</Text>
                     <Text
-                        style={
-                            styles.subtitle
-                        }>{`Booking for ${booking?.serviceProvider?.firstName} ${booking?.serviceProvider?.lastName}`}</Text>
+                        style={styles.subtitle}
+                    >{`Booking for ${booking?.serviceProvider?.firstName} ${booking?.serviceProvider?.lastName}`}</Text>
 
                     <View style={styles.textContainer}>
                         <Text style={styles.body}>
-                            {new Date(booking.startDate).toLocaleDateString()}{" "}
-                            {data?.oneDay
-                                ? ""
-                                : ` to ${new Date(
-                                      booking.endDate
-                                  ).toLocaleDateString()}`}
+                            {new Date(booking.startDate).toLocaleDateString()}{' '}
+                            {data?.oneDay ? '' : ` to ${new Date(booking.endDate).toLocaleDateString()}`}
                         </Text>
                         <Text style={styles.body}>
-                            {new Date(booking.startTime).toLocaleTimeString()}{" "}
-                            {` to ${new Date(
-                                booking.endTime
-                            ).toLocaleTimeString()}`}
+                            {new Date(booking.startTime).toLocaleTimeString()}{' '}
+                            {` to ${new Date(booking.endTime).toLocaleTimeString()}`}
                         </Text>
                     </View>
 
                     <View
                         style={{
                             ...styles.textContainer,
-                            flexDirection: "row",
-                        }}>
+                            flexDirection: 'row',
+                        }}
+                    >
                         <Text style={styles.subtitle}>Pets </Text>
                         {data?.involvedPets?.map((pet, index) => (
                             <ThemeChip key={index} text={pet.name} />
@@ -134,28 +136,20 @@ const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallb
                     </View>
 
                     <Text style={styles.subtitle}>
-                        Total Fee : {data?.totalFee}{" "}
-                        {data?.continuous ? "$/day" : "$"}
+                        Total Fee : {data?.totalFee} {data?.continuous ? '$/day' : '$'}
                     </Text>
 
                     <View style={styles.textContainerRow}>
                         <Text style={styles.highlight}>STATUS : </Text>
-                        <Text style={styles.highlightBold}>
-                            {booking.status}
-                        </Text>
+                        <Text style={styles.highlightBold}>{booking.status}</Text>
                     </View>
 
                     <View style={styles.actionContainer}>
-                        <ThemeButton
-                            variant={"clear"}
-                            title={"Close"}
-                            onPress={closeActionCallback}
-                        />
-                        {booking.status === "pending" && (
-                            <ThemeButton
-                                title={actionTitle}
-                                onPress={handleActionPress}
-                            />
+                        <ThemeButton variant={'clear'} title={'Close'} onPress={closeActionCallback} />
+                        {booking.status === 'pending' && (
+                            <ThemeButton title={submitting ? '' : actionTitle} onPress={handleActionPress}>
+                                {submitting && <ActivityIndicator color={theme.colors.primaryText} size={20} />}
+                            </ThemeButton>
                         )}
                     </View>
                 </Animated.View>

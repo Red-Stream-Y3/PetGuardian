@@ -1,7 +1,8 @@
-import { StatusBar, Text, View } from "react-native";
-import getThemeContext from "../../context/ThemeContext";
+import { StatusBar, Text, View } from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
+import { ThemeButton } from '../../components';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { AdoptionHome, AdoptionList, ThemeButton } from "../../components";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const AdoptionNavigator = createNativeStackNavigator();
@@ -23,7 +24,6 @@ const AdoptionScreen = (navigation) => {
                 <AdoptionNavigator.Screen name="Adoptions" component={AdoptionHome} />
                 <AdoptionNavigator.Screen name="AdoptionList" component={AdoptionList}/>
             </AdoptionNavigator.Navigator>
-
         </SafeAreaView>
     );
 };

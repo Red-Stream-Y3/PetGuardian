@@ -8,7 +8,11 @@ import {
     StatusBar,
     SafeAreaView,
 } from "react-native";
-import { ImageItemCard, ThemeButton } from "../../components";
+import {
+    FloatingMenuButton,
+    ImageItemCard,
+    ThemeButton,
+} from "../../components";
 import getThemeContext from "../../context/ThemeContext";
 import { AntDesign } from "@expo/vector-icons";
 
@@ -17,7 +21,7 @@ const HomeScreen = () => {
     const [themeSwitch, setThemeSwitch] = useState(false);
 
     useEffect(() => {
-        if (theme.mode === "dark") setThemeSwitch(true);
+        if (theme.mode === 'dark') setThemeSwitch(true);
     }, []);
 
     //example with a body element
@@ -28,35 +32,30 @@ const HomeScreen = () => {
             key={i}
             index={i}
             uri={
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToPtWIfv5-l3Q1GRBnlJ0H4jCVK2DEz63oSIx92b7FmYpPfx0FqvG7UVj8JcyPNAAlImE&usqp=CAU"
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToPtWIfv5-l3Q1GRBnlJ0H4jCVK2DEz63oSIx92b7FmYpPfx0FqvG7UVj8JcyPNAAlImE&usqp=CAU'
             }
             body={
                 <View
                     style={{
                         flex: 1,
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}>
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
                     <View>
                         <Text
                             style={{
-                                fontWeight: "bold",
+                                fontWeight: 'bold',
                                 color: theme.colors.text,
-                            }}>
+                            }}
+                        >
                             Body Example Title
                         </Text>
                         <Text style={{ color: theme.colors.text }}>Body</Text>
                     </View>
-                    <ThemeButton
-                        title='Button'
-                        onPress={() => console.debug("Test button")}
-                        variant={"clear"}>
-                        <AntDesign
-                            name='addfile'
-                            size={24}
-                            color={theme.colors.icon}
-                        />
+                    <ThemeButton title="Button" onPress={() => console.debug('Test button')} variant={'clear'}>
+                        <AntDesign name="addfile" size={24} color={theme.colors.icon} />
                     </ThemeButton>
                 </View>
             }
@@ -68,10 +67,10 @@ const HomeScreen = () => {
         <ImageItemCard
             key={i}
             index={i}
-            uri={"https://wallpapercave.com/wp/wp4928162.jpg"}
-            title={"Example Title"}
-            subtitle={"Example Subtitle"}
-            sideTag={"Example sideTag"}
+            uri={'https://wallpapercave.com/wp/wp4928162.jpg'}
+            title={'Example Title'}
+            subtitle={'Example Subtitle'}
+            sideTag={'Example sideTag'}
         />
     );
 
@@ -80,30 +79,24 @@ const HomeScreen = () => {
         <ImageItemCard
             key={i}
             index={i}
-            uri={"https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg"}
+            uri={'https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg'}
             body={
                 <View>
                     <Text
                         style={{
-                            fontWeight: "bold",
+                            fontWeight: 'bold',
                             color: theme.colors.text,
-                        }}>
+                        }}
+                    >
                         Body Example Title
                     </Text>
                     <Text style={{ color: theme.colors.text }}>Body</Text>
-                    <ThemeButton
-                        title='Button'
-                        onPress={() => console.debug("Test button")}
-                    />
-                    <ThemeButton
-                        title='Button'
-                        onPress={() => console.debug("Test button")}
-                        variant={"outlined"}
-                    />
+                    <ThemeButton title="Button" onPress={() => console.debug('Test button')} />
+                    <ThemeButton title="Button" onPress={() => console.debug('Test button')} variant={'outlined'} />
                 </View>
             }
-            style={"side"}
-            onClick={() => console.debug("Test component click")}
+            style={'side'}
+            onClick={() => console.debug('Test component click')}
         />
     );
 
@@ -111,13 +104,11 @@ const HomeScreen = () => {
     const smallWidth = (i) => (
         <ImageItemCard
             key={i}
-            uri={
-                "https://wallpaperbat.com/img/609256-anime-boy-power-up-wallpaper.jpg"
-            }
-            title={"Example Title"}
-            width={"45%"}
-            subtitle={"Example Subtitle"}
-            sideTag={"sideTag"}
+            uri={'https://wallpaperbat.com/img/609256-anime-boy-power-up-wallpaper.jpg'}
+            title={'Example Title'}
+            width={'45%'}
+            subtitle={'Example Subtitle'}
+            sideTag={'sideTag'}
             borderRadius={15}
         />
     );
@@ -132,14 +123,8 @@ const HomeScreen = () => {
     };
 
     return (
-        <SafeAreaView
-            style={{ flex: 1, backgroundColor: theme.colors.background }}>
-            <StatusBar
-                barStyle={
-                    theme.mode === "dark" ? "light-content" : "dark-content"
-                }
-                hidden={false}
-            />
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+            <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} hidden={false} />
             <View style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
                 <View
                     style={{
@@ -149,25 +134,24 @@ const HomeScreen = () => {
                         alignItems: "center",
                         paddingHorizontal: "5%",
                     }}>
-                    <Text style={{ color: theme.colors.text }}>Feed</Text>
+                    <Text
+                        style={{
+                            color: theme.colors.text,
+                            fontSize: 18,
+                            fontWeight: "bold",
+                        }}>
+                        Feed
+                    </Text>
                     <View
                         style={{
                             flexDirection: "row",
                             justifyContent: "space-between",
                             alignItems: "center",
                         }}>
-                        <Text style={{ color: theme.colors.text }}>
-                            Dark Mode
-                        </Text>
-                        <Switch
-                            onValueChange={changeTheme}
-                            value={themeSwitch}
-                        />
+                        <FloatingMenuButton />
                     </View>
                 </View>
-                <ScrollView
-                    style={{ width: "100%" }}
-                    contentContainerStyle={{ alignItems: "center" }}>
+                <ScrollView style={{ width: '100%' }} contentContainerStyle={{ alignItems: 'center' }}>
                     {Array(8)
                         .fill((i) => body(i), 0, 2)
                         .fill((i) => noBody(i), 3, 5)
@@ -175,11 +159,12 @@ const HomeScreen = () => {
                         .map((func, i) => func(i))}
                     <ScrollView
                         horizontal={true}
-                        contentContainerStyle={{ alignItems: "center" }}
+                        contentContainerStyle={{ alignItems: 'center' }}
                         style={{
                             marginBottom: 10,
-                            width: Dimensions.get("screen").width,
-                        }}>
+                            width: Dimensions.get('screen').width,
+                        }}
+                    >
                         {Array(5)
                             .fill(0)
                             .map((_, i) => smallWidth(i))}

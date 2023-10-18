@@ -1,19 +1,13 @@
-import {
-    ActivityIndicator,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from "react-native";
-import getThemeContext from "../../context/ThemeContext";
-import ThemebackButton from "../common/ThemeBackButton";
-import { useState } from "react";
-import ThemeChipList from "../common/ThemeChipList";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { getAppContext } from "../../context/AppContext";
-import ThemeButton from "../common/ThemeButton";
-import { Ionicons } from "@expo/vector-icons";
-import OneTimeBooking from "./OneTimeBooking";
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
+import ThemebackButton from '../common/ThemeBackButton';
+import { useState } from 'react';
+import ThemeChipList from '../common/ThemeChipList';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { getAppContext } from '../../context/AppContext';
+import ThemeButton from '../common/ThemeButton';
+import { Ionicons } from '@expo/vector-icons';
+import OneTimeBooking from './OneTimeBooking';
 import Animated, {
     FadeInDown,
     FadeOutDown,
@@ -21,18 +15,19 @@ import Animated, {
     SlideInRight,
     SlideOutLeft,
     SlideOutRight,
-} from "react-native-reanimated";
-import DailyBooking from "./DailyBooking";
-import WeeklyBooking from "./WeeklyBooking";
-import axios from "axios";
-import Toast from "react-native-toast-message";
+} from 'react-native-reanimated';
+import DailyBooking from './DailyBooking';
+import WeeklyBooking from './WeeklyBooking';
+import axios from 'axios';
+import Toast from 'react-native-toast-message';
+import { checkBookingTimeAvailability, createServiceBooking } from '../../services/ServiceproviderSerives';
 
-const BOOKING_TYPES = ["ONE_TIME", "DAILY", "WEEKLY"];
+const BOOKING_TYPES = ['ONE_TIME', 'DAILY', 'WEEKLY'];
 
 const ServiceBooking = ({ navigation, route }) => {
     const { theme } = getThemeContext();
     const { service } = route.params;
-    const { SERVER_URL, USER } = getAppContext();
+    const { user } = getAppContext();
     const [loading, setLoading] = useState(false);
     const [bookingType, setBookingType] = useState(BOOKING_TYPES[0]);
     const [prevType, setPrevType] = useState(BOOKING_TYPES[0]); //for animation [0,1,2]
@@ -41,7 +36,7 @@ const ServiceBooking = ({ navigation, route }) => {
     const [oneDay, setOneDay] = useState(false);
     const [datePicker, setDatePicker] = useState({
         show: false,
-        mode: "date",
+        mode: 'date',
         date: new Date(Date.now()),
         inputCallback: () => {},
     });
@@ -51,30 +46,30 @@ const ServiceBooking = ({ navigation, route }) => {
         startDateTime: new Date(Date.now()),
         endDateTime: new Date(Date.now()),
         pets: [],
-        paymentMethod: "credit",
-        notes: "",
+        paymentMethod: 'credit',
+        notes: '',
         days: new Array(7).fill(false),
     });
 
     const styles = StyleSheet.create({
         container: {
             flex: 1,
-            alignItems: "center",
+            alignItems: 'center',
         },
         textTitle: {
             color: theme.colors.text,
             fontSize: 20,
-            fontWeight: "bold",
+            fontWeight: 'bold',
         },
         textH1: {
             color: theme.colors.text,
             fontSize: 18,
-            fontWeight: "bold",
+            fontWeight: 'bold',
         },
         textBody: {
             color: theme.colors.text,
             fontSize: 14,
-            fontWeight: "normal",
+            fontWeight: 'normal',
         },
     });
 
@@ -85,15 +80,15 @@ const ServiceBooking = ({ navigation, route }) => {
 
     const chipList = [
         {
-            text: "One Time",
+            text: 'One Time',
             onClick: () => chipOnPress(0),
         },
         {
-            text: "Daily",
+            text: 'Daily',
             onClick: () => chipOnPress(1),
         },
         {
-            text: "Weekly",
+            text: 'Weekly',
             onClick: () => chipOnPress(2),
         },
     ];
@@ -101,40 +96,21 @@ const ServiceBooking = ({ navigation, route }) => {
     const handleHirePress = async () => {
         setLoading(true);
         //calculate fees
-        const fee = service.services.fees.find(
-            (fee) => fee.tag === bookingType
-        ).price;
-        const totalFee = calculateFees(
-            input,
-            bookingType,
-            allDay,
-            fee,
-            continuous,
-            oneDay
-        );
+        const fee = service.services.fees.find((fee) => fee.tag === bookingType).price;
+        const totalFee = calculateFees(input, bookingType, allDay, fee, continuous, oneDay);
 
         const reqData = {
-            user: USER._id,
+            user: user._id,
             serviceProvider: service._id,
             involvedPets: [], //TODO: input.pets.map((pet) => pet._id),
-            startDate: input.startDateTime.toISOString().split("T")[0],
-            endDate: input.endDateTime.toISOString().split("T")[0],
+            startDate: input.startDateTime.toISOString().split('T')[0],
+            endDate: input.endDateTime.toISOString().split('T')[0],
             startTime: allDay
-                ? new Date(
-                      input.startDateTime.toISOString().split("T")[0] +
-                          " 12:00:00"
-                  )
-                      .toISOString()
-                      .split("T")[1]
-                : input.startDateTime.toISOString().split("T")[1],
+                ? new Date(input.startDateTime.toISOString().split('T')[0] + ' 12:00:00').toISOString().split('T')[1]
+                : input.startDateTime.toISOString().split('T')[1],
             endTime: allDay
-                ? new Date(
-                      input.startDateTime.toISOString().split("T")[0] +
-                          " 23:59:59"
-                  )
-                      .toISOString()
-                      .split("T")[1]
-                : input.endDateTime.toISOString().split("T")[1],
+                ? new Date(input.startDateTime.toISOString().split('T')[0] + ' 23:59:59').toISOString().split('T')[1]
+                : input.endDateTime.toISOString().split('T')[1],
             daily: bookingType === BOOKING_TYPES[1],
             weekly: bookingType === BOOKING_TYPES[2],
             days: input.days,
@@ -147,36 +123,53 @@ const ServiceBooking = ({ navigation, route }) => {
 
         try {
             //check if booking time is available
-            const checkResponse = await axios.post(
-                `${SERVER_URL}/api/v1/services/hire/check`,
-                reqData
-            );
+            const checkResponse = await checkBookingTimeAvailability(reqData, user.token);
 
-            if (checkResponse.data?.length > 0) {
+            if (checkResponse?.length > 0) {
                 setLoading(false);
                 Toast.show({
-                    type: "error",
-                    text1: "Booking time not available",
-                    text2: "Please choose another time",
+                    type: 'error',
+                    text1: 'Booking time not available',
+                    text2: 'Please choose another time',
                 });
                 return;
             }
             //add booking
-            const response = await axios.post(
-                `${SERVER_URL}/api/v1/services/hire`,
-                reqData
-            );
+            const response = await createServiceBooking(reqData, user.token);
 
             setLoading(false);
 
-            if (response.status === 201) {
-                navigation.goBack();
+            if (response) {
+                navigation.reset({
+                    index: 0,
+                    routes: [
+                        { name: 'Services' },
+                        {
+                            name: 'ServiceDetails',
+                            params: {
+                                service: service,
+                            },
+                        },
+                    ],
+                });
+                navigation.getParent().getParent().jumpTo('Hire History');
                 // response.data.message;
             } else {
-                console.log(response.data.error);
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: response.data.error || 'Could not hire service',
+                });
             }
         } catch (error) {
-            console.debug(error);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2:
+                    error.response?.data?.message || //axios error
+                    error.message || //js error
+                    'Could not hire service', //default
+            });
             setLoading(false);
         }
     };
@@ -186,11 +179,12 @@ const ServiceBooking = ({ navigation, route }) => {
             style={{
                 ...styles.container,
                 backgroundColor: theme.colors.background,
-            }}>
+            }}
+        >
             <ThemebackButton navigation={navigation} />
 
             <Text style={styles.textTitle}>
-                {"Hire "}
+                {'Hire '}
                 {service?.firstName}
             </Text>
 
@@ -201,15 +195,14 @@ const ServiceBooking = ({ navigation, route }) => {
             <ScrollView
                 style={{
                     flex: 1,
-                    width: "100%",
+                    width: '100%',
                 }}
                 contentContainerStyle={{
-                    alignItems: "center",
-                }}>
+                    alignItems: 'center',
+                }}
+            >
                 {bookingType === BOOKING_TYPES[0] && (
-                    <Animated.View
-                        entering={SlideInLeft}
-                        exiting={SlideOutLeft}>
+                    <Animated.View entering={SlideInLeft} exiting={SlideOutLeft}>
                         <OneTimeBooking
                             styles={styles}
                             setDatePicker={setDatePicker}
@@ -226,16 +219,9 @@ const ServiceBooking = ({ navigation, route }) => {
 
                 {bookingType === BOOKING_TYPES[1] && (
                     <Animated.View
-                        entering={
-                            prevType === BOOKING_TYPES[2]
-                                ? SlideInLeft
-                                : SlideInRight
-                        }
-                        exiting={
-                            prevType === BOOKING_TYPES[0]
-                                ? SlideOutLeft
-                                : SlideOutRight
-                        }>
+                        entering={prevType === BOOKING_TYPES[2] ? SlideInLeft : SlideInRight}
+                        exiting={prevType === BOOKING_TYPES[0] ? SlideOutLeft : SlideOutRight}
+                    >
                         <DailyBooking
                             styles={styles}
                             setDatePicker={setDatePicker}
@@ -251,9 +237,7 @@ const ServiceBooking = ({ navigation, route }) => {
                 )}
 
                 {bookingType === BOOKING_TYPES[2] && (
-                    <Animated.View
-                        entering={SlideInRight}
-                        exiting={SlideOutRight}>
+                    <Animated.View entering={SlideInRight} exiting={SlideOutRight}>
                         <WeeklyBooking
                             styles={styles}
                             setDatePicker={setDatePicker}
@@ -267,25 +251,12 @@ const ServiceBooking = ({ navigation, route }) => {
                 )}
             </ScrollView>
 
-            <Animated.View
-                entering={FadeInDown}
-                exiting={FadeOutDown}
-                style={{ marginBottom: 10 }}>
-                <ThemeButton
-                    title={loading ? null : "Hire"}
-                    textSize={16}
-                    onPress={handleHirePress}>
+            <Animated.View entering={FadeInDown} exiting={FadeOutDown} style={{ marginBottom: 10 }}>
+                <ThemeButton title={loading ? null : 'Hire'} textSize={16} onPress={handleHirePress}>
                     {loading ? (
-                        <ActivityIndicator
-                            size={24}
-                            color={theme.colors.primaryIcon}
-                        />
+                        <ActivityIndicator size={24} color={theme.colors.primaryIcon} />
                     ) : (
-                        <Ionicons
-                            name='add-circle-outline'
-                            size={24}
-                            color={theme.colors.primaryIcon}
-                        />
+                        <Ionicons name="add-circle-outline" size={24} color={theme.colors.primaryIcon} />
                     )}
                 </ThemeButton>
             </Animated.View>
@@ -310,17 +281,15 @@ export default ServiceBooking;
 const calculateFees = (input, bookingType, allDay, fee, continuous, oneDay) => {
     let totalFee;
     let oneDayTime = new Date(
-        input.startDateTime.toISOString().split("T")[0] +
-            "T" +
-            input.endDateTime.toISOString().split("T")[1]
+        input.startDateTime.toISOString().split('T')[0] + 'T' + input.endDateTime.toISOString().split('T')[1],
     );
 
     let sameDayTimeDifference = (oneDayTime - input.startDateTime) / 3600000;
     let timeRangeDateDifference =
         Math.floor(
-            (new Date(input.endDateTime.toISOString().split("T")[0]) -
-                new Date(input.startDateTime.toISOString().split("T")[0])) /
-                86400000
+            (new Date(input.endDateTime.toISOString().split('T')[0]) -
+                new Date(input.startDateTime.toISOString().split('T')[0])) /
+                86400000,
         ) + 1;
 
     if (bookingType === BOOKING_TYPES[2]) {
@@ -328,8 +297,7 @@ const calculateFees = (input, bookingType, allDay, fee, continuous, oneDay) => {
         if (allDay) {
             totalFee = numDays * 24 * fee;
         } else {
-            totalFee =
-                numDays * ((oneDayTime - input.startDateTime) / 3600000) * fee;
+            totalFee = numDays * ((oneDayTime - input.startDateTime) / 3600000) * fee;
         }
     } else if (bookingType === BOOKING_TYPES[1]) {
         if (allDay) {
@@ -342,8 +310,7 @@ const calculateFees = (input, bookingType, allDay, fee, continuous, oneDay) => {
             if (continuous) {
                 totalFee = fee * sameDayTimeDifference;
             } else {
-                totalFee =
-                    timeRangeDateDifference * sameDayTimeDifference * fee;
+                totalFee = timeRangeDateDifference * sameDayTimeDifference * fee;
             }
         }
     } else {
@@ -357,8 +324,7 @@ const calculateFees = (input, bookingType, allDay, fee, continuous, oneDay) => {
             if (oneDay) {
                 totalFee = fee * sameDayTimeDifference;
             } else {
-                totalFee =
-                    fee * sameDayTimeDifference * timeRangeDateDifference;
+                totalFee = fee * sameDayTimeDifference * timeRangeDateDifference;
             }
         }
     }

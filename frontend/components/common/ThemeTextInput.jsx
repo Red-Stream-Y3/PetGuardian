@@ -1,6 +1,6 @@
-import { StyleSheet, TextInput, View, Text, Pressable } from "react-native";
-import getThemeContext from "../../context/ThemeContext";
-import { getAppContext } from "../../context/AppContext";
+import { StyleSheet, TextInput, View, Text, Pressable } from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
+import { getAppContext } from '../../context/AppContext';
 
 const ThemeTextInput = ({
     title,
@@ -18,6 +18,10 @@ const ThemeTextInput = ({
     multiline,
     numOfLines,
     maxLength,
+    onFocus,
+    onFocusLoss,
+    secureTextEntry,
+    textContentType,
 }) => {
     const { theme } = getThemeContext();
     const { tabColor } = getAppContext();
@@ -26,15 +30,15 @@ const ThemeTextInput = ({
         textH1: {
             color: theme.colors.text,
             fontSize: 16,
-            fontWeight: "bold",
+            fontWeight: 'bold',
         },
         textBody: {
-            color: textColor || disabled ? "#888" : theme.colors.text,
+            color: textColor || disabled ? '#888' : theme.colors.text,
             fontSize: textSize || 16,
-            width: "100%",
+            width: '100%',
             flex: 1,
-            textAlignVertical: multiline ? "top" : "center",
-            fontWeight: "normal",
+            textAlignVertical: multiline ? 'top' : 'center',
+            fontWeight: 'normal',
             paddingVertical: 10,
             paddingHorizontal: 10,
             zIndex: 1,
@@ -45,18 +49,18 @@ const ThemeTextInput = ({
             borderRadius: 5,
             marginTop: title ? 15 : 5,
             marginBottom: 5,
-            width: width || "100%",
+            width: width || '100%',
             borderWidth: 1,
             borderColor: tabColor,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
         },
         titleText: {
             color: theme.colors.text,
             fontSize: 16,
-            fontWeight: "bold",
-            position: "absolute",
+            fontWeight: 'bold',
+            position: 'absolute',
             top: -13,
             left: 10,
             backgroundColor: theme.colors.surface,
@@ -77,8 +81,12 @@ const ThemeTextInput = ({
             {title && <Text style={styles.titleText}>{title}</Text>}
             <TextInput
                 value={value}
+                onFocus={onFocus}
+                onBlur={onFocusLoss}
                 placeholder={placeholder}
-                placeholderTextColor={disabled ? "#888" : theme.colors.text}
+                textContentType={textContentType || null}
+                secureTextEntry={secureTextEntry || false}
+                placeholderTextColor={disabled ? '#888' : theme.colors.text}
                 keyboardType={keyboardType || null}
                 editable={(editable === false ? false : true) && !disabled}
                 multiline={multiline || false}
@@ -92,7 +100,8 @@ const ThemeTextInput = ({
                     <Pressable
                         android_ripple={disabled ? null : styles.ripple}
                         style={styles.pressableContainer}
-                        onPress={!disabled ? onPressIcon : () => {}}>
+                        onPress={!disabled ? onPressIcon : () => {}}
+                    >
                         {icon}
                     </Pressable>
                 </View>

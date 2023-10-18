@@ -1,45 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
+import ThemeTextInput from '../common/ThemeTextInput';
+import Toast from 'react-native-toast-message';
+import Animated, { FadeInUp, FadeOutUp } from 'react-native-reanimated';
+import ThemeButton from '../common/ThemeButton';
+import { getAppContext } from '../../context/AppContext';
+import axios from 'axios';
 import {
-    View,
-    Text,
-    StyleSheet,
-    Dimensions,
-    ActivityIndicator,
-} from "react-native";
-import getThemeContext from "../../context/ThemeContext";
-import ThemeTextInput from "../common/ThemeTextInput";
-import Toast from "react-native-toast-message";
-import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
-import ThemeButton from "../common/ThemeButton";
-import { getAppContext } from "../../context/AppContext";
-import axios from "axios";
+    createServiceRating,
+    getServiceRatingByUser,
+    updateServiceRating,
+} from '../../services/ServiceproviderSerives';
 
 const RateService = ({ provider, handleClose }) => {
     const { theme } = getThemeContext();
-    const { SERVER_URL, USER, tabColor } = getAppContext();
-    const [rating, setRating] = useState("");
-    const [review, setReview] = useState("");
+    const { user, tabColor } = getAppContext();
+    const [rating, setRating] = useState('');
+    const [review, setReview] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [action, setAction] = useState("NEW"); // ['NEW', 'UPDATE']
+    const [action, setAction] = useState('NEW'); // ['NEW', 'UPDATE']
 
     const fetchRating = async () => {
         setLoading(true);
 
         try {
-            const response = await axios.get(
-                `${SERVER_URL}/api/v1/ratings/user/${USER._id}/${provider.serviceProvider._id}`
-            );
+            const response = await getServiceRatingByUser(user._id, provider.serviceProvider._id, user.token);
 
-            if (response.data) {
-                setRating(`${response.data.rating}`);
-                setReview(response.data.review);
-                setAction("UPDATE");
+            if (response) {
+                setRating(`${response.rating}`);
+                setReview(response.review);
+                setAction('UPDATE');
             }
 
             setLoading(false);
         } catch (error) {
-            setError(error.message);
+            setError(
+                error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    'Could not get rating', //default
+            );
             setLoading(false);
         }
     };
@@ -51,10 +52,10 @@ const RateService = ({ provider, handleClose }) => {
     const styles = StyleSheet.create({
         container: {
             backgroundColor: theme.colors.surface,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
             padding: 20,
-            width: Dimensions.get("window").width * 0.8,
+            width: Dimensions.get('window').width * 0.8,
             borderRadius: 10,
             elevation: 5,
         },
@@ -63,24 +64,24 @@ const RateService = ({ provider, handleClose }) => {
         },
         title: {
             fontSize: 16,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             color: theme.colors.text,
             marginBottom: 5,
         },
         subtitle: {
             fontSize: 14,
-            fontWeight: "bold",
+            fontWeight: 'bold',
             color: theme.colors.text,
         },
         error: {
             color: theme.colors.error,
         },
         actionContainer: {
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
             marginTop: 15,
-            width: "100%",
+            width: '100%',
         },
     });
 
@@ -91,7 +92,7 @@ const RateService = ({ provider, handleClose }) => {
                 setRating(`${num}`);
                 setError(null);
             } else {
-                throw new Error("Rating must be between 1 and 5");
+                throw new Error('Rating must be between 1 and 5');
             }
         } catch (error) {
             setError(error.message);
@@ -104,7 +105,7 @@ const RateService = ({ provider, handleClose }) => {
 
     const handleRatingPress = async () => {
         if (!rating) {
-            setError("Rating is required");
+            setError('Rating is required');
             return;
         }
 
@@ -114,28 +115,22 @@ const RateService = ({ provider, handleClose }) => {
             const data = {
                 rating: parseInt(rating),
                 review: review,
-                user: USER._id,
+                user: user._id,
                 serviceProvider: provider.serviceProvider._id,
             };
 
-            let response;
+            let response = null;
 
-            if (action === "UPDATE") {
-                response = await axios.put(
-                    `${SERVER_URL}/api/v1/ratings/user/${USER._id}/${provider.serviceProvider._id}`,
-                    data
-                );
+            if (action === 'UPDATE') {
+                response = await updateServiceRating(data, user.token);
             } else {
-                response = await axios.post(
-                    `${SERVER_URL}/api/v1/ratings/`,
-                    data
-                );
+                response = await createServiceRating(data, user.token);
             }
 
-            if (response.data) {
+            if (response !== null) {
                 Toast.show({
-                    type: "success",
-                    text1: "Rating Submitted",
+                    type: 'success',
+                    text1: 'Rating Submitted',
                 });
                 handleClose();
             }
@@ -157,41 +152,33 @@ const RateService = ({ provider, handleClose }) => {
             ) : (
                 <View style={styles.container}>
                     <Text style={styles.title}>
-                        Rate {provider?.serviceProvider.firstName}
+                        {action === 'NEW'
+                            ? `Rate your experience with ${provider?.serviceProvider.firstName}`
+                            : `Update your rating for ${provider?.serviceProvider.firstName}`}
                     </Text>
                     {error && (
-                        <Animated.Text
-                            entering={FadeInUp}
-                            exiting={FadeOutUp}
-                            style={styles.error}>
+                        <Animated.Text entering={FadeInUp} exiting={FadeOutUp} style={styles.error}>
                             {error}
                         </Animated.Text>
                     )}
                     <ThemeTextInput
-                        keyboardType='numeric'
+                        keyboardType="numeric"
                         title={`Rating (1 - 5)`}
                         value={rating}
                         onChange={ratingOnChange}
-                        placeholder='Enter your rating'
+                        placeholder="Enter your rating"
                     />
                     <ThemeTextInput
                         title={`Review`}
                         value={review}
                         onChange={reviewOnChange}
-                        placeholder='Enter your review (Optional)'
+                        placeholder="Enter your review (Optional)"
                         multiline
                         numOfLines={5}
                     />
                     <View style={styles.actionContainer}>
-                        <ThemeButton
-                            variant={"clear"}
-                            title={"Close"}
-                            onPress={handleClosePress}
-                        />
-                        <ThemeButton
-                            title={"Submit"}
-                            onPress={handleRatingPress}
-                        />
+                        <ThemeButton variant={'clear'} title={'Close'} onPress={handleClosePress} />
+                        <ThemeButton title={'Submit'} onPress={handleRatingPress} />
                     </View>
                 </View>
             )}

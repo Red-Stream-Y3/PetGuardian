@@ -1,15 +1,15 @@
-import Animated, { FadeInLeft, FadeOutLeft } from "react-native-reanimated";
-import getThemeContext from "../../context/ThemeContext";
-import ThemeButton from "./ThemeButton";
-import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet } from "react-native";
+import Animated, { FadeInLeft, FadeOutLeft } from 'react-native-reanimated';
+import getThemeContext from '../../context/ThemeContext';
+import ThemeButton from './ThemeButton';
+import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet } from 'react-native';
 
-const ThemebackButton = ({ navigation }) => {
+const ThemebackButton = ({ navigation, customBackAction }) => {
     const { theme } = getThemeContext();
 
     const styles = StyleSheet.create({
         container: {
-            position: "absolute",
+            position: 'absolute',
             top: 10,
             left: 10,
             zIndex: 100,
@@ -21,14 +21,13 @@ const ThemebackButton = ({ navigation }) => {
         <Animated.View
             style={styles.container}
             entering={FadeInLeft.delay(700).springify()}
-            exiting={FadeOutLeft.delay(100).springify()}>
-            <ThemeButton borderRadius={50}>
-                <Ionicons
-                    name='arrow-back'
-                    size={24}
-                    color={theme.colors.primaryIcon}
-                    onPress={() => navigation.goBack()}
-                />
+            exiting={FadeOutLeft.delay(100).springify()}
+        >
+            <ThemeButton
+                borderRadius={50}
+                onPress={customBackAction ? () => customBackAction() : () => navigation.goBack()}
+            >
+                <Ionicons name="arrow-back" size={24} color={theme.colors.primaryIcon} />
             </ThemeButton>
         </Animated.View>
     );

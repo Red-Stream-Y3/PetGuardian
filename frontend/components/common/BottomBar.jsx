@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Animated, StyleSheet } from "react-native";
-import RoundIconButton from "./RoundIconButton";
-import getThemeContext from "../../context/ThemeContext";
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { getAppContext } from "../../context/AppContext";
+import React, { useEffect, useState } from 'react';
+import { Animated, StyleSheet } from 'react-native';
+import RoundIconButton from './RoundIconButton';
+import getThemeContext from '../../context/ThemeContext';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { getAppContext } from '../../context/AppContext';
 
 const BottomBar = ({}) => {
     const { theme } = getThemeContext();
@@ -43,53 +43,33 @@ const BottomBar = ({}) => {
 
     const buttons = [
         {
-            name: "SERVICES",
-            icon: (
-                <Ionicons name='paw-outline' size={SIZE_1} color={ICON_THEME} />
-            ),
-            selectIcon: (
-                <Ionicons name='paw' size={SIZE_1} color={ICON_THEME} />
-            ),
+            name: 'SERVICES',
+            icon: <Ionicons name="paw-outline" size={SIZE_1} color={ICON_THEME} />,
+            selectIcon: <Ionicons name="paw" size={SIZE_1} color={ICON_THEME} />,
             padding: PADDING,
         },
         {
-            name: "LOST",
-            icon: (
-                <Ionicons name='paw-outline' size={SIZE_1} color={ICON_THEME} />
-            ),
-            selectIcon: (
-                <Ionicons name='paw' size={SIZE_1} color={ICON_THEME} />
-            ),
+            name: 'LOST',
+            icon: <Ionicons name="paw-outline" size={SIZE_1} color={ICON_THEME} />,
+            selectIcon: <Ionicons name="paw" size={SIZE_1} color={ICON_THEME} />,
             padding: PADDING,
         },
         {
-            name: "HOME",
-            icon: (
-                <Ionicons name='paw-outline' size={SIZE_2} color={ICON_THEME} />
-            ),
-            selectIcon: (
-                <Ionicons name='paw' size={SIZE_2} color={ICON_THEME} />
-            ),
+            name: 'HOME',
+            icon: <Ionicons name="paw-outline" size={SIZE_2} color={ICON_THEME} />,
+            selectIcon: <Ionicons name="paw" size={SIZE_2} color={ICON_THEME} />,
             padding: PADDING,
         },
         {
-            name: "ADOPT",
-            icon: (
-                <Ionicons name='paw-outline' size={SIZE_1} color={ICON_THEME} />
-            ),
-            selectIcon: (
-                <Ionicons name='paw' size={SIZE_1} color={ICON_THEME} />
-            ),
+            name: 'ADOPT',
+            icon: <Ionicons name="paw-outline" size={SIZE_1} color={ICON_THEME} />,
+            selectIcon: <Ionicons name="paw" size={SIZE_1} color={ICON_THEME} />,
             padding: PADDING,
         },
         {
-            name: "PLAY",
-            icon: (
-                <Ionicons name='paw-outline' size={SIZE_1} color={ICON_THEME} />
-            ),
-            selectIcon: (
-                <Ionicons name='paw' size={SIZE_1} color={ICON_THEME} />
-            ),
+            name: 'PLAY',
+            icon: <Ionicons name="paw-outline" size={SIZE_1} color={ICON_THEME} />,
+            selectIcon: <Ionicons name="paw" size={SIZE_1} color={ICON_THEME} />,
             padding: PADDING,
         },
     ];
@@ -101,10 +81,12 @@ const BottomBar = ({}) => {
 
     const styles = StyleSheet.create({
         container: {
-            alignItems: "center",
-            flexDirection: "row",
-            justifyContent: "space-evenly",
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
             backgroundColor: backgroundColor,
+            borderTopEndRadius: 10,
+            borderTopStartRadius: 10,
         },
     });
 
@@ -115,7 +97,8 @@ const BottomBar = ({}) => {
                     key={index}
                     name={button.name}
                     padding={button.padding}
-                    onPress={() => handlePress(index)}>
+                    onPress={() => handlePress(index)}
+                >
                     {selectedTab === index ? button.selectIcon : button.icon}
                 </RoundIconButton>
             ))}
