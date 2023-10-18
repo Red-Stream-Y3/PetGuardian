@@ -177,3 +177,42 @@ export const cancelBooking = async (data, token) => {
 
     return response.data;
 };
+
+export const createServiceProvider = async (data, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    const response = await axios.post(
+        `${BASE}/api/v1/services/create`,
+        data,
+        config
+    );
+
+    if (response.status !== 201) {
+        throw new Error("Failed to create service provider");
+    }
+
+    return response.data;
+};
+
+export const getMyHireRequests = async (id, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    let response = await axios.get(
+        `${BASE}/api/v1/services/myhire/${id}`,
+        config
+    );
+
+    if (response.status !== 200) {
+        throw new Error("Failed to fetch service provider");
+    }
+
+    return response.data;
+};

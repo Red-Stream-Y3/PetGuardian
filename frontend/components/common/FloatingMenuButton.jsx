@@ -87,7 +87,7 @@ const FloatingMenuButton = ({ onClick, variant }) => {
         container: {
             position: "absolute",
             top: 0,
-            right: 0,
+            right: 10,
             zIndex: 100,
             borderRadius: 50,
             overflow: "hidden",

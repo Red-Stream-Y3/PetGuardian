@@ -182,8 +182,16 @@ const RegisterContainer = ({ setOverlayOpen, setLoginEmail, setLoginPassword }) 
                     placeholder="Retype Password"
                     value={retypePassword}
                     onChange={(text) => setRetypePassword(text)}
-                    icon={<Feather name={showPassword ? 'eye-off' : 'eye'} size={24} color={theme.colors.icon} />}
-                    onPressIcon={() => setShowRetypePassword(!showRetypePassword)}
+                    icon={
+                        <Feather
+                            name={showRetypePassword ? "eye-off" : "eye"}
+                            size={24}
+                            color={theme.colors.icon}
+                        />
+                    }
+                    onPressIcon={() =>
+                        setShowRetypePassword(!showRetypePassword)
+                    }
                     secureTextEntry={!showRetypePassword}
                     textContentType="newPassword"
                 />

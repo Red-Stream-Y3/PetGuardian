@@ -2,7 +2,13 @@ import { StyleSheet, View } from 'react-native';
 import ThemeChip from './ThemeChip';
 import { useEffect, useState } from 'react';
 
-const ThemeChipList = ({ data, defaultIndex, multiSelect, activeList }) => {
+const ThemeChipList = ({
+    data,
+    defaultIndex,
+    multiSelect,
+    activeList,
+    allActive,
+}) => {
     const [clickIndex, setClickIndex] = useState(defaultIndex || 0);
     const [activeChips, setActiveChips] = useState(activeList || new Array(data.length).fill(false));
 
@@ -41,12 +47,15 @@ const ThemeChipList = ({ data, defaultIndex, multiSelect, activeList }) => {
                           key={index}
                           text={item.text}
                           clickable={true}
-                          active={activeChips[index]}
+                          active={
+                              allActive === true ? true : activeChips[index]
+                          }
                           onClick={() => {
                               setClickIndex(index);
                               item.onClick();
-                          }}
-                      />
+                          }}>
+                          {item.children}
+                      </ThemeChip>
                   ))}
         </View>
     );
