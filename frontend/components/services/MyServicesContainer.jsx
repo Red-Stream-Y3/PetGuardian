@@ -1,230 +1,412 @@
 import {
-  Dimensions,
-  FlatList,
-  RefreshControl,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
-import getThemeContext from '../../context/ThemeContext';
-import { getAppContext } from '../../context/AppContext';
-import { useEffect, useState } from 'react';
-import Toast from 'react-native-toast-message';
-import { getMyHireRequests } from '../../services/ServiceproviderSerives';
-import Animated from 'react-native-reanimated';
-import ImageItemCard from '../common/ImageItemCard';
-import ThemeButton from '../common/ThemeButton';
-import { CommonActions } from '@react-navigation/native';
-import ThemeCard from './../common/ThemeCard';
+    ActivityIndicator,
+    Dimensions,
+    FlatList,
+    RefreshControl,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
+import getThemeContext from "../../context/ThemeContext";
+import { getAppContext } from "../../context/AppContext";
+import { useEffect, useState } from "react";
+import Toast from "react-native-toast-message";
+import {
+    getMyHireRequests,
+    rejectHireRequest,
+} from "../../services/ServiceproviderSerives";
+import Animated from "react-native-reanimated";
+import ImageItemCard from "../common/ImageItemCard";
+import ThemeButton from "../common/ThemeButton";
+import { CommonActions } from "@react-navigation/native";
+import ThemeCard from "./../common/ThemeCard";
+import ThemeOverlay from "./../common/ThemeOverlay";
+import BookingSummary from "./BookingSummary";
 
 const MyServicesContainer = ({ navigation }) => {
-  const { theme } = getThemeContext();
-  const { user, setSelectedTab } = getAppContext();
-  const [loading, setLoading] = useState(false);
-  const [history, setHistory] = useState([]);
+    const { theme } = getThemeContext();
+    const { user, setSelectedTab } = getAppContext();
+    const [loading, setLoading] = useState(false);
+    const [history, setHistory] = useState([]);
+    const [selected, setSelected] = useState(null);
+    const [showSelected, setShowSelected] = useState(false);
+    const [showReject, setShowReject] = useState(false);
+    const [showAccept, setShowAccept] = useState(false);
+    const [buttonLoading, setButtonLoading] = useState(false);
 
-  const fetchMyHireRequests = async () => {
-    try {
-      const response = await getMyHireRequests(user._id, user.token);
-      if (response) setHistory(response);
-    } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2:
-          error?.response?.data?.message || //axios error
-          error.message || //js error
-          'Could not get hire history' //default
-      });
-    }
-  };
+    const fetchMyHireRequests = async () => {
+        try {
+            const response = await getMyHireRequests(user._id, user.token);
+            if (response) setHistory(response);
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not get hire history", //default
+            });
+        }
+    };
 
-  const handleRefresh = async () => {
-    setLoading(true);
-    await fetchMyHireRequests();
-    setLoading(false);
-  };
+    const handleRefresh = async () => {
+        setLoading(true);
+        await fetchMyHireRequests();
+        setLoading(false);
+    };
 
-  const handleEditClick = () => {
-    //
-  };
+    const handleEditClick = () => {
+        //
+    };
 
-  const handleAcceptClick = (item) => {};
+    const handleAcceptClick = async (item) => {
+        if (!showAccept) {
+            setSelected(item);
+            setShowAccept(true);
+            return;
+        }
 
-  const setSelected = (item) => {};
+        try {
+            setButtonLoading(true);
+            const response = await rejectHireRequest(selected._id, user.token);
 
-  const setShowSelected = (value) => {};
-
-  useEffect(() => {
-    handleRefresh();
-  }, []);
-
-  const handleGoToMyPageClick = () => {
-    setSelectedTab(0);
-
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'Home',
-            state: {
-              routes: [
-                {
-                  name: 'SERVICES',
-                  state: {
-                    routes: [
-                      {
-                        name: 'Services'
-                      },
-                      {
-                        name: 'ServiceDetails',
-                        params: {
-                          service: {
-                            _id: user._id
-                          }
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
+            if (response) {
+                Toast.show({
+                    type: "success",
+                    text1: "Success",
+                    text2: "Hire request accepted",
+                });
+                handleRefresh();
+                setShowAccept(false);
             }
-          }
-        ]
-      })
-    );
-  };
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      width: '100%',
-      backgroundColor: theme.colors.background
-    },
-    textTitle: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: theme.colors.text,
-      marginBottom: 5,
-      marginStart: 30,
-      alignSelf: 'flex-start'
-    },
-    textSubtitle: {
-      fontSize: 14,
-      fontWeight: 'bold',
-      color: theme.colors.text
-    },
-    textBody: {
-      fontSize: 14,
-      color: theme.colors.text
-    },
-    textHighlight: {
-      fontSize: 18,
-      color: theme.colors.servicesPrimary
-    },
-    textHighlightBold: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: theme.colors.servicesPrimary
-    },
-    titleContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginVertical: 10
-    },
-    itemContainer: {
-      width: '100%',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    emptyMessage: {
-      marginTop: Dimensions.get('window').height / 3,
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '100%'
-    }
-  });
-
-  return (
-    <View style={styles.container}>
-      <ThemeCard>
-        <View style={styles.titleContainer}>
-          <ThemeButton
-            title={'Go to my page'}
-            onPress={handleGoToMyPageClick}
-          />
-          <ThemeButton title={'Edit my services'} onPress={handleEditClick} />
-        </View>
-      </ThemeCard>
-
-      <Text style={styles.textTitle}>My Hire Requests</Text>
-      <FlatList
-        data={history}
-        refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={handleRefresh} />
+            setButtonLoading(false);
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not accept hire request", //default
+            });
+            setShowAccept(false);
+            setButtonLoading(false);
         }
-        ListEmptyComponent={
-          <View style={styles.emptyMessage}>
-            <Text style={styles.textBody}>No History Found</Text>
-          </View>
-        }
-        keyExtractor={(item) => item._id}
-        style={{ width: '100%' }}
-        renderItem={({ item, i }) => (
-          <Animated.View style={styles.itemContainer}>
-            <ImageItemCard
-              style={'side'}
-              index={i}
-              onClick={() => {
-                setSelected(item);
-                setShowSelected(true);
-              }}
-              uri={
-                item.user.profilePic ||
-                'https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg'
-              }
-              body={
-                <View>
-                  <Text style={styles.textTitle}>
-                    {item.user.firstName} {item.user.lastName}
-                  </Text>
-                  <Text style={styles.textBody}>
-                    {new Date(item.startDate).toLocaleDateString()}{' '}
-                    {item.oneDay
-                      ? ''
-                      : ` to ${new Date(item.endDate).toLocaleDateString()}`}
-                  </Text>
-                  <Text style={styles.textBody}>
-                    {new Date(item.startTime).toLocaleTimeString()}{' '}
-                    {` to ${new Date(item.endTime).toLocaleTimeString()}`}
-                  </Text>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      marginTop: 5
-                    }}
-                  >
-                    <Text style={styles.textHighlight}>STATUS : </Text>
-                    <Text style={styles.textHighlightBold}>{item.status}</Text>
-                  </View>
+    };
 
-                  {item.status !== 'pending' && (
+    const handleRejectClick = async (item) => {
+        if (!showReject) {
+            setSelected(item);
+            setShowReject(true);
+            return;
+        }
+
+        try {
+            setButtonLoading(true);
+            const response = await rejectHireRequest(selected._id, user.token);
+            if (response) {
+                Toast.show({
+                    type: "success",
+                    text1: "Success",
+                    text2: "Hire request rejected",
+                });
+                handleRefresh();
+                setShowReject(false);
+            }
+            setButtonLoading(false);
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not reject hire request", //default
+            });
+            setShowReject(false);
+            setButtonLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        handleRefresh();
+    }, []);
+
+    const handleGoToMyPageClick = () => {
+        setSelectedTab(0);
+
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [
+                    {
+                        name: "Home",
+                        state: {
+                            routes: [
+                                {
+                                    name: "SERVICES",
+                                    state: {
+                                        routes: [
+                                            {
+                                                name: "Services",
+                                            },
+                                            {
+                                                name: "ServiceDetails",
+                                                params: {
+                                                    service: {
+                                                        _id: user._id,
+                                                    },
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            })
+        );
+    };
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            alignItems: "center",
+            width: "100%",
+            backgroundColor: theme.colors.background,
+        },
+        textTitle: {
+            fontSize: 16,
+            fontWeight: "bold",
+            color: theme.colors.text,
+            marginBottom: 5,
+            alignSelf: "flex-start",
+        },
+        textSubtitle: {
+            fontSize: 14,
+            fontWeight: "bold",
+            color: theme.colors.text,
+        },
+        textBody: {
+            fontSize: 14,
+            color: theme.colors.text,
+        },
+        textHighlight: {
+            fontSize: 18,
+            color: theme.colors.servicesPrimary,
+        },
+        textHighlightBold: {
+            fontSize: 18,
+            fontWeight: "bold",
+            color: theme.colors.servicesPrimary,
+        },
+        titleContainer: {
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginVertical: 10,
+        },
+        itemContainer: {
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+        },
+        emptyMessage: {
+            marginTop: Dimensions.get("window").height / 3,
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+        },
+        buttonContainer: {
+            alignSelf: "flex-end",
+            flexDirection: "row",
+            alignItems: "flex-end",
+            justifyContent: "center",
+        },
+    });
+
+    return (
+        <View style={styles.container}>
+            <ThemeOverlay
+                visible={showSelected}
+                onPressBg={() => setShowSelected(false)}>
+                <BookingSummary
+                    booking={selected}
+                    closeActionCallback={() => setShowSelected(false)}
+                />
+            </ThemeOverlay>
+
+            <ThemeOverlay
+                visible={showAccept}
+                onPressBg={() => setShowAccept(false)}>
+                <ThemeCard>
+                    <View style={{}}>
+                        <Text style={styles.textTitle}>
+                            Are you sure you want to accept this request?
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <ThemeButton
+                                title={"Cancel"}
+                                variant={"clear"}
+                                onPress={() => setShowAccept(false)}
+                            />
+                            <ThemeButton
+                                title={"Accept"}
+                                onPress={handleAcceptClick}>
+                                {buttonLoading && (
+                                    <ActivityIndicator
+                                        size={16}
+                                        color={theme.colors.primarytext}
+                                    />
+                                )}
+                            </ThemeButton>
+                        </View>
+                    </View>
+                </ThemeCard>
+            </ThemeOverlay>
+
+            <ThemeOverlay
+                visible={showReject}
+                onPressBg={() => setShowReject(false)}>
+                <ThemeCard>
+                    <View style={{}}>
+                        <Text style={styles.textTitle}>
+                            Are you sure you want to reject this request?
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <ThemeButton
+                                title={"Cancel"}
+                                variant={"clear"}
+                                onPress={() => setShowReject(false)}
+                            />
+                            <ThemeButton
+                                title={"Reject"}
+                                onPress={handleRejectClick}>
+                                {buttonLoading && (
+                                    <ActivityIndicator
+                                        size={16}
+                                        color={theme.colors.primarytext}
+                                    />
+                                )}
+                            </ThemeButton>
+                        </View>
+                    </View>
+                </ThemeCard>
+            </ThemeOverlay>
+
+            <ThemeCard>
+                <View style={styles.titleContainer}>
                     <ThemeButton
-                      title={'Accept'}
-                      onPress={() => handleAcceptClick(item)}
+                        title={"Go to my page"}
+                        onPress={handleGoToMyPageClick}
                     />
-                  )}
+                    <ThemeButton
+                        title={"Edit my services"}
+                        onPress={handleEditClick}
+                    />
                 </View>
-              }
+            </ThemeCard>
+
+            <Text
+                style={[
+                    styles.textTitle,
+                    {
+                        marginStart: 30,
+                    },
+                ]}>
+                My Hire Requests
+            </Text>
+            <FlatList
+                data={history}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={loading}
+                        onRefresh={handleRefresh}
+                    />
+                }
+                ListEmptyComponent={
+                    <View style={styles.emptyMessage}>
+                        <Text style={styles.textBody}>No History Found</Text>
+                    </View>
+                }
+                keyExtractor={(item) => item._id}
+                style={{ width: "100%" }}
+                renderItem={({ item, i }) => (
+                    <Animated.View style={styles.itemContainer}>
+                        <ImageItemCard
+                            style={"side"}
+                            index={i}
+                            onClick={() => {
+                                setSelected(item);
+                                setShowSelected(true);
+                            }}
+                            uri={
+                                item.user.profilePic ||
+                                "https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg"
+                            }
+                            body={
+                                <View>
+                                    <Text style={styles.textTitle}>
+                                        {item.user.firstName}{" "}
+                                        {item.user.lastName}
+                                    </Text>
+                                    <Text style={styles.textBody}>
+                                        {new Date(
+                                            item.startDate
+                                        ).toLocaleDateString()}{" "}
+                                        {item.oneDay
+                                            ? ""
+                                            : ` to ${new Date(
+                                                  item.endDate
+                                              ).toLocaleDateString()}`}
+                                    </Text>
+                                    <Text style={styles.textBody}>
+                                        {new Date(
+                                            item.startTime
+                                        ).toLocaleTimeString()}{" "}
+                                        {` to ${new Date(
+                                            item.endTime
+                                        ).toLocaleTimeString()}`}
+                                    </Text>
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            marginTop: 5,
+                                        }}>
+                                        <Text style={styles.textHighlight}>
+                                            STATUS :{" "}
+                                        </Text>
+                                        <Text style={styles.textHighlightBold}>
+                                            {item.status}
+                                        </Text>
+                                    </View>
+
+                                    {item.status === "pending" && (
+                                        <View style={styles.buttonContainer}>
+                                            <ThemeButton
+                                                title={"Accept"}
+                                                onPress={() =>
+                                                    handleAcceptClick(item)
+                                                }
+                                            />
+                                            <ThemeButton
+                                                title={"Reject"}
+                                                onPress={() =>
+                                                    handleRejectClick(item)
+                                                }
+                                            />
+                                        </View>
+                                    )}
+                                </View>
+                            }
+                        />
+                    </Animated.View>
+                )}
             />
-          </Animated.View>
-        )}
-      />
-    </View>
-  );
+        </View>
+    );
 };
 
 export default MyServicesContainer;

@@ -9,17 +9,12 @@ import {
   StatusBar,
   SafeAreaView
 } from 'react-native';
-import { ImageItemCard, ThemeButton } from '../../components';
+import { FloatingMenuButton, ImageItemCard, ThemeButton } from '../../components';
 import getThemeContext from '../../context/ThemeContext';
 import { AntDesign } from '@expo/vector-icons';
 
 const HomeScreen = () => {
-  const { theme, toggleTheme } = getThemeContext();
-  const [themeSwitch, setThemeSwitch] = useState(false);
-
-  useEffect(() => {
-    if (theme.mode === 'dark') setThemeSwitch(true);
-  }, []);
+  const { theme } = getThemeContext();
 
   //example with a body element
   //can provide local image or uri
@@ -113,15 +108,6 @@ const HomeScreen = () => {
     />
   );
 
-  const changeTheme = () => {
-    try {
-      setThemeSwitch(!themeSwitch);
-      toggleTheme();
-    } catch (error) {
-      console.debug(error);
-    }
-  };
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <StatusBar
@@ -129,6 +115,7 @@ const HomeScreen = () => {
         hidden={false}
       />
       <View style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
+      <FloatingMenuButton />
         <View
           style={{
             flexDirection: 'row',
@@ -138,7 +125,7 @@ const HomeScreen = () => {
             paddingHorizontal: '5%'
           }}
         >
-          <Text style={{ color: theme.colors.text }}>Feed</Text>
+          <Text style={{ color: theme.colors.text, fontWeight:"bold", fontSize:18 }}>Feed</Text>
           <View
             style={{
               flexDirection: 'row',
@@ -146,8 +133,6 @@ const HomeScreen = () => {
               alignItems: 'center'
             }}
           >
-            <Text style={{ color: theme.colors.text }}>Dark Mode</Text>
-            <Switch onValueChange={changeTheme} value={themeSwitch} />
           </View>
         </View>
         <ScrollView
