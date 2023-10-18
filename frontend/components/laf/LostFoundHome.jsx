@@ -49,7 +49,7 @@ const LostFoundHome = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      <Search navigation={navigation} />
+      <Search navigation={navigation} image={user.profilePic} profile={true} />
       <Suspense fallback={<ActivityIndicator />}>
         <ScrollView>
           <PetsContainer
