@@ -1,27 +1,32 @@
-import { View } from "react-native";
-import ThemeChip from "./ThemeChip";
-import { useEffect, useState } from "react";
+import { StyleSheet, View } from 'react-native';
+import ThemeChip from './ThemeChip';
+import { useEffect, useState } from 'react';
 
-const ThemeChipList = ({ data, defaultIndex, multiSelect, activeList }) => {
+const ThemeChipList = ({
+    data,
+    defaultIndex,
+    multiSelect,
+    activeList,
+    allActive,
+}) => {
     const [clickIndex, setClickIndex] = useState(defaultIndex || 0);
-    const [activeChips, setActiveChips] = useState(
-        activeList || new Array(data.length).fill(false)
-    );
+    const [activeChips, setActiveChips] = useState(activeList || new Array(data.length).fill(false));
+
+    const styles = StyleSheet.create({
+        container: {
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+    });
 
     useEffect(() => {
-        if (multiSelect !== true)
-            setActiveChips(
-                activeChips.map((chip, index) => index === clickIndex)
-            );
+        if (multiSelect !== true) setActiveChips(activeChips.map((chip, index) => index === clickIndex));
     }, [clickIndex]);
+
     return (
-        <View
-            style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                alignItems: "center",
-            }}>
+        <View style={styles.container}>
             {multiSelect === true
                 ? data.map((item, index) => (
                       <ThemeChip
@@ -42,12 +47,15 @@ const ThemeChipList = ({ data, defaultIndex, multiSelect, activeList }) => {
                           key={index}
                           text={item.text}
                           clickable={true}
-                          active={activeChips[index]}
+                          active={
+                              allActive === true ? true : activeChips[index]
+                          }
                           onClick={() => {
                               setClickIndex(index);
                               item.onClick();
-                          }}
-                      />
+                          }}>
+                          {item.children}
+                      </ThemeChip>
                   ))}
         </View>
     );

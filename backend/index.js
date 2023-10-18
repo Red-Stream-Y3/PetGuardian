@@ -12,13 +12,15 @@ import utilRoutes from './routes/utilRoutes.js';
 import servicesRoutes from './routes/servicesRoutes.js';
 import playDateRoutes from './routes/playDateRoutes.js';
 import petRoutes from './routes/petRoutes.js';
-
+import ratingRoutes from './routes/ratingRoutes.js';
+import postRoutes from './routes/postRoutes.js';
+import adoptionRoutes from './routes/adoptionRoutes.js';
 
 let dbUri;
 
 if (process.env.NODE_ENV !== 'production') {
-  dotenv.config({ path: findConfig('.env.dev') });
-  dbUri = process.env.MONGO_URI_DEV;
+    dotenv.config({ path: findConfig('.env.dev') });
+    dbUri = process.env.MONGO_URI_DEV;
 } else dbUri = process.env.MONGO_URI;
 
 connectDB(dbUri);
@@ -33,15 +35,18 @@ app.use('/api/v1/util', utilRoutes);
 app.use('/api/v1/services', servicesRoutes);
 app.use('/api/v1/playdates', playDateRoutes);
 app.use('/api/v1/pets', petRoutes);
+app.use('/api/v1/ratings', ratingRoutes);
+app.use('/api/v1/posts', postRoutes);
+app.use('/api/v1/adoption', adoptionRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port: ${PORT}`.yellow.bold);
-  });
+    app.listen(PORT, () => {
+        console.log(`Server is running on port: ${PORT}`.yellow.bold);
+    });
 }
 
 export default app;
