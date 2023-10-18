@@ -9,7 +9,7 @@ const Post = ({ route }) => {
     const { theme } = getThemeContext();
     const { petData } = route.params;
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const petImages = petData.images.map((image) => image.uri);
+    const petImages = petData.images.map((image) => image);
 
     const formatDate = (dateStr) => {
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -28,7 +28,7 @@ const Post = ({ route }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-            <Header title={petData.title} />
+            <Header title={petData.pet.name} />
 
             <Suspense fallback={<ActivityIndicator />}>
                 <ScrollView>
@@ -44,10 +44,10 @@ const Post = ({ route }) => {
                         <View style={styles.detailsContainer}>
                             <View style={styles.detailsRow}>
                                 <Text style={[styles.detailText, { backgroundColor: getRandomColor() }]}>
-                                    {petData.breed}
+                                    {petData.pet.breed}
                                 </Text>
                                 <Text style={[styles.detailText, { backgroundColor: getRandomColor() }]}>
-                                    {petData.age}
+                                    {petData.pet.age}
                                 </Text>
                                 <Text
                                     style={[
@@ -70,7 +70,7 @@ const Post = ({ route }) => {
                                     },
                                 ]}
                             >
-                                {petData.description}
+                                {petData.pet.description}
                             </Text>
                             <UserBox />
                         </View>
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     },
     detailText: {
         marginVertical: 15,
+        marginRight: 4,
         fontSize: 14,
         fontWeight: 'bold',
         padding: 10,
