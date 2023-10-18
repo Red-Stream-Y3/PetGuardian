@@ -8,7 +8,6 @@ const ThemeChip = ({
     onClick,
     text,
     disableRipple,
-    filled,
     color,
     active,
 }) => {
@@ -31,12 +30,15 @@ const ThemeChip = ({
             paddingHorizontal: 10,
             paddingVertical: 5,
             backgroundColor: active ? color || tabColor : theme.colors.surface,
-            alignItems: "center",
+            alignItems: "baseline",
+            justifyContent: "center",
+            flexDirection: "row",
         },
         text: {
             fontWeight: "bold",
             color: active ? theme.colors.primaryText : theme.colors.text,
             paddingHorizontal: 5,
+            marginEnd: children ? 5 : 0,
         },
     });
 
@@ -50,9 +52,8 @@ const ThemeChip = ({
                         if (onClick) onClick();
                     }
                 }}>
-                {children}
-
                 <Text style={styles.text}>{text}</Text>
+                {children}
             </Pressable>
         </View>
     );

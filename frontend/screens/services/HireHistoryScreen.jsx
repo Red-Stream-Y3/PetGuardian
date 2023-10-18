@@ -1,6 +1,6 @@
 import { SafeAreaView, View, StatusBar } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
-import { HireHistoy } from "../../components";
+import { FloatingMenuButton, HireHistoy } from "../../components";
 
 const HireHistoryScreen = ({ navigation }) => {
     const { theme } = getThemeContext();
@@ -15,6 +15,7 @@ const HireHistoryScreen = ({ navigation }) => {
                 hidden={false}
             />
             <View style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
+                <FloatingMenuButton />
                 <HireHistoy navigation={navigation} />
             </View>
         </SafeAreaView>

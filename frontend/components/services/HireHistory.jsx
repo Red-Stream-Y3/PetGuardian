@@ -166,7 +166,6 @@ const HireHistory = ({ navigation }) => {
             </ThemeOverlay>
 
             <View style={styles.titleContainer}>
-                <ThemeBackButton navigation={navigation} />
                 <Text style={styles.textTitle}>Hire History</Text>
             </View>
 

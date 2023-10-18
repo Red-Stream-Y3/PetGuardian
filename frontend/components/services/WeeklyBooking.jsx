@@ -2,6 +2,7 @@ import { Switch, Text, View } from "react-native";
 import ThemeTextInput from "../common/ThemeTextInput";
 import { FontAwesome5 } from "@expo/vector-icons";
 import ThemeChipList from "../common/ThemeChipList";
+import ThemeWeekDaySelector from "../common/ThemeWeekDaySelector";
 
 const WeeklyBooking = ({
     styles,
@@ -12,56 +13,9 @@ const WeeklyBooking = ({
     setAllDay,
     theme,
 }) => {
-    const setDays = (index) => {
-        const newDays = [...input.days];
-        newDays[index] = !newDays[index];
-        setInput({ ...input, days: newDays });
+    const setDays = (daylist) => {
+        setInput({ ...input, days: daylist });
     };
-
-    const daysOfTheWeek = [
-        {
-            text: "Monday",
-            onClick: () => {
-                setDays(0);
-            },
-        },
-        {
-            text: "Tuesday",
-            onClick: () => {
-                setDays(1);
-            },
-        },
-        {
-            text: "Wednesday",
-            onClick: () => {
-                setDays(2);
-            },
-        },
-        {
-            text: "Thursday",
-            onClick: () => {
-                setDays(3);
-            },
-        },
-        {
-            text: "Friday",
-            onClick: () => {
-                setDays(4);
-            },
-        },
-        {
-            text: "Saturday",
-            onClick: () => {
-                setDays(5);
-            },
-        },
-        {
-            text: "Sunday",
-            onClick: () => {
-                setDays(6);
-            },
-        },
-    ];
 
     return (
         <View
@@ -70,11 +24,7 @@ const WeeklyBooking = ({
                 paddingHorizontal: 20,
             }}>
             <Text style={styles.textH1}>{"Days of the week"}</Text>
-            <ThemeChipList
-                multiSelect={true}
-                data={daysOfTheWeek}
-                activeList={input.days}
-            />
+            <ThemeWeekDaySelector days={input.days} setDays={setDays} />
 
             <Text style={styles.textH1}>{"Time"}</Text>
             <View

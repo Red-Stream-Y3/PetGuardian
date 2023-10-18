@@ -179,6 +179,10 @@ const ServiceDetails = ({ navigation, route }) => {
             justifyContent: "center",
             marginTop: 15,
         },
+        flexRowFee: {
+            flexDirection: "row",
+            flexWrap: "wrap",
+        },
     });
 
     return (
@@ -272,24 +276,35 @@ const ServiceDetails = ({ navigation, route }) => {
                                 <Text style={styles.H1}>WORKING DAYS</Text>
                                 <View style={styles.flexRow}>
                                     {details?.services?.workDays.map(
-                                        (item, i) => (
-                                            <ThemeChip key={i} text={item} />
-                                        )
+                                        (item, i) =>
+                                            item !== null && (
+                                                <ThemeChip
+                                                    key={i}
+                                                    text={item}
+                                                />
+                                            )
                                     )}
                                 </View>
                             </View>
 
                             <View style={styles.marginVertical10}>
                                 <Text style={styles.H1}>MY RATES</Text>
-                                <View style={styles.flexRow}>
+                                <View style={styles.flexRowFee}>
                                     {details?.services?.fees.map((item, i) => (
                                         <ThemeChip
                                             key={i}
                                             text={
-                                                item.tag +
+                                                String(item.tag).substring(
+                                                    0,
+                                                    1
+                                                ) +
+                                                String(item.tag)
+                                                    .substring(1)
+                                                    .toLocaleLowerCase()
+                                                    .replace("_", " ") +
                                                 " " +
                                                 item.price +
-                                                "$/hr"
+                                                " Rs/hr"
                                             }
                                         />
                                     ))}

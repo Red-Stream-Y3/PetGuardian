@@ -17,12 +17,7 @@ import getThemeContext from "../../context/ThemeContext";
 import { AntDesign } from "@expo/vector-icons";
 
 const HomeScreen = () => {
-    const { theme, toggleTheme } = getThemeContext();
-    const [themeSwitch, setThemeSwitch] = useState(false);
-
-    useEffect(() => {
-        if (theme.mode === "dark") setThemeSwitch(true);
-    }, []);
+    const { theme } = getThemeContext();
 
     //example with a body element
     //can provide local image or uri
@@ -126,15 +121,6 @@ const HomeScreen = () => {
         />
     );
 
-    const changeTheme = () => {
-        try {
-            setThemeSwitch(!themeSwitch);
-            toggleTheme();
-        } catch (error) {
-            console.debug(error);
-        }
-    };
-
     return (
         <SafeAreaView
             style={{ flex: 1, backgroundColor: theme.colors.background }}>
@@ -145,6 +131,7 @@ const HomeScreen = () => {
                 hidden={false}
             />
             <View style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
+                <FloatingMenuButton />
                 <View
                     style={{
                         flexDirection: "row",
@@ -166,9 +153,7 @@ const HomeScreen = () => {
                             flexDirection: "row",
                             justifyContent: "space-between",
                             alignItems: "center",
-                        }}>
-                        <FloatingMenuButton />
-                    </View>
+                        }}></View>
                 </View>
                 <ScrollView
                     style={{ width: "100%" }}

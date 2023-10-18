@@ -1,12 +1,21 @@
 import { SafeAreaView, Text, View, StatusBar } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import { getAppContext } from "../../context/AppContext";
-import { MyServicesContainer, RegisterServiceProvider } from "../../components";
+import {
+    FloatingMenuButton,
+    MyServicesContainer,
+    RegisterServiceProvider,
+} from "../../components";
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated";
+import { useEffect } from "react";
 
 const MyServiceScreen = ({ navigation }) => {
     const { theme } = getThemeContext();
     const { user } = getAppContext();
+
+    useEffect(() => {
+        console.log(user.isServiceProvider);
+    }, []);
 
     return (
         <SafeAreaView
@@ -18,6 +27,7 @@ const MyServiceScreen = ({ navigation }) => {
                 hidden={false}
             />
             <View style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
+                <FloatingMenuButton />
                 <Text
                     style={{
                         color: theme.colors.text,
@@ -27,7 +37,9 @@ const MyServiceScreen = ({ navigation }) => {
                     }}>
                     My Services
                 </Text>
-                {user?.services !== null && user?.services !== undefined ? (
+                {user.isServiceProvider === null ||
+                user.isServiceProvider === undefined ||
+                !user.isServiceProvider ? (
                     <Animated.View
                         entering={FadeInDown}
                         exiting={FadeOutDown}

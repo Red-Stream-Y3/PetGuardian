@@ -104,6 +104,7 @@ export const AppContextProvider = ({ children, value }) => {
                 SERVER_URL,
                 tabColor,
                 user,
+                setUser,
                 loadingUser,
                 setLoadingUser,
                 storeUser,

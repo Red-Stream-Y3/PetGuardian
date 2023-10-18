@@ -54,6 +54,11 @@ export const userSchema = mongoose.Schema(
         //   type: String,
         //   default: '',
         // },
+        isServiceProvider: {
+            type: Boolean,
+            default: false,
+            required: true,
+        },
         services: {
             serviceTypes: [String],
             petTypes: [String],
