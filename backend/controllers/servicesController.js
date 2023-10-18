@@ -10,6 +10,11 @@ const getProviders = asyncHandler(async (req, res) => {
     try {
         const providers = await User.aggregate([
             {
+                $match: {
+                    isServiceProvider: true,
+                },
+            },
+            {
                 $project: {
                     _id: 1,
                     firstName: 1,

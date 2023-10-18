@@ -213,7 +213,7 @@ const RegisterContainer = ({
                     onChange={(text) => setRetypePassword(text)}
                     icon={
                         <Feather
-                            name={showPassword ? "eye-off" : "eye"}
+                            name={showRetypePassword ? "eye-off" : "eye"}
                             size={24}
                             color={theme.colors.icon}
                         />

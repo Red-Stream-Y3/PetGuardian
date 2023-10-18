@@ -153,8 +153,8 @@ const BookingSummary = ({
                     </View>
 
                     <Text style={styles.subtitle}>
-                        Total Fee : {data?.totalFee}{" "}
-                        {data?.continuous ? "$/day" : "$"}
+                        Total Fee : {data?.totalFee}
+                        {data?.continuous ? " Rs/day" : " Rupees"}
                     </Text>
 
                     <View style={styles.textContainerRow}>

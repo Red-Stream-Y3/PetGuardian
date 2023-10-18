@@ -122,7 +122,10 @@ const ServicesHome = ({ navigation }) => {
                                     service: provider,
                                 });
                             }}
-                            uri={"https://wallpapercave.com/wp/wp4928162.jpg"}
+                            uri={
+                                provider.profilePic ||
+                                "https://wallpapercave.com/wp/wp4928162.jpg"
+                            }
                             style='side'
                             animationTag={provider._id}
                             body={

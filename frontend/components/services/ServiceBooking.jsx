@@ -295,6 +295,22 @@ const ServiceBooking = ({ navigation, route }) => {
                 entering={FadeInDown}
                 exiting={FadeOutDown}
                 style={{ marginBottom: 10 }}>
+                <Text style={styles.textBody}>
+                    Total Fee:{" "}
+                    <Text style={{ fontWeight: "bold" }}>
+                        {calculateFees(
+                            input,
+                            bookingType,
+                            allDay,
+                            service.services.fees.find(
+                                (fee) => fee.tag === bookingType
+                            ).price,
+                            continuous,
+                            oneDay
+                        )}
+                        {continuous ? " Rs/day" : " Rupees"}
+                    </Text>
+                </Text>
                 <ThemeButton
                     title={loading ? null : "Hire"}
                     textSize={16}

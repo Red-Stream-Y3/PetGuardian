@@ -51,6 +51,10 @@ const MyServicesContainer = ({ navigation }) => {
 
     const handleAcceptClick = (item) => {};
 
+    const setSelected = (item) => {};
+
+    const setShowSelected = (value) => {};
+
     useEffect(() => {
         handleRefresh();
     }, []);
@@ -131,6 +135,11 @@ const MyServicesContainer = ({ navigation }) => {
             justifyContent: "center",
             marginVertical: 10,
         },
+        itemContainer: {
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+        },
         emptyMessage: {
             marginTop: Dimensions.get("window").height / 3,
             justifyContent: "center",
@@ -171,7 +180,7 @@ const MyServicesContainer = ({ navigation }) => {
                 keyExtractor={(item) => item._id}
                 style={{ width: "100%" }}
                 renderItem={({ item, i }) => (
-                    <Animated.View style={styles.titleContainer}>
+                    <Animated.View style={styles.itemContainer}>
                         <ImageItemCard
                             style={"side"}
                             index={i}
@@ -180,14 +189,14 @@ const MyServicesContainer = ({ navigation }) => {
                                 setShowSelected(true);
                             }}
                             uri={
-                                item.serviceProvider.profilePic ||
+                                item.user.profilePic ||
                                 "https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg"
                             }
                             body={
                                 <View>
                                     <Text style={styles.textTitle}>
-                                        {item.serviceProvider.firstName}{" "}
-                                        {item.serviceProvider.lastName}
+                                        {item.user.firstName}{" "}
+                                        {item.user.lastName}
                                     </Text>
                                     <Text style={styles.textBody}>
                                         {new Date(
