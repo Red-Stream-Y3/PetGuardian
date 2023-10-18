@@ -1,23 +1,31 @@
-import React, { Suspense, lazy, useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, RefreshControl } from 'react-native';
-import getThemeContext from '../../context/ThemeContext';
-import { getAppContext } from '../../context/AppContext';
-import axios from 'axios';
-import ImageItemCard from '../common/ImageItemCard';
-import Animated from 'react-native-reanimated';
-import ThemeBackButton from '../common/ThemeBackButton';
-import ThemeOverlay from '../common/ThemeOverlay';
-import BookingSummary from './BookingSummary';
-import Toast from 'react-native-toast-message';
-import ThemeButton from '../common/ThemeButton';
-import RateService from './RateService';
-import { cancelBooking, getUserBookings } from '../../services/ServiceproviderSerives';
+import React, { Suspense, lazy, useEffect, useState } from "react";
+import {
+    View,
+    Text,
+    ActivityIndicator,
+    StyleSheet,
+    RefreshControl,
+    Dimensions,
+} from "react-native";
+import getThemeContext from "../../context/ThemeContext";
+import { getAppContext } from "../../context/AppContext";
+import ImageItemCard from "../common/ImageItemCard";
+import Animated from "react-native-reanimated";
+import ThemeOverlay from "../common/ThemeOverlay";
+import BookingSummary from "./BookingSummary";
+import Toast from "react-native-toast-message";
+import ThemeButton from "../common/ThemeButton";
+import RateService from "./RateService";
+import {
+    cancelBooking,
+    getUserBookings,
+} from "../../services/ServiceproviderSerives";
 
 const FlatList = lazy(() => import('react-native/Libraries/Lists/FlatList'));
 
 const HireHistory = ({ navigation }) => {
     const { theme } = getThemeContext();
-    const { SERVER_URL, user } = getAppContext();
+    const { user } = getAppContext();
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showSelected, setShowSelected] = useState(false);
@@ -84,10 +92,10 @@ const HireHistory = ({ navigation }) => {
             alignItems: 'center',
         },
         emptyMessage: {
-            marginTop: 50,
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
+            marginTop: Dimensions.get("window").height / 3,
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
         },
     });
 
@@ -149,7 +157,6 @@ const HireHistory = ({ navigation }) => {
             </ThemeOverlay>
 
             <View style={styles.titleContainer}>
-                <ThemeBackButton navigation={navigation} />
                 <Text style={styles.textTitle}>Hire History</Text>
             </View>
 

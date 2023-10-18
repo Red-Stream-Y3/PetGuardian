@@ -14,10 +14,10 @@ import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.route('/').get(getPlaydates).post(createPlaydate, protect);
-router.route('/:id').get(getPlaydateById).patch(updatePlaydate, protect).delete(deletePlaydate, protect);
-router.route('/user/:id').get(getPlaydatesByUser, protect);
-router.route('/:id/request').post(createRequest, protect);
-router.route('/:id/request/:requestId').patch(updateRequest, protect).delete(deleteRequest, protect);
+router.route('/').get(getPlaydates).post(createPlaydate);
+router.route('/:id').get(getPlaydateById).patch(updatePlaydate).delete(deletePlaydate);
+router.route('/user/:id').get(getPlaydatesByUser);
+router.route('/:id/request').post(createRequest);
+router.route('/:id/request/:requestId').patch(updateRequest).delete(deleteRequest);
 
 export default router;

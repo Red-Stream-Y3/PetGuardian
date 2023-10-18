@@ -87,8 +87,14 @@ export const ThemeProvider = ({ children }) => {
         }
     }, [systemTheme]);
 
-    const toggleTheme = () => {
-        setTheme((prevTheme) => (prevTheme.mode === 'light' ? DARK_THEME : LIGHT_THEME));
+    const toggleTheme = async () => {
+        await AsyncStorage.setItem(
+            "theme",
+            JSON.stringify(theme.mode === "light" ? "dark" : "light")
+        );
+        setTheme((prevTheme) =>
+            prevTheme.mode === "light" ? DARK_THEME : LIGHT_THEME
+        );
     };
 
     return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;

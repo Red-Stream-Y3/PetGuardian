@@ -56,7 +56,7 @@ const createPlaydate = asyncHandler(async (req, res) => {
             location,
             description,
             pets,
-            user: req.user._id,
+            user
         });
         res.status(201).json(playdate);
     } catch (error) {
@@ -107,7 +107,7 @@ const deletePlaydate = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         res.status(400);
-        throw new Error('Invalid playdate data');
+        throw new Error(error);
     }
 });
 

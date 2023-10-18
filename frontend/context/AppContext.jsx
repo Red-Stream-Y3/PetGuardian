@@ -47,7 +47,6 @@ export const AppContextProvider = ({ children, value }) => {
             const savedUser = await AsyncStorage.getItem('user');
             if (savedUser) {
                 setUser(JSON.parse(savedUser));
-                // console.log("UserToken: ", JSON.parse(savedUser).token);
             } else {
                 setUser({});
             }
@@ -105,6 +104,7 @@ export const AppContextProvider = ({ children, value }) => {
                 SERVER_URL,
                 tabColor,
                 user,
+                setUser,
                 loadingUser,
                 setLoadingUser,
                 storeUser,

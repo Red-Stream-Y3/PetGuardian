@@ -18,7 +18,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import DailyBooking from './DailyBooking';
 import WeeklyBooking from './WeeklyBooking';
-import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import { checkBookingTimeAvailability, createServiceBooking } from '../../services/ServiceproviderSerives';
 
@@ -251,8 +250,30 @@ const ServiceBooking = ({ navigation, route }) => {
                 )}
             </ScrollView>
 
-            <Animated.View entering={FadeInDown} exiting={FadeOutDown} style={{ marginBottom: 10 }}>
-                <ThemeButton title={loading ? null : 'Hire'} textSize={16} onPress={handleHirePress}>
+            <Animated.View
+                entering={FadeInDown}
+                exiting={FadeOutDown}
+                style={{ marginBottom: 10 }}>
+                <Text style={styles.textBody}>
+                    Total Fee:{" "}
+                    <Text style={{ fontWeight: "bold" }}>
+                        {calculateFees(
+                            input,
+                            bookingType,
+                            allDay,
+                            service.services.fees.find(
+                                (fee) => fee.tag === bookingType
+                            ).price,
+                            continuous,
+                            oneDay
+                        )}
+                        {continuous ? " Rs/day" : " Rupees"}
+                    </Text>
+                </Text>
+                <ThemeButton
+                    title={loading ? null : "Hire"}
+                    textSize={16}
+                    onPress={handleHirePress}>
                     {loading ? (
                         <ActivityIndicator size={24} color={theme.colors.primaryIcon} />
                     ) : (

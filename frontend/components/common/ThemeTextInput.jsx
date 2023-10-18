@@ -1,6 +1,12 @@
-import { StyleSheet, TextInput, View, Text, Pressable } from 'react-native';
-import getThemeContext from '../../context/ThemeContext';
-import { getAppContext } from '../../context/AppContext';
+import {
+    StyleSheet,
+    TextInput,
+    View,
+    Text,
+    Pressable,
+} from "react-native";
+import getThemeContext from "../../context/ThemeContext";
+import { getAppContext } from "../../context/AppContext";
 
 const ThemeTextInput = ({
     title,
@@ -52,9 +58,8 @@ const ThemeTextInput = ({
             width: width || '100%',
             borderWidth: 1,
             borderColor: tabColor,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
         },
         titleText: {
             color: theme.colors.text,
