@@ -1,11 +1,4 @@
-import {
-    StyleSheet,
-    TextInput,
-    View,
-    Text,
-    Pressable,
-    Dimensions,
-} from "react-native";
+import { StyleSheet, TextInput, View, Text, Pressable } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import { getAppContext } from "../../context/AppContext";
 

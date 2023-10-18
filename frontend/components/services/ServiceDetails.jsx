@@ -202,7 +202,7 @@ const ServiceDetails = ({ navigation, route }) => {
                     style={styles.imageStyle}
                     source={{
                         uri:
-                            service?.image ||
+                            service?.profilePic ||
                             "https://wallpapercave.com/wp/wp4928162.jpg",
                     }}
                     sharedTransitionTag={service?._id}

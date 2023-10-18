@@ -295,7 +295,7 @@ const updateHireRequest = asyncHandler(async (req, res) => {
     try {
         const { status, _id } = req.body;
 
-        const result = await HireRequest.findOne({ _id: _id });
+        const result = await HireRequest.findById(_id);
 
         if (result) {
             result.status = status;
