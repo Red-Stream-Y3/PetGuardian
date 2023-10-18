@@ -15,11 +15,15 @@ import Animated, {
     SlideInRight,
     SlideOutLeft,
     SlideOutRight,
-} from 'react-native-reanimated';
-import DailyBooking from './DailyBooking';
-import WeeklyBooking from './WeeklyBooking';
-import Toast from 'react-native-toast-message';
-import { checkBookingTimeAvailability, createServiceBooking } from '../../services/ServiceproviderSerives';
+} from "react-native-reanimated";
+import DailyBooking from "./DailyBooking";
+import WeeklyBooking from "./WeeklyBooking";
+import Toast from "react-native-toast-message";
+import {
+    checkBookingTimeAvailability,
+    createServiceBooking,
+} from "../../services/ServiceproviderSerives";
+import ThemeDropDownInput from "../common/ThemeDropDownInput";
 
 const BOOKING_TYPES = ['ONE_TIME', 'DAILY', 'WEEKLY'];
 
@@ -68,7 +72,13 @@ const ServiceBooking = ({ navigation, route }) => {
         textBody: {
             color: theme.colors.text,
             fontSize: 14,
-            fontWeight: 'normal',
+            fontWeight: "normal",
+        },
+        paddedContainer: {
+            width: "90%",
+        },
+        paddedContainer: {
+            width: "90%",
         },
     });
 
@@ -173,6 +183,11 @@ const ServiceBooking = ({ navigation, route }) => {
         }
     };
 
+    const handleDropDownItemPress = (item) => {
+        if (input.pets.find((pet) => pet._id === item._id)) return;
+        setInput({ ...input, pets: [...input.pets, item] });
+    };
+
     return (
         <View
             style={{
@@ -197,9 +212,38 @@ const ServiceBooking = ({ navigation, route }) => {
                     width: '100%',
                 }}
                 contentContainerStyle={{
-                    alignItems: 'center',
-                }}
-            >
+                    alignItems: "center",
+                }}>
+                <View style={styles.paddedContainer}>
+                    <Text style={styles.textH1}>{"Select Pets"}</Text>
+                    <ThemeDropDownInput
+                        title='Pets'
+                        placeholder='Select pets'
+                        options={user.pets}
+                        onPressItem={handleDropDownItemPress}
+                    />
+                    <ThemeChipList
+                        data={input.pets.map((pet) => ({
+                            text: pet.name,
+                            children: (
+                                <Ionicons
+                                    name='close-circle-outline'
+                                    size={24}
+                                    color={theme.colors.primaryIcon}
+                                    onPress={() => {
+                                        setInput({
+                                            ...input,
+                                            pets: input.pets.filter(
+                                                (p) => p._id !== pet._id
+                                            ),
+                                        });
+                                    }}
+                                />
+                            ),
+                        }))}
+                    />
+                </View>
+
                 {bookingType === BOOKING_TYPES[0] && (
                     <Animated.View entering={SlideInLeft} exiting={SlideOutLeft}>
                         <OneTimeBooking

@@ -107,9 +107,12 @@ const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallb
             ) : (
                 <Animated.View entering={FadeInDown} style={styles.container}>
                     <Text style={styles.title}>Booking Summary</Text>
-                    <Text
-                        style={styles.subtitle}
-                    >{`Booking for ${booking?.serviceProvider?.firstName} ${booking?.serviceProvider?.lastName}`}</Text>
+                    <Text style={styles.subtitle}>
+                        {booking?.serviceProvider &&
+                            `Booking for ${booking?.serviceProvider?.firstName} ${booking?.serviceProvider?.lastName}`}
+                        {booking?.user &&
+                            `Booking made by ${booking?.user?.firstName} ${booking?.user?.lastName}`}
+                    </Text>
 
                     <View style={styles.textContainer}>
                         <Text style={styles.body}>
@@ -138,6 +141,9 @@ const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallb
                         Total Fee : {data?.totalFee}
                         {data?.continuous ? " Rs/day" : " Rupees"}
                     </Text>
+                    <Text style={styles.subtitle}>
+                        Payment : {data?.paymentStatus}
+                    </Text>
 
                     <View style={styles.textContainerRow}>
                         <Text style={styles.highlight}>STATUS : </Text>
@@ -145,12 +151,24 @@ const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallb
                     </View>
 
                     <View style={styles.actionContainer}>
-                        <ThemeButton variant={'clear'} title={'Close'} onPress={closeActionCallback} />
-                        {booking.status === 'pending' && (
-                            <ThemeButton title={submitting ? '' : actionTitle} onPress={handleActionPress}>
-                                {submitting && <ActivityIndicator color={theme.colors.primaryText} size={20} />}
-                            </ThemeButton>
-                        )}
+                        <ThemeButton
+                            variant={"clear"}
+                            title={"Close"}
+                            onPress={closeActionCallback}
+                        />
+                        {booking.status === "pending" &&
+                            booking.user === null && (
+                                <ThemeButton
+                                    title={submitting ? "" : actionTitle}
+                                    onPress={handleActionPress}>
+                                    {submitting && (
+                                        <ActivityIndicator
+                                            color={theme.colors.primaryText}
+                                            size={20}
+                                        />
+                                    )}
+                                </ThemeButton>
+                            )}
                     </View>
                 </Animated.View>
             )}

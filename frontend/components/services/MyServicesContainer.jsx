@@ -1,4 +1,5 @@
 import {
+    ActivityIndicator,
     Dimensions,
     FlatList,
     RefreshControl,
@@ -10,18 +11,28 @@ import getThemeContext from "../../context/ThemeContext";
 import { getAppContext } from "../../context/AppContext";
 import { useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
-import { getMyHireRequests } from "../../services/ServiceproviderSerives";
+import {
+    getMyHireRequests,
+    rejectHireRequest,
+} from "../../services/ServiceproviderSerives";
 import Animated from "react-native-reanimated";
 import ImageItemCard from "../common/ImageItemCard";
 import ThemeButton from "../common/ThemeButton";
 import { CommonActions } from "@react-navigation/native";
 import ThemeCard from "./../common/ThemeCard";
+import ThemeOverlay from "./../common/ThemeOverlay";
+import BookingSummary from "./BookingSummary";
 
 const MyServicesContainer = ({ navigation }) => {
     const { theme } = getThemeContext();
     const { user, setSelectedTab } = getAppContext();
     const [loading, setLoading] = useState(false);
     const [history, setHistory] = useState([]);
+    const [selected, setSelected] = useState(null);
+    const [showSelected, setShowSelected] = useState(false);
+    const [showReject, setShowReject] = useState(false);
+    const [showAccept, setShowAccept] = useState(false);
+    const [buttonLoading, setButtonLoading] = useState(false);
 
     const fetchMyHireRequests = async () => {
         try {
@@ -49,11 +60,74 @@ const MyServicesContainer = ({ navigation }) => {
         //
     };
 
-    const handleAcceptClick = (item) => {};
+    const handleAcceptClick = async (item) => {
+        if (!showAccept) {
+            setSelected(item);
+            setShowAccept(true);
+            return;
+        }
 
-    const setSelected = (item) => {};
+        try {
+            setButtonLoading(true);
+            const response = await rejectHireRequest(selected._id, user.token);
 
-    const setShowSelected = (value) => {};
+            if (response) {
+                Toast.show({
+                    type: "success",
+                    text1: "Success",
+                    text2: "Hire request accepted",
+                });
+                handleRefresh();
+                setShowAccept(false);
+            }
+            setButtonLoading(false);
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not accept hire request", //default
+            });
+            setShowAccept(false);
+            setButtonLoading(false);
+        }
+    };
+
+    const handleRejectClick = async (item) => {
+        if (!showReject) {
+            setSelected(item);
+            setShowReject(true);
+            return;
+        }
+
+        try {
+            setButtonLoading(true);
+            const response = await rejectHireRequest(selected._id, user.token);
+            if (response) {
+                Toast.show({
+                    type: "success",
+                    text1: "Success",
+                    text2: "Hire request rejected",
+                });
+                handleRefresh();
+                setShowReject(false);
+            }
+            setButtonLoading(false);
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not reject hire request", //default
+            });
+            setShowReject(false);
+            setButtonLoading(false);
+        }
+    };
 
     useEffect(() => {
         handleRefresh();
@@ -108,7 +182,6 @@ const MyServicesContainer = ({ navigation }) => {
             fontWeight: "bold",
             color: theme.colors.text,
             marginBottom: 5,
-            marginStart: 30,
             alignSelf: "flex-start",
         },
         textSubtitle: {
@@ -146,10 +219,83 @@ const MyServicesContainer = ({ navigation }) => {
             alignItems: "center",
             width: "100%",
         },
+        buttonContainer: {
+            alignSelf: "flex-end",
+            flexDirection: "row",
+            alignItems: "flex-end",
+            justifyContent: "center",
+        },
     });
 
     return (
         <View style={styles.container}>
+            <ThemeOverlay
+                visible={showSelected}
+                onPressBg={() => setShowSelected(false)}>
+                <BookingSummary
+                    booking={selected}
+                    closeActionCallback={() => setShowSelected(false)}
+                />
+            </ThemeOverlay>
+
+            <ThemeOverlay
+                visible={showAccept}
+                onPressBg={() => setShowAccept(false)}>
+                <ThemeCard>
+                    <View style={{}}>
+                        <Text style={styles.textTitle}>
+                            Are you sure you want to accept this request?
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <ThemeButton
+                                title={"Cancel"}
+                                variant={"clear"}
+                                onPress={() => setShowAccept(false)}
+                            />
+                            <ThemeButton
+                                title={"Accept"}
+                                onPress={handleAcceptClick}>
+                                {buttonLoading && (
+                                    <ActivityIndicator
+                                        size={16}
+                                        color={theme.colors.primarytext}
+                                    />
+                                )}
+                            </ThemeButton>
+                        </View>
+                    </View>
+                </ThemeCard>
+            </ThemeOverlay>
+
+            <ThemeOverlay
+                visible={showReject}
+                onPressBg={() => setShowReject(false)}>
+                <ThemeCard>
+                    <View style={{}}>
+                        <Text style={styles.textTitle}>
+                            Are you sure you want to reject this request?
+                        </Text>
+                        <View style={styles.buttonContainer}>
+                            <ThemeButton
+                                title={"Cancel"}
+                                variant={"clear"}
+                                onPress={() => setShowReject(false)}
+                            />
+                            <ThemeButton
+                                title={"Reject"}
+                                onPress={handleRejectClick}>
+                                {buttonLoading && (
+                                    <ActivityIndicator
+                                        size={16}
+                                        color={theme.colors.primarytext}
+                                    />
+                                )}
+                            </ThemeButton>
+                        </View>
+                    </View>
+                </ThemeCard>
+            </ThemeOverlay>
+
             <ThemeCard>
                 <View style={styles.titleContainer}>
                     <ThemeButton
@@ -163,7 +309,15 @@ const MyServicesContainer = ({ navigation }) => {
                 </View>
             </ThemeCard>
 
-            <Text style={styles.textTitle}>My Hire Requests</Text>
+            <Text
+                style={[
+                    styles.textTitle,
+                    {
+                        marginStart: 30,
+                    },
+                ]}>
+                My Hire Requests
+            </Text>
             <FlatList
                 data={history}
                 refreshControl={
@@ -229,13 +383,21 @@ const MyServicesContainer = ({ navigation }) => {
                                         </Text>
                                     </View>
 
-                                    {item.status !== "pending" && (
-                                        <ThemeButton
-                                            title={"Accept"}
-                                            onPress={() =>
-                                                handleAcceptClick(item)
-                                            }
-                                        />
+                                    {item.status === "pending" && (
+                                        <View style={styles.buttonContainer}>
+                                            <ThemeButton
+                                                title={"Accept"}
+                                                onPress={() =>
+                                                    handleAcceptClick(item)
+                                                }
+                                            />
+                                            <ThemeButton
+                                                title={"Reject"}
+                                                onPress={() =>
+                                                    handleRejectClick(item)
+                                                }
+                                            />
+                                        </View>
                                     )}
                                 </View>
                             }

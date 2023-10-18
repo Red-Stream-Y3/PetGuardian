@@ -187,7 +187,9 @@ const ServiceDetails = ({ navigation, route }) => {
                 <Animated.Image
                     style={styles.imageStyle}
                     source={{
-                        uri: service?.profilePic || 'https://wallpapercave.com/wp/wp4928162.jpg',
+                        uri:
+                            service?.profilePic ||
+                            "https://wallpapercave.com/wp/wp4928162.jpg",
                     }}
                     sharedTransitionTag={service?._id}
                 />

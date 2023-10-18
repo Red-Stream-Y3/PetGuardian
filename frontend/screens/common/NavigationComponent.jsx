@@ -9,7 +9,6 @@ import {
 } from "@react-navigation/native";
 import getThemeContext from "../../context/ThemeContext";
 import DrawerNavigator from "./DrawerNavigator";
-import { BottomBar } from "../../components";
 import { getAppContext } from "../../context/AppContext";
 import LoginScreen from "./LoginScreen";
 
@@ -34,7 +33,6 @@ const NavigationComponent = () => {
                     ) : (
                         <>
                             <DrawerNavigator />
-                            <BottomBar />
                         </>
                     )}
                     <Toast />

@@ -1,12 +1,22 @@
-import { ActivityIndicator, Dimensions, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
-import Search from '../common/Search';
-import getThemeContext from '../../context/ThemeContext';
-import { getAppContext } from '../../context/AppContext';
-import { Suspense, useState } from 'react';
-import ImageItemCard from '../common/ImageItemCard';
-import ThemeChip from '../common/ThemeChip';
-import { getServiceProviders } from '../../services/ServiceproviderSerives';
-import Toast from 'react-native-toast-message';
+import {
+    ActivityIndicator,
+    Dimensions,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
+import Search from "../common/Search";
+import getThemeContext from "../../context/ThemeContext";
+import { getAppContext } from "../../context/AppContext";
+import { Suspense, useState } from "react";
+import axios from "axios";
+import ImageItemCard from "../common/ImageItemCard";
+import ThemeChip from "../common/ThemeChip";
+import { getServiceProviders } from "../../services/ServiceproviderSerives";
+import Toast from "react-native-toast-message";
+import FloatingMenuButton from "../common/FloatingMenuButton";
 
 const ServicesHome = ({ navigation }) => {
     const { theme } = getThemeContext();
@@ -86,6 +96,7 @@ const ServicesHome = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Search navigation={navigation} />
+            <FloatingMenuButton navigation={navigation} />
             <View style={styles.chipContainer}>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {chips.map((chip, i) => (

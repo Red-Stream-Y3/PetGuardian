@@ -2,19 +2,13 @@ import {
     KeyboardAvoidingView,
     StyleSheet,
     Text,
-    View,
     Platform,
     ScrollView,
     Dimensions,
     ActivityIndicator,
 } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
-import Animated, {
-    FadeInDown,
-    FadeOutUp,
-    SlideInDown,
-    SlideOutDown,
-} from "react-native-reanimated";
+import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import ThemeButton from "./../common/ThemeButton";
 import { useState } from "react";
 import ThemeTextInput from "./../common/ThemeTextInput";

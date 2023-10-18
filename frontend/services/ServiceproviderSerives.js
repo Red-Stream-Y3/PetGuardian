@@ -216,3 +216,87 @@ export const getMyHireRequests = async (id, token) => {
 
     return response.data;
 };
+
+export const acceptHireRequest = async (id, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    const data = {
+        _id: id,
+        status: "accepted",
+    };
+
+    let response = await axios.put(
+        `${BASE}/api/v1/services/hire`,
+        data,
+        config
+    );
+
+    if (response.status !== 200) {
+        throw new Error("Failed to accept hire request");
+    }
+
+    return response.data;
+};
+
+export const rejectHireRequest = async (id, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    const data = {
+        _id: id,
+        status: "rejected",
+    };
+
+    let response = await axios.put(
+        `${BASE}/api/v1/services/hire`,
+        data,
+        config
+    );
+
+    if (response.status !== 200) {
+        throw new Error("Failed to reject hire request");
+    }
+
+    return response.data;
+};
+
+export const completeHireRequest = async (id, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    const data = {
+        _id: id,
+        status: "completed",
+    };
+
+    let response = await axios.put(
+        `${BASE}/api/v1/services/hire`,
+        data,
+        config
+    );
+
+    if (response.status !== 200) {
+        throw new Error("Failed to complete hire request");
+    }
+
+    return response.data;
+};
+
+export const getPetsByUser = async (id, token) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/api/v1/pets/user/${id}`);
+        return response.data;
+    } catch (error) {
+        throw new Error("Error fetching pets");
+    }
+};
