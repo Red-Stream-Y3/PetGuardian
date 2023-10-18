@@ -183,7 +183,7 @@ const getMyHireRequests = asyncHandler(async (req, res) => {
                     endDate: 1,
                     startTime: 1,
                     endTime: 1,
-                    //totalFee: 1,
+                    totalFee: 1,
                     user: {
                         _id: 1,
                         firstName: 1,

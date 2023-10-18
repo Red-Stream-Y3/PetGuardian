@@ -9,10 +9,8 @@ import {
 } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
 import { getAppContext } from "../../context/AppContext";
-import axios from "axios";
 import ImageItemCard from "../common/ImageItemCard";
 import Animated from "react-native-reanimated";
-import ThemeBackButton from "../common/ThemeBackButton";
 import ThemeOverlay from "../common/ThemeOverlay";
 import BookingSummary from "./BookingSummary";
 import Toast from "react-native-toast-message";
@@ -27,7 +25,7 @@ const FlatList = lazy(() => import("react-native/Libraries/Lists/FlatList"));
 
 const HireHistory = ({ navigation }) => {
     const { theme } = getThemeContext();
-    const { SERVER_URL, user } = getAppContext();
+    const { user } = getAppContext();
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showSelected, setShowSelected] = useState(false);

@@ -222,3 +222,22 @@ export const createServiceProvider = async (data, token) => {
 
     return response.data;
 };
+
+export const getMyHireRequests = async (id, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    let response = await axios.get(
+        `${BASE}/api/v1/services/myhire/${id}`,
+        config
+    );
+
+    if (response.status !== 200) {
+        throw new Error("Failed to fetch service provider");
+    }
+
+    return response.data;
+};
