@@ -1,4 +1,5 @@
 import {
+    ActivityIndicator,
     Dimensions,
     FlatList,
     RefreshControl,
@@ -10,7 +11,10 @@ import getThemeContext from "../../context/ThemeContext";
 import { getAppContext } from "../../context/AppContext";
 import { useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
-import { getMyHireRequests } from "../../services/ServiceproviderSerives";
+import {
+    getMyHireRequests,
+    rejectHireRequest,
+} from "../../services/ServiceproviderSerives";
 import Animated from "react-native-reanimated";
 import ImageItemCard from "../common/ImageItemCard";
 import ThemeButton from "../common/ThemeButton";
@@ -28,6 +32,7 @@ const MyServicesContainer = ({ navigation }) => {
     const [showSelected, setShowSelected] = useState(false);
     const [showReject, setShowReject] = useState(false);
     const [showAccept, setShowAccept] = useState(false);
+    const [buttonLoading, setButtonLoading] = useState(false);
 
     const fetchMyHireRequests = async () => {
         try {
@@ -55,29 +60,74 @@ const MyServicesContainer = ({ navigation }) => {
         //
     };
 
-    const handleAcceptClick = (item) => {
+    const handleAcceptClick = async (item) => {
         if (!showAccept) {
             setSelected(item);
             setShowAccept(true);
             return;
         }
 
-        setShowAccept(false);
+        try {
+            setButtonLoading(true);
+            const response = await rejectHireRequest(selected._id, user.token);
+
+            if (response) {
+                Toast.show({
+                    type: "success",
+                    text1: "Success",
+                    text2: "Hire request accepted",
+                });
+                handleRefresh();
+                setShowAccept(false);
+            }
+            setButtonLoading(false);
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not accept hire request", //default
+            });
+            setShowAccept(false);
+            setButtonLoading(false);
+        }
     };
 
-    const handleRejectClick = (item) => {
+    const handleRejectClick = async (item) => {
         if (!showReject) {
             setSelected(item);
             setShowReject(true);
             return;
         }
 
-        setShowReject(false);
+        try {
+            setButtonLoading(true);
+            const response = await rejectHireRequest(selected._id, user.token);
+            if (response) {
+                Toast.show({
+                    type: "success",
+                    text1: "Success",
+                    text2: "Hire request rejected",
+                });
+                handleRefresh();
+                setShowReject(false);
+            }
+            setButtonLoading(false);
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2:
+                    error?.response?.data?.message || //axios error
+                    error.message || //js error
+                    "Could not reject hire request", //default
+            });
+            setShowReject(false);
+            setButtonLoading(false);
+        }
     };
-
-    // const setSelected = (item) => {};
-
-    // const setShowSelected = (value) => {};
 
     useEffect(() => {
         handleRefresh();
@@ -204,8 +254,14 @@ const MyServicesContainer = ({ navigation }) => {
                             />
                             <ThemeButton
                                 title={"Accept"}
-                                onPress={handleAcceptClick}
-                            />
+                                onPress={handleAcceptClick}>
+                                {buttonLoading && (
+                                    <ActivityIndicator
+                                        size={16}
+                                        color={theme.colors.primarytext}
+                                    />
+                                )}
+                            </ThemeButton>
                         </View>
                     </View>
                 </ThemeCard>
@@ -227,8 +283,14 @@ const MyServicesContainer = ({ navigation }) => {
                             />
                             <ThemeButton
                                 title={"Reject"}
-                                onPress={handleRejectClick}
-                            />
+                                onPress={handleRejectClick}>
+                                {buttonLoading && (
+                                    <ActivityIndicator
+                                        size={16}
+                                        color={theme.colors.primarytext}
+                                    />
+                                )}
+                            </ThemeButton>
                         </View>
                     </View>
                 </ThemeCard>

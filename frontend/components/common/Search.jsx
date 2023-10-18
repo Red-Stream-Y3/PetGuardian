@@ -7,7 +7,6 @@ import {
     TouchableOpacity,
 } from "react-native";
 import getThemeContext from "../../context/ThemeContext";
-import FloatingMenuButton from "./FloatingMenuButton";
 
 const Search = ({ navigation, image }) => {
     const { theme } = getThemeContext();
@@ -48,7 +47,6 @@ const Search = ({ navigation, image }) => {
                 placeholder='Search'
                 style={styles.searchBar}
             />
-            <FloatingMenuButton navigation={navigation} />
             {/* <TouchableOpacity
                 onPress={() => navigation.getParent().getParent().openDrawer()}>
                 <Image

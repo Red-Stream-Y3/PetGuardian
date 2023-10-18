@@ -16,6 +16,7 @@ import ImageItemCard from "../common/ImageItemCard";
 import ThemeChip from "../common/ThemeChip";
 import { getServiceProviders } from "../../services/ServiceproviderSerives";
 import Toast from "react-native-toast-message";
+import FloatingMenuButton from "../common/FloatingMenuButton";
 
 const ServicesHome = ({ navigation }) => {
     const { theme } = getThemeContext();
@@ -95,6 +96,7 @@ const ServicesHome = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Search navigation={navigation} />
+            <FloatingMenuButton navigation={navigation} />
             <View style={styles.chipContainer}>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {chips.map((chip, i) => (
