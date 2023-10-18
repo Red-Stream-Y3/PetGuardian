@@ -9,6 +9,7 @@ const LostHome = () => {
     const { theme } = getThemeContext();
     const { user } = getAppContext();
     const [lostPosts, setLostPosts] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const getPosts = async () => {
         try {
