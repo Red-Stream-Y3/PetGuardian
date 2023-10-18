@@ -1,8 +1,13 @@
-import { SafeAreaView, Text, View, StatusBar, StyleSheet } from 'react-native';
-import getThemeContext from '../../context/ThemeContext';
-import { ThemeBackButton, ThemeButton, ThemeCard, ThemeOverlay } from '../../components';
-import { getAppContext } from '../../context/AppContext';
-import { useState } from 'react';
+import { SafeAreaView, Text, View, StatusBar, StyleSheet } from "react-native";
+import getThemeContext from "../../context/ThemeContext";
+import {
+    FloatingMenuButton,
+    ThemeButton,
+    ThemeCard,
+    ThemeOverlay,
+} from "../../components";
+import { getAppContext } from "../../context/AppContext";
+import { useState } from "react";
 
 const ProfileScreen = ({ navigation }) => {
     const { theme, toggleTheme } = getThemeContext();
@@ -18,8 +23,8 @@ const ProfileScreen = ({ navigation }) => {
         await removeUser();
     };
 
-    const handleSwitchThemePress = () => {
-        toggleTheme();
+    const handleSwitchThemePress = async () => {
+        await toggleTheme();
     };
 
     const styles = StyleSheet.create({
@@ -61,8 +66,7 @@ const ProfileScreen = ({ navigation }) => {
                 </ThemeCard>
             </ThemeOverlay>
             <View style={styles.container}>
-                <ThemeBackButton navigation={navigation} customBackAction={() => navigation.jumpTo('Home')} />
-
+                <FloatingMenuButton />
                 <ThemeCard>
                     <View style={styles.titleContainer}>
                         <Text style={styles.titleText}>Profile</Text>

@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, Dimensions, ActivityIndicator } from 'react-nat
 import getThemeContext from '../../context/ThemeContext';
 import ThemeButton from '../common/ThemeButton';
 import ThemeChip from '../common/ThemeChip';
-import axios from 'axios';
 import { getAppContext } from '../../context/AppContext';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { getBookingById } from '../../services/ServiceproviderSerives';
@@ -136,7 +135,8 @@ const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallb
                     </View>
 
                     <Text style={styles.subtitle}>
-                        Total Fee : {data?.totalFee} {data?.continuous ? '$/day' : '$'}
+                        Total Fee : {data?.totalFee}
+                        {data?.continuous ? " Rs/day" : " Rupees"}
                     </Text>
 
                     <View style={styles.textContainerRow}>

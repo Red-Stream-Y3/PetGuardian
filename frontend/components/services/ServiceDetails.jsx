@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ActivityIndicator, Dimensions, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeInDown, FadeInLeft } from 'react-native-reanimated';
 import { getAppContext } from '../../context/AppContext';
@@ -165,6 +164,10 @@ const ServiceDetails = ({ navigation, route }) => {
             justifyContent: 'center',
             marginTop: 15,
         },
+        flexRowFee: {
+            flexDirection: "row",
+            flexWrap: "wrap",
+        },
     });
 
     return (
@@ -184,7 +187,7 @@ const ServiceDetails = ({ navigation, route }) => {
                 <Animated.Image
                     style={styles.imageStyle}
                     source={{
-                        uri: service?.image || 'https://wallpapercave.com/wp/wp4928162.jpg',
+                        uri: service?.profilePic || 'https://wallpapercave.com/wp/wp4928162.jpg',
                     }}
                     sharedTransitionTag={service?._id}
                 />
@@ -236,17 +239,38 @@ const ServiceDetails = ({ navigation, route }) => {
                             <View style={styles.marginVertical10}>
                                 <Text style={styles.H1}>WORKING DAYS</Text>
                                 <View style={styles.flexRow}>
-                                    {details?.services?.workDays.map((item, i) => (
-                                        <ThemeChip key={i} text={item} />
-                                    ))}
+                                    {details?.services?.workDays.map(
+                                        (item, i) =>
+                                            item !== null && (
+                                                <ThemeChip
+                                                    key={i}
+                                                    text={item}
+                                                />
+                                            )
+                                    )}
                                 </View>
                             </View>
 
                             <View style={styles.marginVertical10}>
                                 <Text style={styles.H1}>MY RATES</Text>
-                                <View style={styles.flexRow}>
+                                <View style={styles.flexRowFee}>
                                     {details?.services?.fees.map((item, i) => (
-                                        <ThemeChip key={i} text={item.tag + ' ' + item.price + '$/hr'} />
+                                        <ThemeChip
+                                            key={i}
+                                            text={
+                                                String(item.tag).substring(
+                                                    0,
+                                                    1
+                                                ) +
+                                                String(item.tag)
+                                                    .substring(1)
+                                                    .toLocaleLowerCase()
+                                                    .replace("_", " ") +
+                                                " " +
+                                                item.price +
+                                                " Rs/hr"
+                                            }
+                                        />
                                     ))}
                                 </View>
                             </View>

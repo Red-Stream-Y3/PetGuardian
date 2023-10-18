@@ -3,7 +3,6 @@ import Search from '../common/Search';
 import getThemeContext from '../../context/ThemeContext';
 import { getAppContext } from '../../context/AppContext';
 import { Suspense, useState } from 'react';
-import axios from 'axios';
 import ImageItemCard from '../common/ImageItemCard';
 import ThemeChip from '../common/ThemeChip';
 import { getServiceProviders } from '../../services/ServiceproviderSerives';
@@ -110,8 +109,11 @@ const ServicesHome = ({ navigation }) => {
                                     service: provider,
                                 });
                             }}
-                            uri={'https://wallpapercave.com/wp/wp4928162.jpg'}
-                            style="side"
+                            uri={
+                                provider.profilePic ||
+                                "https://wallpapercave.com/wp/wp4928162.jpg"
+                            }
+                            style='side'
                             animationTag={provider._id}
                             body={
                                 <View>
