@@ -1,47 +1,49 @@
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StyleSheet, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import Toast from "react-native-toast-message";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StyleSheet, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import Toast from 'react-native-toast-message';
 import {
-    NavigationContainer,
-    DarkTheme,
-    DefaultTheme,
-} from "@react-navigation/native";
-import getThemeContext from "../../context/ThemeContext";
-import DrawerNavigator from "./DrawerNavigator";
-import { BottomBar } from "../../components";
-import { getAppContext } from "../../context/AppContext";
-import LoginScreen from "./LoginScreen";
+  NavigationContainer,
+  DarkTheme,
+  DefaultTheme
+} from '@react-navigation/native';
+import getThemeContext from '../../context/ThemeContext';
+import DrawerNavigator from './DrawerNavigator';
+import { BottomBar } from '../../components';
+import { getAppContext } from '../../context/AppContext';
+import LoginScreen from './LoginScreen';
 
 const NavigationComponent = () => {
-    const { theme } = getThemeContext();
-    const { user, loadingUser } = getAppContext();
+  const { theme } = getThemeContext();
+  const { user, loadingUser } = getAppContext();
 
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            backgroundColor: theme.colors.background,
-        },
-    });
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background
+    }
+  });
 
-    return (
-        <NavigationContainer theme={theme.mode === 'dark' ? DarkTheme : DefaultTheme}>
-            <SafeAreaProvider>
-                <View style={styles.container}>
-                    <StatusBar style='auto' />
-                    {!user?._id || !user?.token ? (
-                        <LoginScreen />
-                    ) : (
-                        <>
-                            <DrawerNavigator />
-                            <BottomBar />
-                        </>
-                    )}
-                    <Toast />
-                </View>
-            </SafeAreaProvider>
-        </NavigationContainer>
-    );
+  return (
+    <NavigationContainer
+      theme={theme.mode === 'dark' ? DarkTheme : DefaultTheme}
+    >
+      <SafeAreaProvider>
+        <View style={styles.container}>
+          <StatusBar style="auto" />
+          {!user?._id || !user?.token ? (
+            <LoginScreen />
+          ) : (
+            <>
+              <DrawerNavigator />
+              <BottomBar />
+            </>
+          )}
+          <Toast />
+        </View>
+      </SafeAreaProvider>
+    </NavigationContainer>
+  );
 };
 
 export default NavigationComponent;

@@ -7,16 +7,25 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const AdoptionNavigator = createNativeStackNavigator();
 
 const AdoptionScreen = (navigation) => {
-    const { theme } = getThemeContext();
-    return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
-            <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} hidden={false} />
-            <AdoptionNavigator.Navigator initialRouteName="Adoptions" screenOptions={{ headerShown: false }}>
-                <AdoptionNavigator.Screen name="Adoptions" component={AdoptionHome} />
-                <AdoptionNavigator.Screen name="AdoptionList" component={AdoptionList} />
-            </AdoptionNavigator.Navigator>
-        </SafeAreaView>
-    );
+  const { theme } = getThemeContext();
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <StatusBar
+        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        hidden={false}
+      />
+      <AdoptionNavigator.Navigator
+        initialRouteName="Adoptions"
+        screenOptions={{ headerShown: false }}
+      >
+        <AdoptionNavigator.Screen name="Adoptions" component={AdoptionHome} />
+        <AdoptionNavigator.Screen
+          name="AdoptionList"
+          component={AdoptionList}
+        />
+      </AdoptionNavigator.Navigator>
+    </SafeAreaView>
+  );
 };
 
 export default AdoptionScreen;
