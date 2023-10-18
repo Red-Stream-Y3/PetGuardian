@@ -7,7 +7,7 @@ import asyncHandler from 'express-async-handler';
 
 const getPosts = asyncHandler(async (req, res) => {
     try {
-        const posts = await Post.find();
+        const posts = await Post.find().populate('user pet');
         res.json(posts);
     } catch (error) {
         res.status(404);
@@ -35,7 +35,7 @@ const getPostsByUser = asyncHandler(async (req, res) => {
 
 const getPostById = asyncHandler(async (req, res) => {
     try {
-        const post = await Post.findById(req.params.id);
+        const post = await Post.findById(req.params.id).populate('user pet');
         res.json(post);
     } catch (error) {
         res.status(404);

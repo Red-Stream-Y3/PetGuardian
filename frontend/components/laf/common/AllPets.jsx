@@ -21,7 +21,7 @@ const AllPets = ({ title, data }) => {
         if (filter === 'All') {
             return true;
         }
-        return pet.petType === filter;
+        return pet.pet.type === filter;
     });
 
     const petsPairs = groupIntoPairs(filteredPetsData);
