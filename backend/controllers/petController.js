@@ -34,7 +34,9 @@ const getPetById = asyncHandler(async (req, res) => {
 // @access  Private
 
 const createPet = asyncHandler(async (req, res) => {
-    const { name, type, breed, age, weight, description, image } = req.body;
+    console.log(req.body);
+    const { name, type, breed, age, weight, description, image, user } = req.body;
+
     try {
         const pet = await Pet.create({
             name,
@@ -44,7 +46,7 @@ const createPet = asyncHandler(async (req, res) => {
             weight,
             description,
             image,
-            user
+            user,
         });
         res.status(201).json(pet);
     } catch (error) {

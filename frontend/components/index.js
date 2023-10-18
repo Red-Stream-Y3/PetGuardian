@@ -17,15 +17,17 @@ export { default as RegisterContainer } from './common/RegisterContainer';
 export { default as ThemeCard } from './common/ThemeCard';
 export { default as ThemeOverlay } from './common/ThemeOverlay';
 export { default as FloatingMenuButton } from './common/FloatingMenuButton';
+export { default as CardWithProfile } from './common/CardWithProfile';
+export { default as HeaderWithFilter } from './common/HeaderWithFilter';
 
 // Lost and Found
 export { default as LostFoundHome } from './laf/LostFoundHome';
 export { default as AllPets } from './laf/common/AllPets';
 export { default as Post } from './laf/common/Post';
 export { default as Profile } from './laf/common/Profile';
-export { default as FoundHome } from './laf/Found/FoundHome';
 export { default as LostHome } from './laf/Lost/LostHome';
 export { default as LostPost } from './laf/Lost/LostPost';
+export { default as FoundHome } from './laf/Found/FoundHome';
 
 //services
 export { default as ServicesHome } from './services/ServicesHome';
@@ -38,3 +40,6 @@ export { default as MyServicesContainer } from './services/MyServicesContainer';
 //adoption
 export { default as AdoptionHome } from './adoption/AdoptionHome';
 export { default as AdoptionList } from './adoption/AdoptionList';
+
+//playdate
+export { default as PlaydateHome } from './playdate/PlaydateHome';
