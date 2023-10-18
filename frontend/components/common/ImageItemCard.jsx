@@ -4,20 +4,20 @@ import getThemeContext from '../../context/ThemeContext';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 const ImageItemCard = ({
-    image,
-    uri,
-    onClick,
-    body,
-    title,
-    sideTag,
-    subtitle,
-    style,
-    width,
-    borderRadius,
-    viewMarginBottom,
-    textMarginBottom,
-    animationTag,
-    index,
+  image,
+  uri,
+  onClick,
+  body,
+  title,
+  sideTag,
+  subtitle,
+  style,
+  width,
+  borderRadius,
+  viewMarginBottom,
+  textMarginBottom,
+  animationTag,
+  index
 }) => {
     const { theme } = getThemeContext();
     const imageStyles = {
@@ -81,7 +81,7 @@ const ImageItemCard = ({
         subtitleText: {
             color: theme.colors.text,
             fontSize: 12,
-            fontWeight: 'bold',
+            fontWeight: '500',
         },
         tagText: {
             color: theme.colors.text,
@@ -117,11 +117,11 @@ const ImageItemCard = ({
 
                     {sideTag !== undefined && sideTag !== null ? <Text style={styles.tagText}>{sideTag}</Text> : null}
 
-                    {body ? body : null}
-                </View>
-            </Pressable>
-        </Animated.View>
-    );
+          {body ? body : null}
+        </View>
+      </Pressable>
+    </Animated.View>
+  );
 };
 
 export default ImageItemCard;

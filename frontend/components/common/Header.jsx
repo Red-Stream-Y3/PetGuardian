@@ -35,7 +35,7 @@ const Header = ({ title, onFilterPress, petTypes, save }) => {
                     </TouchableOpacity>
                 )}
             </View>
-            {petTypes ? <PetFilter petTypes={petTypes} onFilterPress={onFilterPress} /> : null}
+            {petTypes && <PetFilter petTypes={petTypes} onFilterPress={onFilterPress} />}
         </View>
     );
 };

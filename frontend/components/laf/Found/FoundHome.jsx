@@ -9,6 +9,7 @@ const FoundHome = () => {
     const { theme } = getThemeContext();
     const { user } = getAppContext();
     const [foundPosts, setFoundPosts] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const getPosts = async () => {
         try {
