@@ -7,15 +7,10 @@ import {
     RegisterServiceProvider,
 } from "../../components";
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated";
-import { useEffect } from "react";
 
 const MyServiceScreen = ({ navigation }) => {
     const { theme } = getThemeContext();
     const { user } = getAppContext();
-
-    useEffect(() => {
-        console.log(user.isServiceProvider);
-    }, []);
 
     return (
         <SafeAreaView

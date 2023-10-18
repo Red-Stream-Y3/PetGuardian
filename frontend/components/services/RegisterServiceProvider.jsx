@@ -25,7 +25,7 @@ import Toast from "react-native-toast-message";
 import { createServiceProvider } from "../../services/ServiceproviderSerives";
 import { getAppContext } from "../../context/AppContext";
 
-const RegisterServiceProvider = ({ navigation }) => {
+const RegisterServiceProvider = ({ navigation, existing }) => {
     const { theme } = getThemeContext();
     const { user, storeUser, setUser } = getAppContext();
     const [showRegister, setShowRegister] = useState(false);
