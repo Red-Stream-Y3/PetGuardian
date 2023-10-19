@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, BackHandler, StyleSheet } from 'react-native';
 import RoundIconButton from './RoundIconButton';
 import getThemeContext from '../../context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import {
+    useNavigation,
+    useRoute,
+    NavigationState,
+} from '@react-navigation/native';
 import { getAppContext } from '../../context/AppContext';
 
 const BottomBar = ({}) => {
@@ -12,6 +16,34 @@ const BottomBar = ({}) => {
     const navigation = useNavigation();
     const [barColor, setBarColor] = useState(theme.colors.homePrimary);
     const [animation] = useState(new Animated.Value(0));
+
+    const getActiveRouteState = (route) => {
+        if (
+            !route.routes ||
+            route.routes.length === 0 ||
+            route.index >= route.routes.length
+        ) {
+            return route;
+        }
+
+        const childActiveRoute = route.routes[route.index];
+        return getActiveRouteState(childActiveRoute);
+    };
+
+    //on back press in android, set selected tab to home
+    useEffect(() => {
+        const backhandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            () => {
+                if (selectedTab !== 2) {
+                    setSelectedTab(2);
+                    return true;
+                }
+                return false;
+            }
+        );
+        return () => backhandler.remove();
+    }, [selectedTab]);
 
     const PADDING = 8;
     const SIZE_1 = 25;
