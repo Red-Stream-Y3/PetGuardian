@@ -36,6 +36,7 @@ export { default as ServiceBooking } from './services/ServiceBooking';
 export { default as HireHistoy } from './services/HireHistory';
 export { default as RegisterServiceProvider } from './services/RegisterServiceProvider';
 export { default as MyServicesContainer } from './services/MyServicesContainer';
+export { default as ScheduleContainer } from './services/ScheduleContainer';
 
 //adoption
 export { default as AdoptionHome } from './adoption/AdoptionHome';

@@ -134,6 +134,9 @@ const getHireRequests = asyncHandler(async (req, res) => {
                 $unwind: '$serviceProvider'
             },
             {
+                $sort: { createdAt: -1 }
+            },
+            {
                 $project: {
                     _id: 1,
                     status: 1,
@@ -142,6 +145,8 @@ const getHireRequests = asyncHandler(async (req, res) => {
                     startTime: 1,
                     endTime: 1,
                     oneDay: 1,
+                    continuous: 1,
+                    allDay: 1,
                     totalFee: 1,
                     paymentStatus: 1,
                     serviceProvider: {
@@ -152,7 +157,7 @@ const getHireRequests = asyncHandler(async (req, res) => {
                     }
                 }
             }
-        ]).hint({ user: 1, serviceProvider: 1 });
+        ]).hint({ user: 1, serviceProvider: 1, createdAt: -1 });
         res.json(hireRequests);
     } catch (error) {
         res.json({ error: error.message });
@@ -182,6 +187,9 @@ const getMyHireRequests = asyncHandler(async (req, res) => {
                 $unwind: '$user'
             },
             {
+                $sort: { createdAt: -1 }
+            },
+            {
                 $project: {
                     _id: 1,
                     status: 1,
@@ -190,6 +198,8 @@ const getMyHireRequests = asyncHandler(async (req, res) => {
                     startTime: 1,
                     endTime: 1,
                     totalFee: 1,
+                    continuous: 1,
+                    allDay: 1,
                     user: {
                         _id: 1,
                         firstName: 1,
@@ -198,7 +208,7 @@ const getMyHireRequests = asyncHandler(async (req, res) => {
                     }
                 }
             }
-        ]).hint({ user: 1, serviceProvider: 1 });
+        ]).hint({ user: 1, serviceProvider: 1, createdAt: -1 });
         res.json(hireRequests);
     } catch (error) {
         res.json({ error: error.message });

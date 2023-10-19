@@ -23,6 +23,7 @@ import { CommonActions } from '@react-navigation/native';
 import ThemeCard from './../common/ThemeCard';
 import ThemeOverlay from './../common/ThemeOverlay';
 import BookingSummary from './BookingSummary';
+import { Entypo } from '@expo/vector-icons';
 
 const MyServicesContainer = ({ navigation }) => {
     const { theme } = getThemeContext();
@@ -134,7 +135,7 @@ const MyServicesContainer = ({ navigation }) => {
         handleRefresh();
     }, []);
 
-    const handleGoToMyPageClick = () => {
+    const deprecated_handleGoToMyPageClick = () => {
         setSelectedTab(0);
 
         navigation.dispatch(
@@ -169,6 +170,18 @@ const MyServicesContainer = ({ navigation }) => {
                 ],
             })
         );
+    };
+
+    const handleGoToMyPageClick = () => {
+        navigation.navigate('MyServicePage', {
+            service: {
+                _id: user._id,
+            },
+        });
+    };
+
+    const handleScheduleClick = () => {
+        navigation.navigate('MyServiceSchedulePage');
     };
 
     const styles = StyleSheet.create({
@@ -304,13 +317,20 @@ const MyServicesContainer = ({ navigation }) => {
 
             <ThemeCard>
                 <View style={styles.titleContainer}>
-                    <ThemeButton
-                        title={'Go to my page'}
-                        onPress={handleGoToMyPageClick}
-                    />
+                    <ThemeButton onPress={handleScheduleClick}>
+                        <Entypo
+                            name="calendar"
+                            size={18}
+                            color={theme.colors.primaryIcon}
+                        />
+                    </ThemeButton>
                     <ThemeButton
                         title={'Edit my services'}
                         onPress={handleEditClick}
+                    />
+                    <ThemeButton
+                        title={'Go to my page'}
+                        onPress={handleGoToMyPageClick}
                     />
                 </View>
             </ThemeCard>
@@ -364,7 +384,7 @@ const MyServicesContainer = ({ navigation }) => {
                             }
                             uri={
                                 item.user.profilePic ||
-                                'https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg'
+                                'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png'
                             }
                             body={
                                 <View>
@@ -373,22 +393,28 @@ const MyServicesContainer = ({ navigation }) => {
                                         {item.user.lastName}
                                     </Text>
                                     <Text style={styles.textBody}>
-                                        {new Date(
-                                            item.startDate
-                                        ).toLocaleDateString()}{' '}
-                                        {item.oneDay
-                                            ? ''
-                                            : ` to ${new Date(
-                                                  item.endDate
+                                        {item.oneDay !== true
+                                            ? item.continuous !== true
+                                                ? `${new Date(
+                                                      item.startDate
+                                                  ).toLocaleDateString()} to ${new Date(
+                                                      item.endDate
+                                                  ).toLocaleDateString()}`
+                                                : `${new Date(
+                                                      item.startDate
+                                                  ).toLocaleDateString()} onwards`
+                                            : `on ${new Date(
+                                                  item.startDate
                                               ).toLocaleDateString()}`}
                                     </Text>
                                     <Text style={styles.textBody}>
-                                        {new Date(
-                                            item.startTime
-                                        ).toLocaleTimeString()}{' '}
-                                        {` to ${new Date(
-                                            item.endTime
-                                        ).toLocaleTimeString()}`}
+                                        {item.allDay !== true
+                                            ? `${new Date(
+                                                  item.startTime
+                                              ).toLocaleTimeString()} to ${new Date(
+                                                  item.endTime
+                                              ).toLocaleTimeString()}`
+                                            : `All Day`}
                                     </Text>
                                     <View
                                         style={{

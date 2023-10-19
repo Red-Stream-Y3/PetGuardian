@@ -257,8 +257,8 @@ const HireHistory = ({ navigation }) => {
                                     setShowSelected(true);
                                 }}
                                 uri={
-                                    item.serviceProvider.profilePic ||
-                                    'https://cdn.wallpapersafari.com/9/81/yaqGvs.jpg'
+                                    item.profilePic ||
+                                    'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png'
                                 }
                                 highlight={true}
                                 highlightColor={
@@ -280,22 +280,28 @@ const HireHistory = ({ navigation }) => {
                                             {item.serviceProvider.lastName}
                                         </Text>
                                         <Text style={styles.textBody}>
-                                            {new Date(
-                                                item.startDate
-                                            ).toLocaleDateString()}{' '}
-                                            {item.oneDay
-                                                ? ''
-                                                : ` to ${new Date(
-                                                      item.endDate
+                                            {item.oneDay !== true
+                                                ? item.continuous !== true
+                                                    ? `${new Date(
+                                                          item.startDate
+                                                      ).toLocaleDateString()} to ${new Date(
+                                                          item.endDate
+                                                      ).toLocaleDateString()}`
+                                                    : `${new Date(
+                                                          item.startDate
+                                                      ).toLocaleDateString()} onwards`
+                                                : `On ${new Date(
+                                                      item.startDate
                                                   ).toLocaleDateString()}`}
                                         </Text>
                                         <Text style={styles.textBody}>
-                                            {new Date(
-                                                item.startTime
-                                            ).toLocaleTimeString()}{' '}
-                                            {` to ${new Date(
-                                                item.endTime
-                                            ).toLocaleTimeString()}`}
+                                            {item.allDay !== true
+                                                ? `${new Date(
+                                                      item.startTime
+                                                  ).toLocaleTimeString()} to ${new Date(
+                                                      item.endTime
+                                                  ).toLocaleTimeString()}`
+                                                : `All Day`}
                                         </Text>
                                         <Text style={styles.textBody}>
                                             {'Total Fee : Rs.'}
