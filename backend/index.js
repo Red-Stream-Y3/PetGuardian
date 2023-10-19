@@ -15,6 +15,14 @@ import petRoutes from './routes/petRoutes.js';
 import ratingRoutes from './routes/ratingRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import adoptionRoutes from './routes/adoptionRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
+import { asyncHandler } from 'express-async-handler';
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 let dbUri;
 
@@ -38,6 +46,15 @@ app.use('/api/v1/pets', petRoutes);
 app.use('/api/v1/ratings', ratingRoutes);
 app.use('/api/v1/posts', postRoutes);
 app.use('/api/v1/adoption', adoptionRoutes);
+
+//payment gateway
+app.use('/api/braintree', paymentRoutes);
+app.get(
+    '/braintree',
+    asyncHandler((req, res) => {
+        res.sendFile(path.join(__dirname, 'braintree.html'));
+    })
+);
 
 app.use(notFound);
 app.use(errorHandler);
