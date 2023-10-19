@@ -32,6 +32,12 @@
         "projectId": "ddd6b7c4-88bf-46e0-abcc-f9b10f6e3dec"
       }
     },
-    "owner": "redstream"
+    "owner": "redstream",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/ddd6b7c4-88bf-46e0-abcc-f9b10f6e3dec"
+    }
   }
 }
