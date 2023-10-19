@@ -9,7 +9,7 @@ import {
 import getThemeContext from "../../context/ThemeContext";
 import { getAppContext } from "../../context/AppContext";
 import { AntDesign } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDrawerStatus } from "@react-navigation/drawer";
 
@@ -20,24 +20,34 @@ const FloatingMenuButton = ({ onClick, variant }) => {
     const navigation = useNavigation();
     const drawerStatus = useDrawerStatus();
 
-    const rotation = new Animated.Value(0);
-    const translation = new Animated.Value(0);
+    const rotation = useRef(new Animated.Value(0)).current;
+    const translation = useRef(new Animated.Value(0)).current;
     const easing = Easing.inOut(Easing.ease);
     const width = Dimensions.get("window").width * 0.8;
 
-    Animated.timing(rotation, {
-        toValue: 1,
-        duration: 500,
-        easing,
-        useNativeDriver: true,
-    }).start();
+    useEffect(() => {
+        if (drawerStatus === "closed") {
+            if (isPressed) setIsPressed(false);
+        } else {
+            if (!isPressed) setIsPressed(true);
+        }
+        rotation.setValue(0);
+        translation.setValue(0);
 
-    Animated.timing(translation, {
-        toValue: 1,
-        duration: 500,
-        easing,
-        useNativeDriver: true,
-    }).start();
+        Animated.timing(rotation, {
+            toValue: 1,
+            duration: 500,
+            easing,
+            useNativeDriver: true,
+        }).start();
+
+        Animated.timing(translation, {
+            toValue: 1,
+            duration: 500,
+            easing,
+            useNativeDriver: true,
+        }).start();
+    }, [drawerStatus]);
 
     const rotateInterpolate = rotation.interpolate({
         inputRange: [0, 1],
@@ -59,28 +69,11 @@ const FloatingMenuButton = ({ onClick, variant }) => {
         outputRange: [-width, 0],
     });
 
-    const playOpenAnimation = () => {
-        rotation.setValue(1);
-        translation.setValue(1);
-    };
-
-    const playCloseAnimation = () => {
-        rotation.setValue(0);
-        translation.setValue(0);
-    };
-
-    useEffect(() => {
-        if (drawerStatus === "closed") {
-            setIsPressed(false);
-        } else {
-            setIsPressed(true);
-        }
-    }, [drawerStatus]);
+    const handlePressIn = () => {};
 
     const handleClick = () => {
         if (onClick) onClick();
         navigation.toggleDrawer();
-        setIsPressed(!isPressed);
     };
 
     const styles = StyleSheet.create({
@@ -130,6 +123,7 @@ const FloatingMenuButton = ({ onClick, variant }) => {
             <Pressable
                 android_ripple={styles.ripple}
                 style={styles.pressableContainer}
+                onPressIn={handlePressIn}
                 onPress={handleClick}>
                 <Animated.View style={styles.iconContainer}>
                     <AntDesign

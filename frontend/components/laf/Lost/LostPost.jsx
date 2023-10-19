@@ -7,60 +7,59 @@ import Header from '../../common/Header';
 import SelectPets from '../../common/SelectPets';
 import LostDetails from './LostDetails';
 import MarkerTitle from '../../common/MarkerTitle';
-import { getPostByUser } from '../../../services/PostServices';
+import { getPetsByUser } from '../../../services/PetServices';
 
 const LostPost = () => {
-    const { theme } = getThemeContext();
-    const { user } = getAppContext();
-    const [posts, setPosts] = useState([]);
+  const { theme } = getThemeContext();
+  const { user } = getAppContext();
+  const [pets, setPets] = useState([]);
 
-    const getPosts = async () => {
-        const response = await getPostByUser(user._id, user.token);
-        const lostPosts = response.filter((post) => post.type === 'Lost');
-        setPosts(lostPosts);
-    };
+  const getPets = async () => {
+    const response = await getPetsByUser(user._id, user.token);
+    setPets(response);
+  };
 
-    useEffect(() => {
-        getPosts();
-    }, []);
+  useEffect(() => {
+    getPets();
+  }, []);
 
-    const groupIntoPairs = (data) => {
-        const pairs = [];
-        for (let i = 0; i < data.length; i += 2) {
-            const pair = [data[i], data[i + 1]].filter(Boolean);
-            pairs.push(pair);
-        }
-        return pairs;
-    };
+  const groupIntoPairs = (data) => {
+    const pairs = [];
+    for (let i = 0; i < data.length; i += 2) {
+      const pair = [data[i], data[i + 1]].filter(Boolean);
+      pairs.push(pair);
+    }
+    return pairs;
+  };
 
-    const lostPetsPairs = groupIntoPairs(posts);
+  const petsPairs = groupIntoPairs(pets);
 
-    return (
-        <ScrollView
-            contentContainerStyle={{
-                flexGrow: 1,
-                backgroundColor: theme.colors.background,
-            }}
-        >
-            <View style={{ flex: 1 }}>
-                <Header title="New Post" save={true} />
+  return (
+    <ScrollView
+      contentContainerStyle={{
+        flexGrow: 1,
+        backgroundColor: theme.colors.background
+      }}
+    >
+      <View style={{ flex: 1 }}>
+        <Header title="New Post" save={true} />
 
-                <Suspense fallback={<ActivityIndicator />}>
-                    <SelectPets
-                        header="Select your pets"
-                        pairs={lostPetsPairs}
-                        component="LostPost"
-                        screen="Post"
-                        fontSize={14}
-                    />
+        <Suspense fallback={<ActivityIndicator />}>
+          <SelectPets
+            header="Select your pets"
+            pairs={petsPairs}
+            component="LostPost"
+            screen="PetProfile"
+            fontSize={14}
+          />
 
-                    <LostDetails />
+          <LostDetails />
 
-                    <MarkerTitle />
-                </Suspense>
-            </View>
-        </ScrollView>
-    );
+          <MarkerTitle />
+        </Suspense>
+      </View>
+    </ScrollView>
+  );
 };
 
 const styles = StyleSheet.create({});

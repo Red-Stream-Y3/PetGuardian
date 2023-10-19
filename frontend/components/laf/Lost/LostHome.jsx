@@ -6,31 +6,32 @@ import AllPets from '../common/AllPets';
 import { getAllPosts } from '../../../services/PostServices';
 
 const LostHome = () => {
-    const { theme } = getThemeContext();
-    const { user } = getAppContext();
-    const [lostPosts, setLostPosts] = useState([]);
+  const { theme } = getThemeContext();
+  const { user } = getAppContext();
+  const [lostPosts, setLostPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-    const getPosts = async () => {
-        try {
-            setLoading(true);
-            const response = await getAllPosts(user.token);
-            const lostPosts = response.filter((post) => post.type === 'Lost');
-            setLostPosts(lostPosts);
-        } catch (error) {
-            console.error('Error fetching posts:', error);
-        }
-        setLoading(false);
-    };
+  const getPosts = async () => {
+    try {
+      setLoading(true);
+      const response = await getAllPosts(user.token);
+      const lostPosts = response.filter((post) => post.type === 'Lost');
+      setLostPosts(lostPosts);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+    setLoading(false);
+  };
 
-    useEffect(() => {
-        getPosts();
-    }, []);
+  useEffect(() => {
+    getPosts();
+  }, []);
 
-    return (
-        <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-            <AllPets title="Lost Pets" data={lostPosts} />
-        </View>
-    );
+  return (
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <AllPets title="Lost Pets" data={lostPosts} />
+    </View>
+  );
 };
 
 export default LostHome;

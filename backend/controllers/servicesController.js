@@ -11,8 +11,8 @@ const getProviders = asyncHandler(async (req, res) => {
         const providers = await User.aggregate([
             {
                 $match: {
-                    isServiceProvider: true,
-                },
+                    isServiceProvider: true
+                }
             },
             {
                 $project: {
@@ -20,13 +20,13 @@ const getProviders = asyncHandler(async (req, res) => {
                     firstName: 1,
                     lastName: 1,
                     services: 1,
-                    profilePic: 1,
-                },
-            },
+                    profilePic: 1
+                }
+            }
         ]).hint({ _id: 1, firstName: 1, lastName: 1, services: 1 });
         res.json(providers);
     } catch (error) {
-        res.status(404).send({ error: "No service providers found" });
+        res.status(404).send({ error: 'No service providers found' });
     }
 });
 
@@ -38,8 +38,8 @@ const getProviderById = asyncHandler(async (req, res) => {
         const provider = await User.aggregate([
             {
                 $match: {
-                    _id: new mongoose.Types.ObjectId(req.params.id),
-                },
+                    _id: new mongoose.Types.ObjectId(req.params.id)
+                }
             },
             {
                 $project: {
@@ -47,9 +47,9 @@ const getProviderById = asyncHandler(async (req, res) => {
                     firstName: 1,
                     lastName: 1,
                     services: 1,
-                    profilePic: 1,
-                },
-            },
+                    profilePic: 1
+                }
+            }
         ]).hint({ _id: 1, firstName: 1, lastName: 1, services: 1 });
         if (provider) {
             res.json(provider);
@@ -80,7 +80,7 @@ const hireProvider = asyncHandler(async (req, res) => {
         continuous,
         totalFee,
         notes,
-        paymentMethod,
+        paymentMethod
     } = req.body;
 
     const hireRequest = new HireRequest({
@@ -100,12 +100,12 @@ const hireProvider = asyncHandler(async (req, res) => {
         totalFee,
         notes,
         paymentMethod,
-        paymentStatus: 'pending',
+        paymentStatus: 'pending'
     });
 
     try {
         const createdHireRequest = await hireRequest.save();
-        res.status(201).json({ message: "Hire request created" });
+        res.status(201).json({ message: 'Hire request created' });
     } catch (error) {
         res.json({ error: error.message });
     }
@@ -119,19 +119,22 @@ const getHireRequests = asyncHandler(async (req, res) => {
         const hireRequests = await HireRequest.aggregate([
             {
                 $match: {
-                    user: new mongoose.Types.ObjectId(req.params.id),
-                },
+                    user: new mongoose.Types.ObjectId(req.params.id)
+                }
             },
             {
                 $lookup: {
-                    from: "users",
-                    localField: "serviceProvider",
-                    foreignField: "_id",
-                    as: "serviceProvider",
-                },
+                    from: 'users',
+                    localField: 'serviceProvider',
+                    foreignField: '_id',
+                    as: 'serviceProvider'
+                }
             },
             {
-                $unwind: "$serviceProvider",
+                $unwind: '$serviceProvider'
+            },
+            {
+                $sort: { createdAt: -1 }
             },
             {
                 $project: {
@@ -142,16 +145,19 @@ const getHireRequests = asyncHandler(async (req, res) => {
                     startTime: 1,
                     endTime: 1,
                     oneDay: 1,
-                    //totalFee: 1,
+                    continuous: 1,
+                    allDay: 1,
+                    totalFee: 1,
+                    paymentStatus: 1,
                     serviceProvider: {
                         _id: 1,
                         firstName: 1,
                         lastName: 1,
-                        profilePic: 1,
-                    },
-                },
-            },
-        ]).hint({ user: 1, serviceProvider: 1 });
+                        profilePic: 1
+                    }
+                }
+            }
+        ]).hint({ user: 1, serviceProvider: 1, createdAt: -1 });
         res.json(hireRequests);
     } catch (error) {
         res.json({ error: error.message });
@@ -166,19 +172,22 @@ const getMyHireRequests = asyncHandler(async (req, res) => {
         const hireRequests = await HireRequest.aggregate([
             {
                 $match: {
-                    serviceProvider: new mongoose.Types.ObjectId(req.params.id),
-                },
+                    serviceProvider: new mongoose.Types.ObjectId(req.params.id)
+                }
             },
             {
                 $lookup: {
-                    from: "users",
-                    localField: "user",
-                    foreignField: "_id",
-                    as: "user",
-                },
+                    from: 'users',
+                    localField: 'user',
+                    foreignField: '_id',
+                    as: 'user'
+                }
             },
             {
-                $unwind: "$user",
+                $unwind: '$user'
+            },
+            {
+                $sort: { createdAt: -1 }
             },
             {
                 $project: {
@@ -189,15 +198,17 @@ const getMyHireRequests = asyncHandler(async (req, res) => {
                     startTime: 1,
                     endTime: 1,
                     totalFee: 1,
+                    continuous: 1,
+                    allDay: 1,
                     user: {
                         _id: 1,
                         firstName: 1,
                         lastName: 1,
-                        profilePic: 1,
-                    },
-                },
-            },
-        ]).hint({ user: 1, serviceProvider: 1 });
+                        profilePic: 1
+                    }
+                }
+            }
+        ]).hint({ user: 1, serviceProvider: 1, createdAt: -1 });
         res.json(hireRequests);
     } catch (error) {
         res.json({ error: error.message });
@@ -216,8 +227,8 @@ const checkHireRequests = asyncHandler(async (req, res) => {
                 $match: {
                     serviceProvider: new mongoose.Types.ObjectId(
                         serviceProvider
-                    ),
-                },
+                    )
+                }
             },
             {
                 $match: {
@@ -225,23 +236,23 @@ const checkHireRequests = asyncHandler(async (req, res) => {
                         {
                             $and: [
                                 { startDate: { $gte: new Date(startDate) } },
-                                { startDate: { $lte: new Date(endDate) } },
-                            ],
+                                { startDate: { $lte: new Date(endDate) } }
+                            ]
                         },
                         {
                             $and: [
                                 { endDate: { $gte: new Date(startDate) } },
-                                { endDate: { $lte: new Date(endDate) } },
-                            ],
+                                { endDate: { $lte: new Date(endDate) } }
+                            ]
                         },
                         {
                             $and: [
                                 { startDate: { $lte: new Date(startDate) } },
-                                { endDate: { $gte: new Date(endDate) } },
-                            ],
-                        },
-                    ],
-                },
+                                { endDate: { $gte: new Date(endDate) } }
+                            ]
+                        }
+                    ]
+                }
             },
             {
                 $project: {
@@ -249,34 +260,36 @@ const checkHireRequests = asyncHandler(async (req, res) => {
                     startDate: 1,
                     endDate: 1,
                     startTime: 1,
-                    endTime: 1,
-                },
-            },
+                    endTime: 1
+                }
+            }
         ]).hint({
             serviceProvider: 1,
             startDate: 1,
             endDate: 1,
             startTime: 1,
-            endTime: 1,
+            endTime: 1
         });
 
         const hireRequestsFiltered = hireRequests.filter((hireRequest) => {
             const hireRequestStartTime = new Date(
                 startDate +
-                    "T" +
-                    new Date(hireRequest.startTime).toISOString().split("T")[1]
+                    'T' +
+                    new Date(hireRequest.startTime).toISOString().split('T')[1]
             );
             const hireRequestEndTime = new Date(
                 startDate +
-                    "T" +
-                    new Date(hireRequest.endTime).toISOString().split("T")[1]
+                    'T' +
+                    new Date(hireRequest.endTime).toISOString().split('T')[1]
             );
-            const startTimeDate = new Date(startDate + "T" + startTime);
-            const endTimeDate = new Date(endDate + "T" + endTime);
+            const startTimeDate = new Date(startDate + 'T' + startTime);
+            const endTimeDate = new Date(endDate + 'T' + endTime);
 
             return (
-                (hireRequestStartTime >= startTimeDate && hireRequestStartTime < endTimeDate) ||
-                (hireRequestEndTime > startTimeDate && hireRequestEndTime <= endTimeDate)
+                (hireRequestStartTime >= startTimeDate &&
+                    hireRequestStartTime < endTimeDate) ||
+                (hireRequestEndTime > startTimeDate &&
+                    hireRequestEndTime <= endTimeDate)
             );
         });
 
@@ -293,12 +306,12 @@ const updateHireRequest = asyncHandler(async (req, res) => {
     try {
         const { status, _id } = req.body;
 
-        const result = await HireRequest.findOne({ _id: _id });
+        const result = await HireRequest.findById(_id);
 
         if (result) {
             result.status = status;
             result.save();
-            res.json({ message: "Hire request updated" });
+            res.json({ message: 'Hire request updated' });
         } else {
             throw new Error('Hire request not found');
         }
@@ -314,22 +327,22 @@ const getHireRequestById = asyncHandler(async (req, res) => {
     try {
         const hireRequest = await HireRequest.aggregate([
             {
-                $match: { _id: new mongoose.Types.ObjectId(req.params.id) },
+                $match: { _id: new mongoose.Types.ObjectId(req.params.id) }
             },
             {
                 $lookup: {
-                    from: "pets",
-                    localField: "involvedPets",
-                    foreignField: "_id",
-                    as: "involvedPets",
-                },
-            },
+                    from: 'pets',
+                    localField: 'involvedPets',
+                    foreignField: '_id',
+                    as: 'involvedPets'
+                }
+            }
         ]);
 
         if (hireRequest) {
             res.json(hireRequest);
         } else {
-            res.json({ error: "Hire request not found" });
+            res.json({ error: 'Hire request not found' });
         }
     } catch (error) {
         res.status(404).json({ error: error.message });
@@ -349,6 +362,7 @@ const createServiceProvider = asyncHandler(async (req, res) => {
             businessPhone,
             activeCities,
             fees,
+            update
         } = req.body;
 
         const { _id } = req.user;
@@ -356,7 +370,11 @@ const createServiceProvider = asyncHandler(async (req, res) => {
         const userExists = await User.findById(_id);
 
         if (!userExists) {
-            throw new Error("Could not find user");
+            throw new Error('Could not find user');
+        }
+
+        if (userExists.isServiceProvider && !update) {
+            throw new Error('User is already a service provider');
         }
 
         userExists.services = {
@@ -366,7 +384,7 @@ const createServiceProvider = asyncHandler(async (req, res) => {
             workDays,
             businessPhone,
             activeCities,
-            fees,
+            fees
         };
         userExists.isServiceProvider = true;
 
@@ -378,13 +396,67 @@ const createServiceProvider = asyncHandler(async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                services: user.services,
+                services: user.services
             });
         } else {
-            throw new Error("Invalid data");
+            throw new Error('Invalid data');
         }
     } catch (error) {
         res.status(400).json({ error: error.message });
+    }
+});
+
+// @desc    search service providers
+// @route   GEt /api/v1/services/search/:searchTerm
+// @access  Public
+const searchServiceProviders = asyncHandler(async (req, res) => {
+    const { searchTerm } = req.params;
+
+    const providers = await User.aggregate([
+        {
+            $match: {
+                isServiceProvider: true
+            }
+        },
+        {
+            $match: {
+                $or: [
+                    { firstName: { $regex: searchTerm, $options: 'i' } },
+                    { lastName: { $regex: searchTerm, $options: 'i' } },
+                    {
+                        'services.serviceTypes': {
+                            $elemMatch: { $regex: searchTerm, $options: 'i' }
+                        }
+                    },
+                    {
+                        'services.petTypes': {
+                            $elemMatch: { $regex: searchTerm, $options: 'i' }
+                        }
+                    },
+                    {
+                        'services.activeCities': {
+                            $elemMatch: { $regex: searchTerm, $options: 'i' }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                firstName: 1,
+                lastName: 1,
+                services: 1,
+                profilePic: 1
+            }
+        }
+    ]);
+
+    if (providers) {
+        res.json(providers);
+    } else {
+        res.status(404);
+        throw new Error('No service providers found');
     }
 });
 
@@ -398,4 +470,5 @@ export {
     updateHireRequest,
     getHireRequestById,
     createServiceProvider,
+    searchServiceProviders
 };

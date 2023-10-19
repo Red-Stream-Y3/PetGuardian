@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Dimensions, ActivityIndicator } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Dimensions,
+    ActivityIndicator,
+} from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
 import ThemeButton from '../common/ThemeButton';
 import ThemeChip from '../common/ThemeChip';
@@ -7,10 +13,16 @@ import { getAppContext } from '../../context/AppContext';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { getBookingById } from '../../services/ServiceproviderSerives';
 import Toast from 'react-native-toast-message';
+import { Ionicons } from '@expo/vector-icons';
 
-const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallback }) => {
+const BookingSummary = ({
+    booking,
+    closeActionCallback,
+    actionTitle,
+    actionCallback,
+}) => {
     const { theme } = getThemeContext();
-    const { user } = getAppContext();
+    const { user, tabColor } = getAppContext();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
@@ -107,18 +119,27 @@ const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallb
             ) : (
                 <Animated.View entering={FadeInDown} style={styles.container}>
                     <Text style={styles.title}>Booking Summary</Text>
-                    <Text
-                        style={styles.subtitle}
-                    >{`Booking for ${booking?.serviceProvider?.firstName} ${booking?.serviceProvider?.lastName}`}</Text>
+                    <Text style={styles.subtitle}>
+                        {booking?.serviceProvider &&
+                            `Booking for ${booking?.serviceProvider?.firstName} ${booking?.serviceProvider?.lastName}`}
+                        {booking?.user &&
+                            `Booking made by ${booking?.user?.firstName} ${booking?.user?.lastName}`}
+                    </Text>
 
                     <View style={styles.textContainer}>
                         <Text style={styles.body}>
                             {new Date(booking.startDate).toLocaleDateString()}{' '}
-                            {data?.oneDay ? '' : ` to ${new Date(booking.endDate).toLocaleDateString()}`}
+                            {data?.oneDay
+                                ? ''
+                                : ` to ${new Date(
+                                      booking.endDate
+                                  ).toLocaleDateString()}`}
                         </Text>
                         <Text style={styles.body}>
                             {new Date(booking.startTime).toLocaleTimeString()}{' '}
-                            {` to ${new Date(booking.endTime).toLocaleTimeString()}`}
+                            {` to ${new Date(
+                                booking.endTime
+                            ).toLocaleTimeString()}`}
                         </Text>
                     </View>
 
@@ -136,21 +157,54 @@ const BookingSummary = ({ booking, closeActionCallback, actionTitle, actionCallb
 
                     <Text style={styles.subtitle}>
                         Total Fee : {data?.totalFee}
-                        {data?.continuous ? " Rs/day" : " Rupees"}
+                        {data?.continuous ? ' Rs/day' : ' Rupees'}
                     </Text>
+                    <View style={styles.textContainerRow}>
+                        <Text style={styles.subtitle}>
+                            Payment : {data?.paymentStatus}
+                        </Text>
+                        {data?.paymentStatus === 'paid' ? (
+                            <Ionicons
+                                name="checkmark-circle"
+                                size={24}
+                                color={tabColor}
+                            />
+                        ) : data?.paymentStatus === 'pending' ? (
+                            <Ionicons
+                                name="ellipsis-horizontal-circle-sharp"
+                                size={24}
+                                color={tabColor}
+                            />
+                        ) : null}
+                    </View>
 
                     <View style={styles.textContainerRow}>
                         <Text style={styles.highlight}>STATUS : </Text>
-                        <Text style={styles.highlightBold}>{booking.status}</Text>
+                        <Text style={styles.highlightBold}>
+                            {booking.status}
+                        </Text>
                     </View>
 
                     <View style={styles.actionContainer}>
-                        <ThemeButton variant={'clear'} title={'Close'} onPress={closeActionCallback} />
-                        {booking.status === 'pending' && (
-                            <ThemeButton title={submitting ? '' : actionTitle} onPress={handleActionPress}>
-                                {submitting && <ActivityIndicator color={theme.colors.primaryText} size={20} />}
-                            </ThemeButton>
-                        )}
+                        <ThemeButton
+                            variant={'clear'}
+                            title={'Close'}
+                            onPress={closeActionCallback}
+                        />
+                        {booking.status === 'pending' &&
+                            booking.user === null && (
+                                <ThemeButton
+                                    title={submitting ? '' : actionTitle}
+                                    onPress={handleActionPress}
+                                >
+                                    {submitting && (
+                                        <ActivityIndicator
+                                            color={theme.colors.primaryText}
+                                            size={20}
+                                        />
+                                    )}
+                                </ThemeButton>
+                            )}
                     </View>
                 </Animated.View>
             )}

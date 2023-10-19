@@ -1,5 +1,11 @@
 import express from 'express';
-import { getPetsByUser, getPetById, createPet, updatePet, deletePet } from '../controllers/petController.js';
+import {
+  getPetsByUser,
+  getPetById,
+  createPet,
+  updatePet,
+  deletePet
+} from '../controllers/petController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();

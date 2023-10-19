@@ -112,11 +112,6 @@ const DailyBooking = ({ styles, setDatePicker, input, setInput, oneDay, setOneDa
                 />
             </View>
 
-            <Text style={styles.textH1}>{'Pets'}</Text>
-            <View>
-                <Text style={styles.textBody}>{'Pet selection component here'}</Text>
-            </View>
-
             <Text style={styles.textH1}>{'Notes'}</Text>
             <ThemeTextInput
                 placeholder={'Special notes...'}

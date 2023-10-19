@@ -1,5 +1,11 @@
 import { Suspense, useEffect } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+    ActivityIndicator,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
@@ -18,6 +24,8 @@ const ImageItemCard = ({
     textMarginBottom,
     animationTag,
     index,
+    highlight,
+    highlightColor,
 }) => {
     const { theme } = getThemeContext();
     const imageStyles = {
@@ -38,7 +46,9 @@ const ImageItemCard = ({
     useEffect(() => {
         if (style === 'side') {
             if (!body) {
-                console.warn('ImageItemCard: style=side requires a body element to be provided');
+                console.warn(
+                    'ImageItemCard: style=side requires a body element to be provided'
+                );
             }
             //   if (width) {
             //     console.warn('ImageItemCard: style=side does not support width prop');
@@ -70,6 +80,11 @@ const ImageItemCard = ({
             marginBottom: viewMarginBottom || 0,
             flexDirection: style === 'side' ? 'column' : 'row',
             justifyContent: style === 'side' ? 'center' : 'space-between',
+            borderStartWidth: style === 'side' && highlight ? 5 : 0,
+            borderStartColor:
+                style === 'side' && highlight
+                    ? highlightColor
+                    : theme.colors.surface,
         },
         titleText: {
             fontWeight: 'bold',
@@ -81,7 +96,7 @@ const ImageItemCard = ({
         subtitleText: {
             color: theme.colors.text,
             fontSize: 12,
-            fontWeight: 'bold',
+            fontWeight: '500',
         },
         tagText: {
             color: theme.colors.text,
@@ -94,11 +109,22 @@ const ImageItemCard = ({
     });
 
     return (
-        <Animated.View style={styles.container} entering={FadeInDown.delay(index ? index * 100 : 0)}>
-            <Pressable android_ripple={styles.ripple} style={styles.pressableContainer} onPress={onClick || null}>
+        <Animated.View
+            style={styles.container}
+            entering={FadeInDown.delay(index ? index * 100 : 0)}
+        >
+            <Pressable
+                android_ripple={styles.ripple}
+                style={styles.pressableContainer}
+                onPress={onClick || null}
+            >
                 <Suspense fallback={<ActivityIndicator />}>
                     <Animated.Image
-                        style={style === 'side' ? imageStyles.side : imageStyles.fill}
+                        style={
+                            style === 'side'
+                                ? imageStyles.side
+                                : imageStyles.fill
+                        }
                         source={
                             image || {
                                 uri:
@@ -111,11 +137,17 @@ const ImageItemCard = ({
                 </Suspense>
                 <View style={styles.bodyContainer}>
                     <View>
-                        {title ? <Text style={styles.titleText}>{title}</Text> : null}
-                        {subtitle ? <Text style={styles.subtitleText}>{subtitle}</Text> : null}
+                        {title ? (
+                            <Text style={styles.titleText}>{title}</Text>
+                        ) : null}
+                        {subtitle ? (
+                            <Text style={styles.subtitleText}>{subtitle}</Text>
+                        ) : null}
                     </View>
 
-                    {sideTag !== undefined && sideTag !== null ? <Text style={styles.tagText}>{sideTag}</Text> : null}
+                    {sideTag !== undefined && sideTag !== null ? (
+                        <Text style={styles.tagText}>{sideTag}</Text>
+                    ) : null}
 
                     {body ? body : null}
                 </View>
