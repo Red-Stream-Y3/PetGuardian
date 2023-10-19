@@ -11,10 +11,11 @@ import Search from '../common/Search';
 import getThemeContext from '../../context/ThemeContext';
 import { getAppContext } from '../../context/AppContext';
 import { Suspense, useState } from 'react';
-import axios from 'axios';
 import ImageItemCard from '../common/ImageItemCard';
-import ThemeChip from '../common/ThemeChip';
-import { getServiceProviders } from '../../services/ServiceproviderSerives';
+import {
+    getServiceProviders,
+    searchServiceProviders,
+} from '../../services/ServiceproviderSerives';
 import Toast from 'react-native-toast-message';
 import FloatingMenuButton from '../common/FloatingMenuButton';
 
@@ -23,6 +24,8 @@ const ServicesHome = ({ navigation }) => {
     const { user } = getAppContext();
     const [providers, setProviders] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [searchText, setSearchText] = useState('');
+    const [searching, setSearching] = useState(false);
 
     const getProviders = async () => {
         try {
@@ -93,9 +96,35 @@ const ServicesHome = ({ navigation }) => {
         },
     });
 
+    const handleSearch = async (text) => {
+        setSearchText(text);
+
+        if (text === '') {
+            await getProviders();
+            return;
+        }
+
+        setSearching(true);
+        try {
+            const response = await searchServiceProviders(text, user.token);
+            setProviders(response);
+            setSearching(false);
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Could not get service providers',
+            });
+        }
+    };
+
     return (
         <View style={styles.container}>
-            <Search navigation={navigation} />
+            <Search
+                navigation={navigation}
+                text={searchText}
+                onChangeText={handleSearch}
+            />
             <FloatingMenuButton navigation={navigation} />
             <Suspense fallback={<ActivityIndicator />}>
                 <ScrollView
@@ -108,6 +137,12 @@ const ServicesHome = ({ navigation }) => {
                     style={{ width: '100%' }}
                     contentContainerStyle={{ alignItems: 'center' }}
                 >
+                    {searching && (
+                        <ActivityIndicator
+                            size={24}
+                            color={theme.colors.servicesPrimary}
+                        />
+                    )}
                     {providers.map((provider, i) => (
                         <ImageItemCard
                             key={i}
