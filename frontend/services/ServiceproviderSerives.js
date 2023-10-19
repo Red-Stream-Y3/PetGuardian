@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE = 'http://192.168.1.175:9120'; //"https://pet-shop-backend-ukkxew3r5q-uc.a.run.app";
+const BASE = 'https://pet-shop-backend-ukkxew3r5q-uc.a.run.app';
 
 export const getServiceProviders = async (token) => {
     const config = {
