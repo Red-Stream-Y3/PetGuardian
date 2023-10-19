@@ -16,7 +16,7 @@ import ratingRoutes from './routes/ratingRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import adoptionRoutes from './routes/adoptionRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
-import { asyncHandler } from 'express-async-handler';
+import asyncHandler from 'express-async-handler';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -50,10 +50,10 @@ app.use('/api/v1/adoption', adoptionRoutes);
 //payment gateway
 app.use('/api/braintree', paymentRoutes);
 app.get(
-    '/braintree',
-    asyncHandler((req, res) => {
-        res.sendFile(path.join(__dirname, 'braintree.html'));
-    })
+  '/braintree',
+  asyncHandler((req, res) => {
+    res.sendFile(path.join(__dirname, 'braintree.html'));
+  })
 );
 
 app.use(notFound);
