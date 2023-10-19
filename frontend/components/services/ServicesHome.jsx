@@ -6,23 +6,26 @@ import {
     StyleSheet,
     Text,
     View,
-} from "react-native";
-import Search from "../common/Search";
-import getThemeContext from "../../context/ThemeContext";
-import { getAppContext } from "../../context/AppContext";
-import { Suspense, useState } from "react";
-import axios from "axios";
-import ImageItemCard from "../common/ImageItemCard";
-import ThemeChip from "../common/ThemeChip";
-import { getServiceProviders } from "../../services/ServiceproviderSerives";
-import Toast from "react-native-toast-message";
-import FloatingMenuButton from "../common/FloatingMenuButton";
+} from 'react-native';
+import Search from '../common/Search';
+import getThemeContext from '../../context/ThemeContext';
+import { getAppContext } from '../../context/AppContext';
+import { Suspense, useState } from 'react';
+import ImageItemCard from '../common/ImageItemCard';
+import {
+    getServiceProviders,
+    searchServiceProviders,
+} from '../../services/ServiceproviderSerives';
+import Toast from 'react-native-toast-message';
+import FloatingMenuButton from '../common/FloatingMenuButton';
 
 const ServicesHome = ({ navigation }) => {
     const { theme } = getThemeContext();
     const { user } = getAppContext();
     const [providers, setProviders] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [searchText, setSearchText] = useState('');
+    const [searching, setSearching] = useState(false);
 
     const getProviders = async () => {
         try {
@@ -93,23 +96,53 @@ const ServicesHome = ({ navigation }) => {
         },
     });
 
+    const handleSearch = async (text) => {
+        setSearchText(text);
+
+        if (text === '') {
+            await getProviders();
+            return;
+        }
+
+        setSearching(true);
+        try {
+            const response = await searchServiceProviders(text, user.token);
+            setProviders(response);
+            setSearching(false);
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Could not get service providers',
+            });
+        }
+    };
+
     return (
         <View style={styles.container}>
-            <Search navigation={navigation} />
+            <Search
+                navigation={navigation}
+                text={searchText}
+                onChangeText={handleSearch}
+            />
             <FloatingMenuButton navigation={navigation} />
-            <View style={styles.chipContainer}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    {chips.map((chip, i) => (
-                        <ThemeChip key={i} clickable text={chip.text} />
-                    ))}
-                </ScrollView>
-            </View>
             <Suspense fallback={<ActivityIndicator />}>
                 <ScrollView
-                    refreshControl={<RefreshControl refreshing={loading} onRefresh={getProviders} />}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={loading}
+                            onRefresh={getProviders}
+                        />
+                    }
                     style={{ width: '100%' }}
                     contentContainerStyle={{ alignItems: 'center' }}
                 >
+                    {searching && (
+                        <ActivityIndicator
+                            size={24}
+                            color={theme.colors.servicesPrimary}
+                        />
+                    )}
                     {providers.map((provider, i) => (
                         <ImageItemCard
                             key={i}
@@ -122,18 +155,24 @@ const ServicesHome = ({ navigation }) => {
                             }}
                             uri={
                                 provider.profilePic ||
-                                "https://wallpapercave.com/wp/wp4928162.jpg"
+                                'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png'
                             }
-                            style='side'
+                            style="side"
                             animationTag={provider._id}
                             body={
                                 <View>
-                                    <Text style={styles.titleText}>{provider.firstName}</Text>
+                                    <Text style={styles.titleText}>
+                                        {provider.firstName}
+                                    </Text>
                                     <Text style={styles.subtitleText}>
-                                        {provider.services?.serviceTypes?.map((serviceType) => serviceType).join(', ')}
+                                        {provider.services?.serviceTypes
+                                            ?.map((serviceType) => serviceType)
+                                            .join(', ')}
                                     </Text>
                                     <Text style={styles.textMargin5}>
-                                        {provider.services?.activeCities?.map((city) => city).join(', ')}
+                                        {provider.services?.activeCities
+                                            ?.map((city) => city)
+                                            .join(', ')}
                                     </Text>
                                 </View>
                             }
