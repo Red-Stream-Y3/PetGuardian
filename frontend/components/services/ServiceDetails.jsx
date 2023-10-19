@@ -1,14 +1,24 @@
-import { ActivityIndicator, Dimensions, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+    ActivityIndicator,
+    Dimensions,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
 import Animated, { FadeInDown, FadeInLeft } from 'react-native-reanimated';
 import { getAppContext } from '../../context/AppContext';
 import getThemeContext from '../../context/ThemeContext';
 import { useEffect, useState } from 'react';
 import ThemeChip from '../common/ThemeChip';
 import ThemeButton from '../common/ThemeButton';
-import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import ThemebackButton from '../common/ThemeBackButton';
-import { getServiceProviderById, getServiceRating } from '../../services/ServiceproviderSerives';
+import {
+    getServiceProviderById,
+    getServiceRating,
+} from '../../services/ServiceproviderSerives';
 import Toast from 'react-native-toast-message';
 
 const ServiceDetails = ({ navigation, route }) => {
@@ -24,7 +34,10 @@ const ServiceDetails = ({ navigation, route }) => {
     const getServiceDetails = async () => {
         setLoading(true);
         try {
-            const result = await getServiceProviderById(service._id, user.token);
+            const result = await getServiceProviderById(
+                service._id,
+                user.token
+            );
             setDetails(result);
             setLoading(false);
         } catch (error) {
@@ -69,6 +82,15 @@ const ServiceDetails = ({ navigation, route }) => {
     }, []);
 
     const handleBookingPress = () => {
+        if (service?._id === user?._id) {
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'You cannot book your own service',
+            });
+            return;
+        }
+
         navigation.navigate('Booking', { service: details });
     };
 
@@ -108,6 +130,7 @@ const ServiceDetails = ({ navigation, route }) => {
             borderTopStartRadius: 20,
             paddingHorizontal: 15,
             elevation: 5,
+            paddingBottom: 20,
         },
         titleContainer: {
             flexDirection: 'row',
@@ -165,8 +188,8 @@ const ServiceDetails = ({ navigation, route }) => {
             marginTop: 15,
         },
         flexRowFee: {
-            flexDirection: "row",
-            flexWrap: "wrap",
+            flexDirection: 'row',
+            flexWrap: 'wrap',
         },
     });
 
@@ -187,52 +210,76 @@ const ServiceDetails = ({ navigation, route }) => {
                 <Animated.Image
                     style={styles.imageStyle}
                     source={{
-                        uri: service?.profilePic || 'https://wallpapercave.com/wp/wp4928162.jpg',
+                        uri:
+                            service?.profilePic ||
+                            details?.profilePic ||
+                            'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png',
                     }}
                     sharedTransitionTag={service?._id}
                 />
 
-                <Animated.View style={styles.descriptionContainer} entering={FadeInDown.delay(600).springify()}>
+                <Animated.View
+                    style={styles.descriptionContainer}
+                    entering={FadeInDown.delay(600).springify()}
+                >
                     <View style={styles.titleContainer}>
                         <View>
-                            <Text style={styles.titleText}>{details?.firstName + ' ' + details?.lastName}</Text>
+                            <Text style={styles.titleText}>
+                                {details?.firstName + ' ' + details?.lastName}
+                            </Text>
                             <Text style={styles.subtitleText}>
                                 {'Available in : '}
-                                {details?.services?.activeCities.map((item) => item).join(', ')}
+                                {details?.services?.activeCities
+                                    .map((item) => item)
+                                    .join(', ')}
                             </Text>
                         </View>
                         <View>
                             {showRating && (
                                 <Animated.View entering={FadeInLeft}>
                                     <View style={styles.ratingContainer}>
-                                        <Ionicons name="paw" size={24} color={theme.colors.servicesPrimary} />
-                                        <Text style={styles.text}>{rating?.averageRating}</Text>
+                                        <Ionicons
+                                            name="paw"
+                                            size={24}
+                                            color={theme.colors.servicesPrimary}
+                                        />
+                                        <Text style={styles.text}>
+                                            {rating?.averageRating}
+                                        </Text>
                                     </View>
-                                    <Text style={{ color: theme.colors.text }}>{rating?.count || 'No'} Ratings</Text>
+                                    <Text style={{ color: theme.colors.text }}>
+                                        {rating?.count || 'No'} Ratings
+                                    </Text>
                                 </Animated.View>
                             )}
                         </View>
                     </View>
 
                     {loading ? (
-                        <ActivityIndicator color={theme.colors.servicesPrimary} />
+                        <ActivityIndicator
+                            color={theme.colors.servicesPrimary}
+                        />
                     ) : (
                         <>
                             <View style={styles.marginVertical10}>
                                 <Text style={styles.H1}>SERVICES</Text>
                                 <View style={styles.flexRow}>
-                                    {details?.services?.serviceTypes.map((item, i) => (
-                                        <ThemeChip key={i} text={item} />
-                                    ))}
+                                    {details?.services?.serviceTypes.map(
+                                        (item, i) => (
+                                            <ThemeChip key={i} text={item} />
+                                        )
+                                    )}
                                 </View>
                             </View>
 
                             <View style={styles.marginVertical10}>
                                 <Text style={styles.H1}>I ACCEPT</Text>
                                 <View style={styles.flexRow}>
-                                    {details?.services?.petTypes.map((item, i) => (
-                                        <ThemeChip key={i} text={item} />
-                                    ))}
+                                    {details?.services?.petTypes.map(
+                                        (item, i) => (
+                                            <ThemeChip key={i} text={item} />
+                                        )
+                                    )}
                                 </View>
                             </View>
 
@@ -265,10 +312,10 @@ const ServiceDetails = ({ navigation, route }) => {
                                                 String(item.tag)
                                                     .substring(1)
                                                     .toLocaleLowerCase()
-                                                    .replace("_", " ") +
-                                                " " +
+                                                    .replace('_', ' ') +
+                                                ' ' +
                                                 item.price +
-                                                " Rs/hr"
+                                                ' Rs/hr'
                                             }
                                         />
                                     ))}
@@ -278,24 +325,29 @@ const ServiceDetails = ({ navigation, route }) => {
                             <View style={styles.marginVertical10}>
                                 <Text style={styles.H1}>ABOUT ME</Text>
                                 <View style={styles.multiLineTextContainer}>
-                                    <Text style={styles.multiLineText}>{details?.services?.description}</Text>
+                                    <Text style={styles.multiLineText}>
+                                        {details?.services?.description}
+                                    </Text>
                                 </View>
                             </View>
 
                             <View style={styles.multiLineTextContainer}>
                                 <Text style={styles.multiLineTextBold}>
                                     {'Contact: '}
-                                    {details?.services?.businessPhone?.map((item) => item)?.join(', ')}
+                                    {details?.services?.businessPhone
+                                        ?.map((item) => item)
+                                        ?.join(', ')}
                                 </Text>
                             </View>
                         </>
                     )}
 
                     <View style={styles.buttonContainer}>
-                        <ThemeButton textSize={16} title="Book Now" onPress={handleBookingPress} />
-                        <ThemeButton>
-                            <Entypo name="calendar" size={24} color={theme.colors.primaryIcon} />
-                        </ThemeButton>
+                        <ThemeButton
+                            textSize={16}
+                            title="Book Now"
+                            onPress={handleBookingPress}
+                        />
                     </View>
                 </Animated.View>
             </ScrollView>

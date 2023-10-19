@@ -1,8 +1,14 @@
 import React from 'react';
-import { TextInput, View, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+    TextInput,
+    View,
+    Image,
+    StyleSheet,
+    TouchableOpacity,
+} from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
 
-const Search = ({ navigation, image }) => {
+const Search = ({ navigation, image, profile, onChangeText, text }) => {
     const { theme } = getThemeContext();
 
     const styles = StyleSheet.create({
@@ -13,6 +19,7 @@ const Search = ({ navigation, image }) => {
             paddingHorizontal: 16,
             marginBottom: 10,
             marginLeft: 2,
+            marginTop: 2,
         },
         searchBar: {
             flex: 1,
@@ -22,26 +29,39 @@ const Search = ({ navigation, image }) => {
             borderRadius: 10,
             paddingHorizontal: 16,
             elevation: 5,
+            marginTop: 3,
+            marginEnd: profile ? 10 : 50,
         },
         userProfileImage: {
-            width: 40,
-            height: 40,
+            width: 45,
+            height: 45,
             borderRadius: 20,
-            marginLeft: 20,
         },
     });
 
     return (
         <View style={styles.header}>
-            <TextInput placeholderTextColor={theme.colors.text} placeholder="Search" style={styles.searchBar} />
-            <TouchableOpacity onPress={() => navigation.getParent().getParent().openDrawer()}>
-                <Image
-                    style={styles.userProfileImage}
-                    source={{
-                        uri: image ? uri : 'https://wallpaperbat.com/img/609256-anime-boy-power-up-wallpaper.jpg',
-                    }}
-                />
-            </TouchableOpacity>
+            <TextInput
+                placeholderTextColor={theme.colors.text}
+                placeholder="Search"
+                style={styles.searchBar}
+                onChangeText={onChangeText}
+                value={text}
+            />
+            {profile && (
+                <TouchableOpacity
+                    onPress={() =>
+                        navigation.getParent().getParent().openDrawer()
+                    }
+                >
+                    <Image
+                        style={styles.userProfileImage}
+                        source={{
+                            uri: image,
+                        }}
+                    />
+                </TouchableOpacity>
+            )}
         </View>
     );
 };

@@ -11,7 +11,7 @@ export const AppContextProvider = ({ children, value }) => {
     const [tabColor, setTabColor] = useState(theme.colors.homePrimary);
     const [loadingUser, setLoadingUser] = useState(false);
     const [user, setUser] = useState(null);
-    const SERVER_URL = 'http://192.168.1.3:9120'; //"https://pet-shop-backend-ukkxew3r5q-uc.a.run.app";
+    const SERVER_URL = 'https://pet-shop-backend-ukkxew3r5q-uc.a.run.app';
     const APP_NAME = 'Pet Guardian';
 
     useEffect(() => {

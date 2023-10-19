@@ -22,6 +22,7 @@ const RoundIconButton = ({ children, padding, name, onPress }) => {
             alignItems: 'center',
         },
         text: {
+            fontSize: 12,
             fontWeight: 'bold',
             color: theme.colors.primaryText,
         },
@@ -29,7 +30,11 @@ const RoundIconButton = ({ children, padding, name, onPress }) => {
 
     return (
         <View style={styles.container}>
-            <Pressable onPress={onPress || (() => {})} android_ripple={styles.ripple} style={styles.pressableContainer}>
+            <Pressable
+                onPress={onPress || (() => {})}
+                android_ripple={styles.ripple}
+                style={styles.pressableContainer}
+            >
                 {children}
                 <Text style={styles.text}>{name}</Text>
             </Pressable>

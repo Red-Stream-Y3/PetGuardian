@@ -2,7 +2,15 @@ import { Animated, Pressable, StyleSheet, Text } from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
 import { getAppContext } from '../../context/AppContext';
 
-const ThemeButton = ({ children, onPress, title, padding, variant, textSize, borderRadius }) => {
+const ThemeButton = ({
+    children,
+    onPress,
+    title,
+    padding,
+    variant,
+    textSize,
+    borderRadius,
+}) => {
     const { theme } = getThemeContext();
     const { tabColor } = getAppContext();
 
@@ -27,7 +35,10 @@ const ThemeButton = ({ children, onPress, title, padding, variant, textSize, bor
             margin: 5,
         },
         ripple: {
-            color: variant === 'clear' || variant === 'outlined' ? tabColor : theme.colors.ripple,
+            color:
+                variant === 'clear' || variant === 'outlined'
+                    ? tabColor
+                    : theme.colors.ripple,
         },
         PressableContainer: {
             padding: padding || 10,
@@ -41,15 +52,30 @@ const ThemeButton = ({ children, onPress, title, padding, variant, textSize, bor
             marginHorizontal: 2,
             marginStart: children ? 5 : 2,
             fontWeight: 'bold',
-            color: variant === 'clear' || variant === 'outlined' ? theme.colors.text : theme.colors.buttonText,
+            color:
+                variant === 'clear'
+                    ? theme.colors.text
+                    : variant === 'outlined'
+                    ? tabColor
+                    : theme.colors.buttonText,
         },
     });
 
     return (
         <Animated.View
-            style={variant === 'clear' ? styles.clear : variant === 'outlined' ? styles.outlined : styles.filled}
+            style={
+                variant === 'clear'
+                    ? styles.clear
+                    : variant === 'outlined'
+                    ? styles.outlined
+                    : styles.filled
+            }
         >
-            <Pressable android_ripple={styles.ripple} style={styles.PressableContainer} onPress={onPress || (() => {})}>
+            <Pressable
+                android_ripple={styles.ripple}
+                style={styles.PressableContainer}
+                onPress={onPress || (() => {})}
+            >
                 {children}
                 {title && <Text style={styles.text}>{title}</Text>}
             </Pressable>
