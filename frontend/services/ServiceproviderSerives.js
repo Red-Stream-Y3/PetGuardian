@@ -325,3 +325,23 @@ export const getPetsByUser = async (id, token) => {
         throw new Error("Error fetching pets");
     }
 };
+
+export const makePayment = async (data, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.post(
+		`${BASE}/api/braintree/createPaymentTransaction`,
+		data,
+		config
+	);
+
+	if (response.status !== 200) {
+		throw new Error("Failed to make payment");
+	}
+
+	return response.data;
+};
