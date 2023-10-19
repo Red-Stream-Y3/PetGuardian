@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "start": "nodemon src/index.js",
-        "format": "prettier --write '**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc.yml"
+        "format": "prettier --write '**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
     },
     "keywords": [],
     "author": "RedStream",

@@ -1,20 +1,20 @@
-import axios from "axios";
-import React, { useState, Suspense } from "react";
-import Search from "../common/Search";
+import axios from 'axios';
+import React, { useState, Suspense } from 'react';
+import Search from '../common/Search';
 import {
   StyleSheet,
   Text,
   View,
   ActivityIndicator,
   Dimensions,
-  TouchableOpacity,
-} from "react-native";
-import getThemeContext from "../../context/ThemeContext";
-import { getAppContext } from "../../context/AppContext";
-import ImageItemCard from "../common/ImageItemCard";
-import { SafeAreaView } from "react-native-safe-area-context";
+  TouchableOpacity
+} from 'react-native';
+import getThemeContext from '../../context/ThemeContext';
+import { getAppContext } from '../../context/AppContext';
+import ImageItemCard from '../common/ImageItemCard';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import PetsContainer from '../common/PetsContainer';
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from 'react-native-gesture-handler';
 import { lostPetsData } from '../laf/pets';
 
 const AdoptionHome = ({ navigation }) => {
@@ -37,9 +37,8 @@ const AdoptionHome = ({ navigation }) => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.background,
-    },
-   
+      backgroundColor: theme.colors.background
+    }
   });
 
   return (
@@ -48,17 +47,17 @@ const AdoptionHome = ({ navigation }) => {
 
       <Suspense fallback={<ActivityIndicator />}>
         <ScrollView
-          style={{ width: "100%" }}
-          contentContainerStyle={{ alignItems: "center" }}
+          style={{ width: '100%' }}
+          contentContainerStyle={{ alignItems: 'center' }}
         >
           {loading && (
             <ActivityIndicator size={50} color={theme.colors.servicesPrimary} />
           )}
           <ImageItemCard
-            width={Dimensions.get("window").width * 0.9}
-            uri={"https://wallpapercave.com/wp/wp4928162.jpg"}
+            width={Dimensions.get('window').width * 0.9}
+            uri={'https://wallpapercave.com/wp/wp4928162.jpg'}
           />
-          
+
           <PetsContainer
             header="Find Your Next Buddy"
             btnText="See All"
@@ -67,7 +66,6 @@ const AdoptionHome = ({ navigation }) => {
             screen="AdoptionList"
             fontSize={18}
           />
-         
         </ScrollView>
       </Suspense>
     </SafeAreaView>
