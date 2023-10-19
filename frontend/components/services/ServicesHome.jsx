@@ -97,13 +97,6 @@ const ServicesHome = ({ navigation }) => {
         <View style={styles.container}>
             <Search navigation={navigation} />
             <FloatingMenuButton navigation={navigation} />
-            <View style={styles.chipContainer}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    {chips.map((chip, i) => (
-                        <ThemeChip key={i} clickable text={chip.text} />
-                    ))}
-                </ScrollView>
-            </View>
             <Suspense fallback={<ActivityIndicator />}>
                 <ScrollView
                     refreshControl={

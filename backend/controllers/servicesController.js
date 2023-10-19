@@ -361,7 +361,8 @@ const createServiceProvider = asyncHandler(async (req, res) => {
             workDays,
             businessPhone,
             activeCities,
-            fees
+            fees,
+            update
         } = req.body;
 
         const { _id } = req.user;
@@ -370,6 +371,10 @@ const createServiceProvider = asyncHandler(async (req, res) => {
 
         if (!userExists) {
             throw new Error('Could not find user');
+        }
+
+        if (userExists.isServiceProvider && !update) {
+            throw new Error('User is already a service provider');
         }
 
         userExists.services = {
@@ -401,6 +406,60 @@ const createServiceProvider = asyncHandler(async (req, res) => {
     }
 });
 
+// @desc    search service providers
+// @route   GEt /api/v1/services/search/:searchTerm
+// @access  Public
+const searchServiceProviders = asyncHandler(async (req, res) => {
+    const { searchTerm } = req.params;
+
+    const providers = await User.aggregate([
+        {
+            $match: {
+                isServiceProvider: true
+            }
+        },
+        {
+            $match: {
+                $or: [
+                    { firstName: { $regex: searchTerm, $options: 'i' } },
+                    { lastName: { $regex: searchTerm, $options: 'i' } },
+                    {
+                        'services.serviceTypes': {
+                            $elemMatch: { $regex: searchTerm, $options: 'i' }
+                        }
+                    },
+                    {
+                        'services.petTypes': {
+                            $elemMatch: { $regex: searchTerm, $options: 'i' }
+                        }
+                    },
+                    {
+                        'services.activeCities': {
+                            $elemMatch: { $regex: searchTerm, $options: 'i' }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                firstName: 1,
+                lastName: 1,
+                services: 1,
+                profilePic: 1
+            }
+        }
+    ]);
+
+    if (providers) {
+        res.json(providers);
+    } else {
+        res.status(404);
+        throw new Error('No service providers found');
+    }
+});
+
 export {
     getProviders,
     getProviderById,
@@ -410,5 +469,6 @@ export {
     checkHireRequests,
     updateHireRequest,
     getHireRequestById,
-    createServiceProvider
+    createServiceProvider,
+    searchServiceProviders
 };

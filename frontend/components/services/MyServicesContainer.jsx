@@ -58,10 +58,6 @@ const MyServicesContainer = ({ navigation }) => {
         setLoading(false);
     };
 
-    const handleEditClick = () => {
-        //
-    };
-
     const handleAcceptClick = async (item) => {
         if (!showAccept) {
             setSelected(item);
@@ -182,6 +178,10 @@ const MyServicesContainer = ({ navigation }) => {
 
     const handleScheduleClick = () => {
         navigation.navigate('MyServiceSchedulePage');
+    };
+
+    const handleEditClick = () => {
+        navigation.navigate('MyServiceEditPage');
     };
 
     const styles = StyleSheet.create({

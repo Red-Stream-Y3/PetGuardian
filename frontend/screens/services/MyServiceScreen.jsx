@@ -5,6 +5,7 @@ import { FloatingMenuButton, ServiceDetails } from '../../components';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MyServiceDashboardScreen from './MyServiceDashboardScreen';
 import MyServicesScheduleScreen from './MyServicesScheduleScreen';
+import MyServicesEditScreen from './MyServicesEditScreen';
 
 const MyServiceStack = createNativeStackNavigator();
 
@@ -42,6 +43,11 @@ const MyServiceScreen = ({ navigation }) => {
                         name="MyServiceSchedulePage"
                         component={MyServicesScheduleScreen}
                         options={{ animation: 'slide_from_left' }}
+                    />
+                    <MyServiceStack.Screen
+                        name="MyServiceEditPage"
+                        component={MyServicesEditScreen}
+                        options={{ animation: 'slide_from_bottom' }}
                     />
                 </MyServiceStack.Navigator>
             </View>
