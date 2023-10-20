@@ -282,5 +282,6 @@ export {
   updatePet,
   createAdoptionRequest,
   deletePetForAdoption,
-  approveAdoptionRequest
+  approveAdoptionRequest,
+  uploadImagesToAdoption
 };

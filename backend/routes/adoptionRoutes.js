@@ -11,8 +11,11 @@ import {
   createAdoptionRequest,
   getAvailablePets,
   deletePetForAdoption,
-  approveAdoptionRequest
+  approveAdoptionRequest,
+  uploadImagesToAdoption
 } from '../controllers/adoptionController.js';
+import { protect } from '../middleware/authMiddleware.js';
+import multermiddleware from './../middleware/Multer.js';
 
 const router = express.Router();
 
@@ -25,5 +28,12 @@ router.route('/:id').get(getPetID).put(updatePet).delete(deletePetForAdoption);
 router.route('/owner/:id').get(getPetByUser);
 router.route('/request/:id').post(createAdoptionRequest);
 router.route('/approve/:id').put(approveAdoptionRequest);
+router
+  .route('/upload/:id')
+  .post(
+    protect,
+    multermiddleware.fields([{ name: 'images', maxCount: 1 }]),
+    uploadImagesToAdoption
+  );
 
 export default router;
