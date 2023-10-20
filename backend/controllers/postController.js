@@ -1,5 +1,6 @@
 import Post from '../models/postModel.js';
 import asyncHandler from 'express-async-handler';
+import { uploadFile } from '../utils/StorageUtils.js';
 
 // @desc    Fetch all posts
 // @route   GET /api/posts
@@ -114,11 +115,52 @@ const deletePost = asyncHandler(async (req, res) => {
   }
 });
 
+const uploadImagesToPost = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const post = await Post.findById(id);
+
+  if (post) {
+    let newImages = [];
+
+    if (req.files?.images?.length > 0) {
+      //upload images to cloud storage
+      const images = req.files.images;
+
+      for (let i = 0; i < images.length; i++) {
+        const file = images[i];
+        await uploadFile(file)
+          .then((uri) => {
+            const publicUrl = `https://storage.googleapis.com/${
+              String(url).split('gs://')[1]
+            }`;
+            newImages.push(publicUrl);
+          })
+          .catch((err) => {
+            res.status(400);
+            throw new Error(err);
+          });
+      }
+    } else {
+      res.status(400);
+      throw new Error('No file uploaded');
+    }
+
+    post.images = newImages;
+    const updatedPost = await post.save();
+    res.json(updatedPost);
+  } else {
+    res.status(404);
+    throw new Error('Post not found');
+  }
+});
+
 export {
   getPosts,
   getPostsByUser,
   getPostById,
   createPost,
   updatePost,
-  deletePost
+  deletePost,
+  uploadImagesToPost
 };

@@ -1,7 +1,7 @@
 import { StatusBar, Text, View } from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AdoptionHome, AdoptionList } from '../../components';
+import { AdoptionHome, AdoptionList, AdoptionDetails } from '../../components';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const AdoptionNavigator = createNativeStackNavigator();
@@ -22,6 +22,10 @@ const AdoptionScreen = (navigation) => {
         <AdoptionNavigator.Screen
           name="AdoptionList"
           component={AdoptionList}
+        />
+        <AdoptionNavigator.Screen
+          name="AdoptionDetails"
+          component={AdoptionDetails}
         />
       </AdoptionNavigator.Navigator>
     </SafeAreaView>

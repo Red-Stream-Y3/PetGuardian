@@ -19,6 +19,8 @@ export { default as ThemeOverlay } from './common/ThemeOverlay';
 export { default as FloatingMenuButton } from './common/FloatingMenuButton';
 export { default as CardWithProfile } from './common/CardWithProfile';
 export { default as HeaderWithFilter } from './common/HeaderWithFilter';
+export { default as ProfileContainer } from './common/ProfileContainer';
+export { default as ImagePicker } from './common/ImagePicker';
 
 // Lost and Found
 export { default as LostFoundHome } from './laf/LostFoundHome';
@@ -41,6 +43,7 @@ export { default as ScheduleContainer } from './services/ScheduleContainer';
 //adoption
 export { default as AdoptionHome } from './adoption/AdoptionHome';
 export { default as AdoptionList } from './adoption/AdoptionList';
-
+export { default as AdoptionDetails } from './adoption/AdoptionDetails';
+export { default as AdoptionApplication } from './adoption/AdoptionApplication';
 //playdate
 export { default as PlaydateHome } from './playdate/PlaydateHome';
