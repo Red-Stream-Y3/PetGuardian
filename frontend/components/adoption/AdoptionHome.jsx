@@ -18,6 +18,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import FloatingMenuButton from '../common/FloatingMenuButton';
 import { getAvailablePets } from '../../services/AdoptionServices';
 import Toast from 'react-native-toast-message';
+import ImageSlider from './ImageSlider';
 
 const AdoptionHome = ({ navigation }) => {
   const { user } = getAppContext();
@@ -61,6 +62,13 @@ const AdoptionHome = ({ navigation }) => {
   };
 
   const featuredPets = groupIntoPairs(pets.slice(0, 6));
+
+  const images = [
+    'https://t3.ftcdn.net/jpg/03/06/37/22/360_F_306372291_8RtHL5R9ETkZadUdpp6PYrXSsmqRwqhv.jpg',
+    'https://t3.ftcdn.net/jpg/02/66/49/08/360_F_266490811_f2vXYFwnOs7hBmjr7aLXfPwttJOJNBYt.jpg',
+    'https://t3.ftcdn.net/jpg/02/52/38/76/360_F_252387654_zToUZrtt7OzYv50aJ4XRqHtRukI5M0XB.jpg',
+    'https://t4.ftcdn.net/jpg/02/52/38/69/360_F_252386958_uN7zXLnXDadR4iy0CfcwliZVaW48OwX8.jpg',
+  ];
 
   const handleSearch = async (text) => {
     setSearchText(text);
@@ -107,12 +115,9 @@ const AdoptionHome = ({ navigation }) => {
           {loading && (
             <ActivityIndicator size={50} color={theme.colors.servicesPrimary} />
           )}
-          <ImageItemCard
-            width={Dimensions.get('window').width * 0.9}
-            uri={
-              'https://img.freepik.com/free-photo/beagle-tricolor-puppy-is-posing-cute-white-braun-black-doggy-pet-is-sitting-red-background-looks-attented-sad-studio-photoshot-concept-motion-movement-action-negative-space_155003-33946.jpg?w=1380&t=st=1697734483~exp=1697735083~hmac=359055be5b822303fef51a2ba9c385ef6088e3e28cb785e404293f30187bcdf3'
-            }
-          />
+
+          <ImageSlider images={images} />
+
           <PetsContainer2
             header="Find Your New Buddy"
             btnText="See All"

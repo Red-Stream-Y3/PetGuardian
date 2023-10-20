@@ -102,6 +102,7 @@ const PetsContainerA = ({
                 borderRadius={15}
                 viewMarginBottom={5}
                 textMarginBottom={5}
+                height={210}
                 onClick={() => {
                   navigation.navigate(screen, { petData: item });
                 }}
