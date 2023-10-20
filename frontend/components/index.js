@@ -29,7 +29,9 @@ export { default as Post } from './laf/common/Post';
 export { default as Profile } from './laf/common/Profile';
 export { default as LostHome } from './laf/Lost/LostHome';
 export { default as LostPost } from './laf/Lost/LostPost';
+export { default as EditPost } from './laf/Lost/EditPost';
 export { default as FoundHome } from './laf/Found/FoundHome';
+export { default as FoundPost } from './laf/Found/FoundPost';
 
 //services
 export { default as ServicesHome } from './services/ServicesHome';
