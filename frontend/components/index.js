@@ -19,6 +19,7 @@ export { default as ThemeOverlay } from './common/ThemeOverlay';
 export { default as FloatingMenuButton } from './common/FloatingMenuButton';
 export { default as CardWithProfile } from './common/CardWithProfile';
 export { default as HeaderWithFilter } from './common/HeaderWithFilter';
+export { default as ProfileContainer } from './common/ProfileContainer';
 
 // Lost and Found
 export { default as LostFoundHome } from './laf/LostFoundHome';

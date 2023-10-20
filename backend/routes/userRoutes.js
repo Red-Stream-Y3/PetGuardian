@@ -7,11 +7,10 @@ import {
   getUsers,
   deleteUser,
   getUserById,
-  updateUser,
-  requestRole,
-  getAuthorInfoById
+  uploadProfilePic
 } from '../controllers/userController.js';
-import { protect, admin, provider } from '../middleware/authMiddleware.js';
+import { protect } from '../middleware/authMiddleware.js';
+import multermiddleware from '../middleware/Multer.js';
 
 const router = express.Router();
 
@@ -22,11 +21,12 @@ router
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
 router
-  .route('/:id')
-  .delete(protect, deleteUser)
-  .get(protect, getUserById)
-  .put(protect, updateUser);
-router.route('/:id/request').put(protect, requestRole);
-router.route('/:id/author').get(protect, getAuthorInfoById);
+  .route('/profilePic')
+  .post(
+    protect,
+    multermiddleware.fields([{ name: 'profile', maxCount: 1 }]),
+    uploadProfilePic
+  );
+router.route('/:id').delete(protect, deleteUser).get(protect, getUserById);
 
 export default router;
