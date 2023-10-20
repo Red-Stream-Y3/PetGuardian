@@ -76,7 +76,13 @@ const ImageItemCard = ({
     },
     bodyContainer: {
       flex: 1,
-      padding: 10,
+      padding:
+        title === undefined &&
+        subtitle === undefined &&
+        sideTag === undefined &&
+        body === undefined
+          ? 0
+          : 10,
       marginBottom: viewMarginBottom || 0,
       flexDirection: style === 'side' ? 'column' : 'row',
       justifyContent: style === 'side' ? 'center' : 'space-between',

@@ -1,41 +1,49 @@
 {
-    "expo": {
-        "name": "Pet Guardian",
-        "slug": "pet-guardian",
-        "version": "1.1.1",
-        "orientation": "portrait",
-        "icon": "./assets/icon.png",
-        "userInterfaceStyle": "automatic",
-        "splash": {
-            "image": "./assets/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
-        "assetBundlePatterns": ["**/*"],
-        "ios": {
-            "supportsTablet": true
-        },
-        "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "./assets/adaptive-icon.png",
-                "backgroundColor": "#ffffff"
-            },
-            "package": "com.redstream.petguardian"
-        },
-        "web": {
-            "favicon": "./assets/favicon.png"
-        },
-        "extra": {
-            "eas": {
-                "projectId": "ddd6b7c4-88bf-46e0-abcc-f9b10f6e3dec"
-            }
-        },
-        "owner": "redstream",
-        "runtimeVersion": {
-            "policy": "appVersion"
-        },
-        "updates": {
-            "url": "https://u.expo.dev/ddd6b7c4-88bf-46e0-abcc-f9b10f6e3dec"
+  "expo": {
+    "name": "Pet Guardian",
+    "slug": "pet-guardian",
+    "version": "1.1.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos."
         }
+      ]
+    ],
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.redstream.petguardian"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ddd6b7c4-88bf-46e0-abcc-f9b10f6e3dec"
+      }
+    },
+    "owner": "redstream",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/ddd6b7c4-88bf-46e0-abcc-f9b10f6e3dec"
     }
+  }
 }

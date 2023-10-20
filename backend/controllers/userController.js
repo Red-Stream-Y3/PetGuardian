@@ -1,6 +1,7 @@
 import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
 import asyncHandler from 'express-async-handler';
+import { uploadFile } from './StorageUtils.js';
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -77,9 +78,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
-      profilePic: user.profilePic,
-      role: user.role,
-      request: user.request
+      phone: user.phone,
+      profilePic: user.profilePic
     });
   } else {
     res.status(404);
@@ -91,15 +91,31 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/profile
 // @access  Private
 const updateUserProfile = asyncHandler(async (req, res) => {
+  const { username, firstName, lastName, email, password, phone } = req.body;
   const user = await User.findById(req.user._id);
 
   if (user) {
-    user.username = req.body.username || user.username;
-    user.firstName = req.body.firstName || user.firstName;
-    user.lastName = req.body.lastName || user.lastName;
-    user.email = req.body.email || user.email;
-    user.profilePic = req.body.profilePic || user.profilePic;
-    if (req.body.password) {
+    if (username) {
+      user.username = req.body.username;
+    }
+
+    if (firstName) {
+      user.firstName = req.body.firstName;
+    }
+
+    if (lastName) {
+      user.lastName = req.body.lastName;
+    }
+
+    if (email) {
+      user.email = req.body.email;
+    }
+
+    if (phone) {
+      user.phone = req.body.phone;
+    }
+
+    if (password) {
       user.password = req.body.password;
     }
 
@@ -112,63 +128,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       profilePic: user.profilePic,
-      role: user.role,
-      request: user.request,
       token: generateToken(updatedUser._id)
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
-});
-
-// @desc    Update user role
-// @route   PUT /api/users/:id
-// @access  Private/Admin
-const updateUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
-
-  if (user) {
-    user.role = req.body.role || user.role;
-
-    const updatedUser = await user.save();
-
-    res.json({
-      _id: updatedUser._id,
-      username: updatedUser.username,
-      email: updatedUser.email,
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      profilePic: updatedUser.profilePic,
-      role: updatedUser.role,
-      request: user.request
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
-});
-
-// @desc    Request user role
-// @route   PUT /api/user/:id/request
-// @access  Private
-const requestRole = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
-
-  if (user) {
-    user.request = req.body.request || user.request;
-
-    const updatedUser = await user.save();
-
-    res.json({
-      _id: updatedUser._id,
-      username: updatedUser.username,
-      email: updatedUser.email,
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      profilePic: updatedUser.profilePic,
-      role: updatedUser.role,
-      request: user.request
     });
   } else {
     res.status(404);
@@ -212,13 +172,36 @@ const getUserById = asyncHandler(async (req, res) => {
   }
 });
 
-const getAuthorInfoById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select(
-    'firstName lastName profilePic'
-  );
+// @desc    Upload profile picture
+// @route   POST /api/users/profilePic
+// @access  Private
+const uploadProfilePic = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
 
   if (user) {
-    res.json(user);
+    const image = req.files.profile;
+
+    if (!image[0]) {
+      res.status(400);
+      throw new Error('No file uploaded');
+    }
+
+    await uploadFile(image[0])
+      .then((url) => {
+        user.profilePic = url;
+      })
+      .catch((err) => {
+        res.status(400);
+        throw new Error(err);
+      });
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      profilePic: user.profilePic,
+      token: generateToken(updatedUser._id)
+    });
   } else {
     res.status(404);
     throw new Error('User not found');
@@ -233,7 +216,5 @@ export {
   deleteUser,
   getUserById,
   getUsers,
-  updateUser,
-  requestRole,
-  getAuthorInfoById
+  uploadProfilePic
 };

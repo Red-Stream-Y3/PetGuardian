@@ -1,18 +1,32 @@
-import { SafeAreaView, Text, View, StatusBar, StyleSheet } from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  View,
+  StatusBar,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
 import {
   FloatingMenuButton,
+  ProfileContainer,
   ThemeButton,
   ThemeCard,
-  ThemeOverlay
+  ThemeOverlay,
 } from '../../components';
 import { getAppContext } from '../../context/AppContext';
 import { useState } from 'react';
+import { MaterialIcons } from '@expo/vector-icons';
+import { getUserProfile } from '../../services/UserServices';
+import Toast from 'react-native-toast-message';
 
 const ProfileScreen = ({ navigation }) => {
   const { theme, toggleTheme } = getThemeContext();
+  const { user, setUser, storeUser } = getAppContext();
   const { removeUser } = getAppContext();
   const [showSignOut, setShowSignOut] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSignOutPress = async () => {
     if (!showSignOut) {
@@ -27,30 +41,66 @@ const ProfileScreen = ({ navigation }) => {
     await toggleTheme();
   };
 
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      const response = await getUserProfile(user.token);
+
+      if (response) {
+        setUser({
+          ...user,
+          profilePic: `https://storage.googleapis.com/${
+            String(response.profilePic).split('gs://')[1]
+          }`,
+        });
+        storeUser({
+          ...user,
+          profilePic: `https://storage.googleapis.com/${
+            String(response.profilePic).split('gs://')[1]
+          }`,
+        });
+        setLoading(false);
+      }
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2:
+          error.response?.data?.message || //axios error
+          error.message || //js error
+          'Error getting profile', //fallback
+      });
+      setLoading(false);
+    }
+  };
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      marginTop: StatusBar.currentHeight
+      marginTop: StatusBar.currentHeight,
     },
     titleText: {
       color: theme.colors.text,
       fontSize: 20,
       fontWeight: 'bold',
-      marginStart: 10
     },
     titleContainer: {
-      flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
+      width: '100%',
     },
     text: {
       color: theme.colors.text,
-      fontSize: 14
+      fontSize: 14,
     },
     buttonGroup: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginTop: 10
-    }
+      alignSelf: 'flex-end',
+    },
+    switchContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
   });
 
   return (
@@ -59,6 +109,7 @@ const ProfileScreen = ({ navigation }) => {
         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
         hidden={false}
       />
+
       <ThemeOverlay
         visible={showSignOut}
         onPressBg={() => setShowSignOut(false)}
@@ -71,18 +122,36 @@ const ProfileScreen = ({ navigation }) => {
           </View>
         </ThemeCard>
       </ThemeOverlay>
+
       <View style={styles.container}>
         <FloatingMenuButton />
-        <ThemeCard>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Profile</Text>
-            <ThemeButton title="Sign Out" onPress={handleSignOutPress} />
-            <ThemeButton
-              title="Switch Theme"
-              onPress={handleSwitchThemePress}
-            />
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>Profile</Text>
+        </View>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={loading} onRefresh={handleRefresh} />
+          }
+        >
+          <View style={styles.buttonGroup}>
+            <ThemeCard>
+              <View style={styles.switchContainer}>
+                <MaterialIcons
+                  name="settings"
+                  size={24}
+                  color={theme.colors.icon}
+                />
+                <ThemeButton
+                  title="Switch Theme"
+                  onPress={handleSwitchThemePress}
+                />
+                <ThemeButton title="Sign Out" onPress={handleSignOutPress} />
+              </View>
+            </ThemeCard>
           </View>
-        </ThemeCard>
+
+          <ProfileContainer navigation={navigation} />
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
