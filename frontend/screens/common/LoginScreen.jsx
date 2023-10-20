@@ -5,13 +5,13 @@ import {
   StyleSheet,
   Platform,
   ActivityIndicator,
-  View
+  View,
 } from 'react-native';
 import {
   RegisterContainer,
   ThemeButton,
   ThemeOverlay,
-  ThemeTextInput
+  ThemeTextInput,
 } from '../../components';
 import { Feather } from '@expo/vector-icons';
 import axios from 'axios';
@@ -37,7 +37,7 @@ const LoginScreen = ({ navigation }) => {
 
     const data = {
       email,
-      password
+      password,
     };
 
     setLoading(true);
@@ -49,7 +49,7 @@ const LoginScreen = ({ navigation }) => {
       );
 
       if (response) {
-        storeUser(response.data);
+        await storeUser(response.data);
       }
 
       setLoading(false);
@@ -76,39 +76,39 @@ const LoginScreen = ({ navigation }) => {
       justifyContent: 'center',
       alignItems: 'center',
       paddingHorizontal: 20,
-      backgroundColor: theme.colors.background
+      backgroundColor: theme.colors.background,
     },
     title: {
       fontSize: 24,
       fontWeight: 'bold',
       marginBottom: 20,
-      color: theme.colors.text
+      color: theme.colors.text,
     },
     error: {
       color: theme.colors.error,
       fontSize: 12,
       alignSelf: 'flex-start',
       marginLeft: 10,
-      marginBottom: 10
+      marginBottom: 10,
     },
     scrollStyle: {
       flex: 1,
-      width: '100%'
+      width: '100%',
     },
     scrollContentStyle: {
       flexGrow: 1,
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     registerContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginTop: 20
+      marginTop: 20,
     },
     text: {
       color: theme.colors.text,
-      fontSize: 14
-    }
+      fontSize: 14,
+    },
   });
 
   return (

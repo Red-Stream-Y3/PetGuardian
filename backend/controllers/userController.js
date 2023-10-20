@@ -108,6 +108,13 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     }
 
     if (email) {
+      const check = User.find({ email });
+
+      if (check.length > 0) {
+        res.status(400);
+        throw new Error('Email already in use');
+      }
+
       user.email = req.body.email;
     }
 
@@ -128,6 +135,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       profilePic: user.profilePic,
+      phone: user.phone,
       token: generateToken(updatedUser._id)
     });
   } else {
@@ -188,7 +196,9 @@ const uploadProfilePic = asyncHandler(async (req, res) => {
 
     await uploadFile(image[0])
       .then((url) => {
-        user.profilePic = url;
+        user.profilePic = `https://storage.googleapis.com/${
+          String(url).split('gs://')[1]
+        }`;
       })
       .catch((err) => {
         res.status(400);

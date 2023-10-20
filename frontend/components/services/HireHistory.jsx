@@ -253,14 +253,11 @@ const HireHistory = ({ navigation }) => {
                   setSelected(item);
                   setShowSelected(true);
                 }}
-                uri={
-                  item.profilePic ||
-                  'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png'
-                }
+                uri={item.profilePic}
                 highlight={true}
                 highlightColor={
                   item.status === 'pending'
-                    ? 'yellow'
+                    ? 'orange'
                     : item.status === 'accepted'
                     ? 'blue'
                     : item.status === 'cancelled' || item.status === 'rejected'
