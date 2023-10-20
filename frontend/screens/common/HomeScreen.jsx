@@ -10,6 +10,9 @@ import {
   SafeAreaView,
   StyleSheet,
   Image,
+  Pressable,
+  ImageBackground,
+  BackHandler,
 } from 'react-native';
 import {
   FloatingMenuButton,
@@ -21,12 +24,26 @@ import {
 import getThemeContext from '../../context/ThemeContext';
 import { MaterialIcons } from '@expo/vector-icons';
 import { getAppContext } from '../../context/AppContext';
+import { useNavigationState } from '@react-navigation/native';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const { theme } = getThemeContext();
   const { user, selectedTab, setSelectedTab } = getAppContext();
   const [scroll, setScroll] = useState(0);
   const heroScroll = useRef(null);
+  const navigationState = useNavigationState((state) => state.index);
+
+  const WIDTH = Dimensions.get('window').width * 0.95;
+  const HEIGHT = Dimensions.get('window').height * 0.3;
+  const IMAGE_HEIGHT = Dimensions.get('window').height * 0.2;
+  const BNT_ICON_NAME = 'arrow-forward';
+
+  //set selected tab to 2 when pressing back button
+  useEffect(() => {
+    if (selectedTab !== 2 && navigationState === 0) {
+      setSelectedTab(2);
+    }
+  }, [navigationState]);
 
   useEffect(() => {
     if (selectedTab !== 2) {
@@ -84,13 +101,36 @@ const HomeScreen = () => {
       color: theme.colors.text,
       fontSize: 14,
     },
+    pressableStyle: {
+      borderRadius: 10,
+      height: HEIGHT / 2,
+      width: HEIGHT / 2,
+      padding: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    pressableContainer: {
+      overflow: 'hidden',
+      borderRadius: 10,
+      margin: 5,
+      backgroundColor: theme.colors.surface,
+      elevation: 3,
+    },
+    ripple: {
+      color: theme.colors.ripple,
+    },
+    boldCenteredText: {
+      fontWeight: 'bold',
+      textAlign: 'center',
+      fontSize: 14,
+    },
+    flexRowWrap: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   });
-
-  const WIDTH = Dimensions.get('window').width * 0.95;
-  const HEIGHT = Dimensions.get('window').height * 0.3;
-  const IMAGE_HEIGHT = Dimensions.get('window').height * 0.2;
-
-  const [images, setImages] = useState([]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -193,17 +233,91 @@ const HomeScreen = () => {
           </ScrollView>
         </View>
 
-        <ImagePicker images={images} setImages={setImages} />
-
         <ScrollView
           style={{ width: '100%' }}
           contentContainerStyle={{ alignItems: 'center' }}
         >
           <ThemeCard>
-            <ThemeButton title={'Find Service Providers'} />
-            <ThemeButton title={'Create a Play Date'} />
-            <ThemeButton title={'Adopt a Pet'} />
-            <ThemeButton title={'Find a Lost Pet'} />
+            <Text style={styles.subtitle}>What would you like to do?</Text>
+            <View style={styles.flexRowWrap}>
+              <ImageBackground
+                src="https://i.pinimg.com/originals/23/e7/6b/23e76b9437ea6d9ed105dce1bc4d061c.jpg"
+                style={styles.pressableContainer}
+              >
+                <Pressable
+                  style={styles.pressableStyle}
+                  android_ripple={styles.ripple}
+                  onPress={() => setSelectedTab(0)}
+                >
+                  <Text style={styles.boldCenteredText}>
+                    Find Service Providers
+                  </Text>
+                  <MaterialIcons
+                    name={BNT_ICON_NAME}
+                    size={18}
+                    color={theme.colors.text}
+                  />
+                </Pressable>
+              </ImageBackground>
+
+              <ImageBackground
+                src="https://png.pngtree.com/thumb_back/fh260/background/20210420/pngtree-simple-cute-pet-dog-background-image_645354.jpg"
+                style={styles.pressableContainer}
+              >
+                <Pressable
+                  style={styles.pressableStyle}
+                  android_ripple={styles.ripple}
+                  onPress={() => setSelectedTab(1)}
+                >
+                  <Text style={styles.boldCenteredText}>
+                    Check Lost and Found Pets
+                  </Text>
+                  <MaterialIcons
+                    name={BNT_ICON_NAME}
+                    size={18}
+                    color={theme.colors.text}
+                  />
+                </Pressable>
+              </ImageBackground>
+              <ImageBackground
+                src="https://img.freepik.com/free-vector/dog-background-vector-with-cute-pets-illustration_53876-127697.jpg"
+                style={styles.pressableContainer}
+              >
+                <Pressable
+                  style={styles.pressableStyle}
+                  android_ripple={styles.ripple}
+                  onPress={() => setSelectedTab(3)}
+                >
+                  <Text style={styles.boldCenteredText}>
+                    Find Pets to Adopt
+                  </Text>
+                  <MaterialIcons
+                    name={BNT_ICON_NAME}
+                    size={18}
+                    color={theme.colors.text}
+                  />
+                </Pressable>
+              </ImageBackground>
+              <ImageBackground
+                src="https://image.slidesdocs.com/responsive-images/background/cute-animal-colorful-nature-animal-decoration-cartoon-animals-powerpoint-background_0e8dfc2564__960_540.jpg"
+                style={styles.pressableContainer}
+              >
+                <Pressable
+                  style={styles.pressableStyle}
+                  android_ripple={styles.ripple}
+                  onPress={() => setSelectedTab(4)}
+                >
+                  <Text style={styles.boldCenteredText}>
+                    Arrange Play Dates
+                  </Text>
+                  <MaterialIcons
+                    name={BNT_ICON_NAME}
+                    size={18}
+                    color={theme.colors.text}
+                  />
+                </Pressable>
+              </ImageBackground>
+            </View>
           </ThemeCard>
         </ScrollView>
       </View>

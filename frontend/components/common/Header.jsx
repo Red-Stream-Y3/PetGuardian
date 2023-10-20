@@ -5,11 +5,16 @@ import { Ionicons } from '@expo/vector-icons';
 import getThemeContext from '../../context/ThemeContext';
 import PetFilter from './PetFilter';
 
-const Header = ({ title, onFilterPress, petTypes, save }) => {
+const Header = ({ title, onFilterPress, petTypes, onSavePress }) => {
   const { theme } = getThemeContext();
   const navigation = useNavigation();
 
   const handleBackPress = () => {
+    navigation.goBack();
+  };
+
+  const handleSavePress = () => {
+    onSavePress();
     navigation.goBack();
   };
 
@@ -20,18 +25,13 @@ const Header = ({ title, onFilterPress, petTypes, save }) => {
           <Text>Back</Text>
         </TouchableOpacity>
         <View style={styles.titleContainer}>
-          <Text
-            style={{
-              color: theme.colors.text,
-              ...styles.title
-            }}
-          >
+          <Text style={{ color: theme.colors.text, ...styles.title }}>
             {title}
           </Text>
         </View>
-        {save && (
+        {onSavePress && (
           <TouchableOpacity
-            onPress={handleBackPress}
+            onPress={handleSavePress}
             style={styles.rightButton}
           >
             <Ionicons name="md-send" size={24} color={theme.colors.text} />
@@ -47,33 +47,33 @@ const Header = ({ title, onFilterPress, petTypes, save }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   backButton: {
     position: 'absolute',
     left: 10,
-    padding: 5
+    padding: 5,
   },
   rightButton: {
     position: 'absolute',
     right: 10,
-    padding: 5
+    padding: 5,
   },
   titleContainer: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });
 
 export default Header;

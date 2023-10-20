@@ -6,7 +6,7 @@ import {
   Text,
   Image,
   StyleSheet,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import getThemeContext from '../../../context/ThemeContext';
@@ -62,7 +62,7 @@ const Post = ({ route }) => {
                 <Text
                   style={[
                     styles.detailText,
-                    { backgroundColor: getRandomColor() }
+                    { backgroundColor: getRandomColor() },
                   ]}
                 >
                   {petData.pet.breed}
@@ -70,7 +70,7 @@ const Post = ({ route }) => {
                 <Text
                   style={[
                     styles.detailText,
-                    { backgroundColor: getRandomColor() }
+                    { backgroundColor: getRandomColor() },
                   ]}
                 >
                   {petData.pet.age}
@@ -79,8 +79,8 @@ const Post = ({ route }) => {
                   style={[
                     styles.detailText,
                     {
-                      backgroundColor: getRandomColor()
-                    }
+                      backgroundColor: getRandomColor(),
+                    },
                   ]}
                 >
                   {formatDate(petData.date)}
@@ -92,13 +92,17 @@ const Post = ({ route }) => {
                   {
                     borderWidth: 3,
                     borderColor: getRandomColor(),
-                    color: theme.colors.text
-                  }
+                    color: theme.colors.text,
+                  },
                 ]}
               >
                 {petData.pet.description}
               </Text>
-              <UserBox />
+              <UserBox
+                name={`${petData.user.firstName} ${petData.user.lastName}`}
+                profilePic={petData.user.profilePic}
+                phone={petData.user.phone}
+              />
             </View>
           </View>
         </ScrollView>
@@ -110,20 +114,20 @@ const Post = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    padding: 20
+    padding: 20,
   },
   image: {
     width: '100%',
     aspectRatio: 1,
-    borderRadius: 30
+    borderRadius: 30,
   },
   detailsContainer: {
-    marginTop: 10
+    marginTop: 10,
   },
   detailsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10
+    marginBottom: 10,
   },
   detailText: {
     marginVertical: 15,
@@ -132,16 +136,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     padding: 10,
     borderRadius: 15,
-    color: '#7D59B8'
+    color: '#7D59B8',
   },
   description: {
     fontSize: 16,
     textAlign: 'left',
     padding: 10,
-    borderRadius: 15
+    borderRadius: 15,
   },
   imageContainer: {
-    position: 'relative'
+    position: 'relative',
   },
   carouselIcon: {
     position: 'absolute',
@@ -150,8 +154,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     borderRadius: 20,
     paddingHorizontal: 20,
-    paddingVertical: 2
-  }
+    paddingVertical: 2,
+  },
 });
 
 export default Post;
