@@ -231,6 +231,46 @@ const createAdoptionRequest = asyncHandler(async (req, res) => {
 
 // delete adoption request
 
+const uploadImagesToAdoption = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const post = await Adoption.findById(id);
+
+  if (post) {
+    let newImages = [];
+
+    if (req.files?.images?.length > 0) {
+      //upload images to cloud storage
+      const images = req.files.images;
+
+      for (let i = 0; i < images.length; i++) {
+        const file = images[i];
+        await uploadFile(file)
+          .then((uri) => {
+            const publicUrl = `https://storage.googleapis.com/${
+              String(url).split('gs://')[1]
+            }`;
+            newImages.push(publicUrl);
+          })
+          .catch((err) => {
+            res.status(400);
+            throw new Error(err);
+          });
+      }
+    } else {
+      res.status(400);
+      throw new Error('No file uploaded');
+    }
+
+    post.image = newImages;
+    const updatedPost = await post.save();
+    res.json(updatedPost);
+  } else {
+    res.status(404);
+    throw new Error('Adoption not found');
+  }
+});
+
 export {
   getAvailablePets,
   getDogs,
@@ -242,5 +282,6 @@ export {
   updatePet,
   createAdoptionRequest,
   deletePetForAdoption,
-  approveAdoptionRequest
+  approveAdoptionRequest,
+  uploadImagesToAdoption
 };

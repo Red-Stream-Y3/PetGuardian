@@ -5,9 +5,11 @@ import {
   getPostById,
   createPost,
   updatePost,
-  deletePost
+  deletePost,
+  uploadImagesToPost
 } from '../controllers/postController.js';
 import { protect } from '../middleware/authMiddleware.js';
+import multermiddleware from './../middleware/Multer.js';
 
 const router = express.Router();
 
@@ -18,5 +20,12 @@ router
   .get(getPostById, protect)
   .put(updatePost, protect)
   .delete(deletePost, protect);
+router
+  .route('/upload/:id')
+  .post(
+    protect,
+    multermiddleware.fields([{ name: 'images', maxCount: 1 }]),
+    uploadImagesToPost
+  );
 
 export default router;

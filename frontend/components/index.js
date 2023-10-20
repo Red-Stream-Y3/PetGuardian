@@ -20,6 +20,7 @@ export { default as FloatingMenuButton } from './common/FloatingMenuButton';
 export { default as CardWithProfile } from './common/CardWithProfile';
 export { default as HeaderWithFilter } from './common/HeaderWithFilter';
 export { default as ProfileContainer } from './common/ProfileContainer';
+export { default as ImagePicker } from './common/ImagePicker';
 
 // Lost and Found
 export { default as LostFoundHome } from './laf/LostFoundHome';
