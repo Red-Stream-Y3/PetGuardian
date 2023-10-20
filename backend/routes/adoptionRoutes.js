@@ -32,7 +32,7 @@ router
   .route('/upload/:id')
   .post(
     protect,
-    multermiddleware.fields([{ name: 'images', maxCount: 1 }]),
+    multermiddleware.fields([{ name: 'images', maxCount: 10 }]),
     uploadImagesToAdoption
   );
 
