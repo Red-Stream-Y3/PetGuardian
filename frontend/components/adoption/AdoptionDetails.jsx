@@ -15,6 +15,7 @@ import ThemebackButton from '../common/ThemeBackButton';
 import ThemeChip from '../common/ThemeChip';
 import ImageItemCard from '../common/ImageItemCard';
 import ThemeButton from '../common/ThemeButton';
+import ImageSlider from './ImageSlider';
 
 const AdoptionDetails = ({ route, navigation }) => {
   const { petData } = route.params;
@@ -69,10 +70,7 @@ const AdoptionDetails = ({ route, navigation }) => {
       <Suspense fallback={<ActivityIndicator />}>
         <ScrollView style={{ width: '100%' }}>
           <View style={{ width: '100%', alignItems: 'center', marginTop: 15 }}>
-            <ImageItemCard
-              width={Dimensions.get('window').width * 0.9}
-              uri={petData?.image[0]}
-            />
+            <ImageSlider images={petData?.image} />
           </View>
 
           <View style={styles.detailsOne}>
