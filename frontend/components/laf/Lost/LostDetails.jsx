@@ -6,20 +6,18 @@ import getThemeContext from '../../../context/ThemeContext';
 
 import ThemeTextInput from '../../common/ThemeTextInput';
 
-const LostDetails = () => {
+const LostDetails = ({ specialNotes, selectedDate }) => {
   const { theme } = getThemeContext();
-  const [specialNotes, setSpecialNotes] = useState('');
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const [datePicker, setDatePicker] = useState({
     show: false,
     mode: 'date',
     date: new Date(Date.now()),
-    inputCallback: () => {}
+    inputCallback: () => {},
   });
 
   const [input, setInput] = useState({
-    startDate: new Date(Date.now()),
-    notes: ''
+    startDate: selectedDate,
+    notes: specialNotes,
   });
 
   return (
@@ -28,13 +26,13 @@ const LostDetails = () => {
         <View
           style={{
             width: '100%',
-            paddingHorizontal: 20
+            paddingHorizontal: 20,
           }}
         >
           <Text
             style={{
               color: theme.colors.text,
-              ...styles.textH1
+              ...styles.details,
             }}
           >
             {'Details'}
@@ -47,7 +45,7 @@ const LostDetails = () => {
                 mode: 'date',
                 inputCallback: (date) => {
                   setInput({ ...input, startDate: date });
-                }
+                },
               });
             }}
             value={input.startDate.toLocaleDateString()}
@@ -62,8 +60,8 @@ const LostDetails = () => {
             multiline={true}
             numOfLines={3}
             maxLength={200}
-            onChange={(e) => {
-              setInput({ ...input, notes: e.target.value });
+            onChange={(text) => {
+              setInput({ ...input, notes: text });
             }}
           />
 
@@ -84,6 +82,12 @@ const LostDetails = () => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  details: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+});
 
 export default LostDetails;

@@ -4,7 +4,7 @@ import {
   View,
   ScrollView,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import getThemeContext from '../../context/ThemeContext';
@@ -18,7 +18,7 @@ const PetsContainer = ({
   component,
   screen,
   fontSize,
-  loading
+  loading,
 }) => {
   const { theme } = getThemeContext();
   const navigation = useNavigation();
@@ -29,37 +29,37 @@ const PetsContainer = ({
 
   const styles = StyleSheet.create({
     sectionContainer: {
-      paddingHorizontal: 10
+      paddingHorizontal: 10,
     },
     headerContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 5
+      marginBottom: 5,
     },
     sectionHeader: {
       fontSize: fontSize,
       fontWeight: 'bold',
-      marginLeft: 10
+      marginLeft: 10,
     },
     seeAllButton: {
       paddingVertical: 5,
       paddingHorizontal: 10,
-      borderRadius: 5
+      borderRadius: 5,
     },
     seeAllText: {
       fontWeight: 'bold',
-      color: '#808080'
+      color: '#808080',
     },
     cardContainer: {
       width: '100%',
-      marginBottom: 5
+      marginBottom: 5,
     },
     rowContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginBottom: 10
-    }
+      marginBottom: 10,
+    },
   });
 
   return (
@@ -69,7 +69,7 @@ const PetsContainer = ({
           <Text
             style={{
               color: theme.colors.text,
-              ...styles.sectionHeader
+              ...styles.sectionHeader,
             }}
           >
             {header}
