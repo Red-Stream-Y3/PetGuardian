@@ -56,8 +56,9 @@ const adoptionSchema = new mongoose.Schema(
       required: true
     },
     image: {
-      type: String,
-      required: true
+      type: [String],
+      required: true,
+      default: []
     },
     currentOwner: {
       type: mongoose.Schema.Types.ObjectId,
@@ -68,7 +69,12 @@ const adoptionSchema = new mongoose.Schema(
       type: Date,
       default: Date.now
     },
-    adoptionRequests: [adoptionRequestSchema]
+    adoptionRequests: [adoptionRequestSchema],
+    status: {
+      type: String,
+      enum: ['pending', 'approved'],
+      default: 'pending'
+    }
   },
   {
     timestamps: true
