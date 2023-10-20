@@ -15,7 +15,9 @@ const FoundHome = () => {
     try {
       setLoading(true);
       const response = await getAllPosts(user.token);
-      const foundPosts = response.filter((post) => post.type === 'Found');
+      const foundPosts = response.filter(
+        (post) => post.type === 'Found' && post.status === 'open'
+      );
       setFoundPosts(foundPosts);
     } catch (error) {
       console.error('Error fetching posts:', error);

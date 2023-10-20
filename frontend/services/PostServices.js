@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.30.160:9120';
+const BASE_URL = 'https://pet-shop-backend-ukkxew3r5q-uc.a.run.app';
 
 export const getAllPosts = async (token) => {
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   };
 
   try {
@@ -20,8 +20,8 @@ export const getAllPosts = async (token) => {
 export const getPostById = async (id, token) => {
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   };
 
   try {
@@ -35,8 +35,8 @@ export const getPostById = async (id, token) => {
 export const createPost = async (post, token) => {
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   };
 
   try {
@@ -50,8 +50,8 @@ export const createPost = async (post, token) => {
 export const updatePost = async (post, token) => {
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   };
 
   try {
@@ -69,8 +69,8 @@ export const updatePost = async (post, token) => {
 export const deletePost = async (id, token) => {
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   };
 
   try {
@@ -87,8 +87,8 @@ export const deletePost = async (id, token) => {
 export const getPostByUser = async (id, token) => {
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   };
 
   try {

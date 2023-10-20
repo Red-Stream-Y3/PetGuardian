@@ -72,7 +72,7 @@ const createPost = asyncHandler(async (req, res) => {
 // @access  Private
 
 const updatePost = asyncHandler(async (req, res) => {
-  const { user, pet, type, content, images, date, location } = req.body;
+  const { user, pet, type, content, images, date, location, status } = req.body;
   try {
     const post = await Post.findById(req.params.id);
     if (post) {
@@ -83,6 +83,7 @@ const updatePost = asyncHandler(async (req, res) => {
       post.images = images;
       post.date = date;
       post.location = location;
+      post.status = status;
       const updatedPost = await post.save();
       res.json(updatedPost);
     } else {
@@ -101,10 +102,9 @@ const updatePost = asyncHandler(async (req, res) => {
 
 const deletePost = asyncHandler(async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findByIdAndDelete(req.params.id);
     if (post) {
-      await post.remove();
-      res.json({ message: 'Post removed' });
+      res.json({ message: 'Post deleted' });
     } else {
       res.status(404);
       throw new Error('Post not found');
