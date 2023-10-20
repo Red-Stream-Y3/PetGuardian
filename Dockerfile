@@ -16,9 +16,15 @@ ENV NODE_ENV=production
 ENV MONGO_URI=mongodb+srv://user:user123@petapp.iiznqch.mongodb.net/pet?retryWrites=true&w=majority
 ENV MONGO_URI_DEV=mongodb+srv://user:user123@petapp.iiznqch.mongodb.net/pet
 ENV JWT_SECRET=redstream
+
 ENV BRAINTREE_MERCHANT_ID=sxd9nrwy2bwkr8m3
 ENV BRAINTREE_PUBLIC_KEY=43z3f2763gncwm8v
 ENV BRAINTREE_PRIVATE_KEY=768b1b9f5f56d6935990d317d8faa3d7
+
+ENV GOOGLE_PROJECT_ID=curious-kingdom-398108
+ENV GOOGLE_PROJECT_LOCATION=us-east1
+ENV GOOGLE_APPLICATION_CREDENTIALS=curious-kingdom-398108-bb6edf68c75b.json
+ENV GOOGLE_BUCKET_NAME=pet-guardian-profile
 
 EXPOSE 4444
 CMD ["npm", "start"]
