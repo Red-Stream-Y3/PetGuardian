@@ -26,12 +26,14 @@ const ImageItemCard = ({
   index,
   highlight,
   highlightColor,
+  imageHeight,
+  height,
 }) => {
   const { theme } = getThemeContext();
   const imageStyles = {
     fill: {
       width: '100%',
-      height: 150,
+      height: imageHeight || 150,
       resizeMode: 'cover',
       borderRadius: borderRadius || 0,
     },
@@ -71,7 +73,7 @@ const ImageItemCard = ({
       color: theme.colors.ripple,
     },
     pressableContainer: {
-      height: style === 'side' ? 150 : 'auto',
+      height: style === 'side' ? 150 : height || 200,
       flexDirection: style === 'side' ? 'row' : 'column',
     },
     bodyContainer: {
@@ -136,12 +138,16 @@ const ImageItemCard = ({
           />
         </Suspense>
         <View style={styles.bodyContainer}>
-          <View>
-            {title ? <Text style={styles.titleText}>{title}</Text> : null}
-            {subtitle ? (
-              <Text style={styles.subtitleText}>{subtitle}</Text>
-            ) : null}
-          </View>
+          {body === undefined && (
+            <View style={{ flex: 1 }}>
+              {title !== undefined ? (
+                <Text style={styles.titleText}>{title}</Text>
+              ) : null}
+              {subtitle !== undefined ? (
+                <Text style={styles.subtitleText}>{subtitle}</Text>
+              ) : null}
+            </View>
+          )}
 
           {sideTag !== undefined && sideTag !== null ? (
             <Text style={styles.tagText}>{sideTag}</Text>

@@ -257,7 +257,7 @@ const HireHistory = ({ navigation }) => {
                 highlight={true}
                 highlightColor={
                   item.status === 'pending'
-                    ? 'yellow'
+                    ? 'orange'
                     : item.status === 'accepted'
                     ? 'blue'
                     : item.status === 'cancelled' || item.status === 'rejected'

@@ -17,34 +17,6 @@ const BottomBar = ({}) => {
   const [barColor, setBarColor] = useState(theme.colors.homePrimary);
   const [animation] = useState(new Animated.Value(0));
 
-  const getActiveRouteState = (route) => {
-    if (
-      !route.routes ||
-      route.routes.length === 0 ||
-      route.index >= route.routes.length
-    ) {
-      return route;
-    }
-
-    const childActiveRoute = route.routes[route.index];
-    return getActiveRouteState(childActiveRoute);
-  };
-
-  //on back press in android, set selected tab to home
-  useEffect(() => {
-    const backhandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        if (selectedTab !== 2) {
-          setSelectedTab(2);
-          return true;
-        }
-        return false;
-      }
-    );
-    return () => backhandler.remove();
-  }, [selectedTab]);
-
   const PADDING = 8;
   const SIZE_1 = 25;
   const SIZE_2 = 30;
