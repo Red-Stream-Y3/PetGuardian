@@ -49,15 +49,11 @@ const ProfileScreen = ({ navigation }) => {
       if (response) {
         setUser({
           ...user,
-          profilePic: `https://storage.googleapis.com/${
-            String(response.profilePic).split('gs://')[1]
-          }`,
+          profilePic: response.profilePic,
         });
-        storeUser({
+        await storeUser({
           ...user,
-          profilePic: `https://storage.googleapis.com/${
-            String(response.profilePic).split('gs://')[1]
-          }`,
+          profilePic: response.profilePic,
         });
         setLoading(false);
       }
@@ -95,7 +91,7 @@ const ProfileScreen = ({ navigation }) => {
     buttonGroup: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignSelf: 'flex-end',
+      alignSelf: 'center',
     },
     switchContainer: {
       flexDirection: 'row',
@@ -129,6 +125,7 @@ const ProfileScreen = ({ navigation }) => {
           <Text style={styles.titleText}>Profile</Text>
         </View>
         <ScrollView
+          keyboardShouldPersistTaps="handled"
           refreshControl={
             <RefreshControl refreshing={loading} onRefresh={handleRefresh} />
           }

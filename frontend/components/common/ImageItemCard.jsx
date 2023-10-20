@@ -129,7 +129,7 @@ const ImageItemCard = ({
               image || {
                 uri:
                   uri ||
-                  'https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png',
+                  'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png',
               }
             }
             //sharedTransitionTag={animationTag || null}
