@@ -118,7 +118,7 @@ const AdoptionHome = ({ navigation }) => {
             btnText="See All"
             pairs={featuredPets}
             component="AdoptionList"
-            screen="AdoptionList"
+            screen="AdoptionDetails"
             fontSize={20}
             loading={loading}
           />

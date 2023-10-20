@@ -105,7 +105,14 @@ const AdoptionList = ({ navigation }) => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
+      alignItems: 'center',
       backgroundColor: theme.colors.background,
+    },
+    header: {
+      marginTop: 18,
+      color: theme.colors.text,
+      fontSize: 22,
+      fontWeight: 'bold',
     },
     // headerContainer: {
     //   flexDirection: 'row',
@@ -120,16 +127,11 @@ const AdoptionList = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        {/* <ThemebackButton navigation={navigation} /> */}
-        <Search
-          navigation={navigation}
-          text={searchText}
-          onChangeText={handleSearch}
-        />
-        <FloatingMenuButton navigation={navigation} />
+      <View>
+        <Text style={styles.header}>Available Pets</Text>
       </View>
 
+      <ThemebackButton navigation={navigation} />
       <Suspense fallback={<ActivityIndicator />}>
         <ScrollView
           style={{ width: '100%' }}
@@ -154,7 +156,7 @@ const AdoptionList = ({ navigation }) => {
           <PetsContainer2
             pairs={allPets}
             component="AdoptionList"
-            screen="AdoptionList"
+            screen="AdoptionDetails"
             fontSize={20}
             loading={loading}
           />
