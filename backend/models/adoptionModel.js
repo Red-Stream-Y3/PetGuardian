@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const adoptionRequestSchema = new mongoose.Schema(
+const adoptionRequestSchema = mongoose.Schema(
   {
     pet: {
       type: mongoose.Schema.Types.ObjectId,
@@ -23,7 +23,7 @@ const adoptionRequestSchema = new mongoose.Schema(
   }
 );
 
-const adoptionSchema = new mongoose.Schema(
+const adoptionSchema = mongoose.Schema(
   {
     name: {
       type: String,
@@ -74,6 +74,19 @@ const adoptionSchema = new mongoose.Schema(
       type: String,
       enum: ['pending', 'approved'],
       default: 'pending'
+    },
+    vaccinated: {
+      type: Boolean,
+      default: false
+    },
+    healthStatus: {
+      type: String,
+      enum: ['healthy', 'sick', 'injured'],
+      default: 'healthy'
+    },
+    healthDescriptiopn: {
+      type: String,
+      default: ''
     }
   },
   {

@@ -98,7 +98,10 @@ const postPetForAdoption = async (req, res) => {
       description,
       location,
       image,
-      currentOwner
+      currentOwner,
+      vaccinated,
+      healthStatus,
+      healthDescriptiopn
     } = req.body;
     const pet = await Adoption.create({
       name,
@@ -109,7 +112,10 @@ const postPetForAdoption = async (req, res) => {
       description,
       image,
       location,
-      currentOwner
+      currentOwner,
+      vaccinated,
+      healthStatus,
+      healthDescriptiopn
     });
     res.status(201).json(pet);
   } catch (err) {
@@ -130,7 +136,10 @@ const updatePet = async (req, res) => {
       location,
       image,
       currentOwner,
-      status
+      status,
+      vaccinated,
+      healthStatus,
+      healthDescriptiopn
     } = req.body;
     const animal = await Adoption.findById(req.params.id);
 
@@ -148,6 +157,9 @@ const updatePet = async (req, res) => {
     animal.image = image || animal.image;
     animal.status = status || animal.status;
     animal.currentOwner = currentOwner || animal.currentOwner;
+    animal.vaccinated = vaccinated || animal.vaccinated;
+    animal.healthStatus = healthStatus || animal.healthStatus;
+    animal.healthDescriptiopn = healthDescriptiopn || animal.healthDescriptiopn;
 
     const updatedAnimal = await animal.save();
     res.status(200).json(updatedAnimal);
@@ -155,6 +167,39 @@ const updatePet = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+//delete pet for adoption
+const deletePetForAdoption = asyncHandler(async (req, res) => {
+  try {
+    const animal = await Adoption.findByIdAndDelete(req.params.id);
+    if (animal) res.json({ message: 'Animal removed' });
+    else {
+      res.status(404);
+      throw new Error('Animal not found');
+    }
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }
+});
+
+//mark adoption request as approved
+const approveAdoptionRequest = asyncHandler(async (req, res) => {
+  try {
+    const animal = await Adoption.findById(req.params.id);
+    if (animal) {
+      animal.status = 'approved';
+      const updatedAnimal = await animal.save();
+      res.status(201).json(updatedAnimal);
+    } else {
+      res.status(404);
+      throw new Error('Animal not found');
+    }
+  } catch (error) {
+    res.status(400);
+    throw new Error('Invalid request data');
+  }
+});
 
 // create adoption request
 const createAdoptionRequest = asyncHandler(async (req, res) => {
@@ -182,6 +227,10 @@ const createAdoptionRequest = asyncHandler(async (req, res) => {
   }
 });
 
+// update adoption request
+
+// delete adoption request
+
 export {
   getAvailablePets,
   getDogs,
@@ -191,5 +240,7 @@ export {
   getPetByUser,
   postPetForAdoption,
   updatePet,
-  createAdoptionRequest
+  createAdoptionRequest,
+  deletePetForAdoption,
+  approveAdoptionRequest
 };
