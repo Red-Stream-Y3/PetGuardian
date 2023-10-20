@@ -4,7 +4,7 @@ import {
   View,
   ScrollView,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
@@ -18,67 +18,60 @@ const SelectPets = ({
   pairs,
   component,
   screen,
-  fontSize
+  fontSize,
+  onSelectPet,
 }) => {
   const { theme } = getThemeContext();
   const navigation = useNavigation();
-  const [selectedPosts, setSelectedPosts] = useState([]);
+  const [selectedPost, setSelectedPost] = useState(null);
 
-  const handleSeeAllPress = () => {
-    navigation.navigate(component);
-  };
+  onSelectPet(selectedPost);
 
-  const togglePostSelection = (postId) => {
-    if (selectedPosts.includes(postId)) {
-      setSelectedPosts(selectedPosts.filter((id) => id !== postId));
-    } else {
-      setSelectedPosts([...selectedPosts, postId]);
-    }
-  };
+  const handleSeeAllPress = () => {};
 
   const styles = StyleSheet.create({
     sectionContainer: {
-      paddingHorizontal: 10
+      paddingHorizontal: 10,
     },
     headerContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 5
+      marginBottom: 5,
     },
     sectionHeader: {
       fontSize: fontSize,
       fontWeight: 'bold',
-      marginLeft: 10
+      marginLeft: 10,
     },
     seeAllButton: {
       paddingVertical: 5,
       paddingHorizontal: 10,
-      borderRadius: 5
+      borderRadius: 5,
     },
     seeAllText: {
       fontWeight: 'bold',
-      color: '#808080'
+      color: '#808080',
     },
     cardContainer: {
       width: '100%',
-      marginBottom: 5
+      marginBottom: 5,
     },
     rowContainer: {
-      flexDirection: 'row'
+      flexDirection: 'row',
     },
     imageItemCard: {
       width: 165,
       marginRight: 10,
-      position: 'relative'
+      position: 'relative',
     },
     checkbox: {
       position: 'absolute',
       top: 15,
       right: 18,
       color: 'white',
-      borderRadius: 5
-    }
+      borderRadius: 5,
+    },
   });
 
   return (
@@ -88,7 +81,7 @@ const SelectPets = ({
           <Text
             style={{
               color: theme.colors.text,
-              ...styles.sectionHeader
+              ...styles.sectionHeader,
             }}
           >
             {header}
@@ -110,7 +103,7 @@ const SelectPets = ({
             {pair.map((item) => (
               <TouchableOpacity
                 key={item._id}
-                onPress={() => togglePostSelection(item._id)}
+                onPress={() => setSelectedPost(item._id)}
                 activeOpacity={0.7}
               >
                 <ImageItemCard
@@ -128,12 +121,10 @@ const SelectPets = ({
 
                 <FontAwesome
                   name={
-                    selectedPosts.includes(item._id)
-                      ? 'check-square-o'
-                      : 'square-o'
+                    selectedPost === item._id ? 'check-square-o' : 'square-o'
                   }
                   size={24}
-                  color="black"
+                  color={selectedPost === item._id ? 'black' : 'gray'}
                   style={styles.checkbox}
                 />
               </TouchableOpacity>
