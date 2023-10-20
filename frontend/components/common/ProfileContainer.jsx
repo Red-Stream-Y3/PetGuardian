@@ -27,7 +27,6 @@ import Toast from 'react-native-toast-message';
 import ThemeOverlay from './ThemeOverlay';
 import ThemeTextInput from './ThemeTextInput';
 import ThemeCard from './ThemeCard';
-import ImageItemCard from './ImageItemCard';
 
 const ProfileContainer = ({ navigation }) => {
   const { theme } = getThemeContext();

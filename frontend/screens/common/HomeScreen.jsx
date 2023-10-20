@@ -14,6 +14,7 @@ import {
 import {
   FloatingMenuButton,
   ImageItemCard,
+  ImagePicker,
   ThemeButton,
   ThemeCard,
 } from '../../components';
@@ -88,6 +89,8 @@ const HomeScreen = () => {
   const WIDTH = Dimensions.get('window').width * 0.95;
   const HEIGHT = Dimensions.get('window').height * 0.3;
   const IMAGE_HEIGHT = Dimensions.get('window').height * 0.2;
+
+  const [images, setImages] = useState([]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -189,6 +192,8 @@ const HomeScreen = () => {
             />
           </ScrollView>
         </View>
+
+        <ImagePicker images={images} setImages={setImages} />
 
         <ScrollView
           style={{ width: '100%' }}

@@ -28,6 +28,7 @@ const ImageItemCard = ({
   highlightColor,
   imageHeight,
   height,
+  padding,
 }) => {
   const { theme } = getThemeContext();
   const imageStyles = {
@@ -73,7 +74,8 @@ const ImageItemCard = ({
       color: theme.colors.ripple,
     },
     pressableContainer: {
-      height: style === 'side' ? 150 : height || 200,
+      // height: style === 'side' ? 150 : height || 220,
+      minHeight: style === 'side' ? 150 : height || 220,
       flexDirection: style === 'side' ? 'row' : 'column',
     },
     bodyContainer: {
@@ -84,6 +86,8 @@ const ImageItemCard = ({
         sideTag === undefined &&
         body === undefined
           ? 0
+          : padding !== undefined
+          ? padding
           : 10,
       marginBottom: viewMarginBottom || 0,
       flexDirection: style === 'side' ? 'column' : 'row',
