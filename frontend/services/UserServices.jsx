@@ -132,10 +132,11 @@ export const updateProfilePic = async (profilePic, id, token) => {
     },
   };
 
+  const date = new Date();
   const formData = new FormData();
   formData.append('profile', {
     uri: profilePic,
-    name: id,
+    name: `${id}${date.getFullYear()}${date.getMonth()}${date.getDate()}${date.getHours()}${date.getMinutes()}.jpeg`,
     type: 'image/jpeg',
   });
 

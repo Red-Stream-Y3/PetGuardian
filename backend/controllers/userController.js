@@ -1,7 +1,7 @@
 import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
 import asyncHandler from 'express-async-handler';
-import { uploadFile } from '../utils/StorageUtils.js';
+import { deleteFile, uploadFile } from '../utils/StorageUtils.js';
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -186,19 +186,22 @@ const getUserById = asyncHandler(async (req, res) => {
 const uploadProfilePic = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
-  if (user) {
-    const image = req.files.profile;
+  const oldProfilePic = user.profilePic;
 
-    if (!image[0]) {
+  if (user) {
+    const image = req.file;
+
+    if (!image) {
       res.status(400);
       throw new Error('No file uploaded');
     }
+    console.log('uploading', image.originalname);
 
-    await uploadFile(image[0])
+    //upload new profile pic
+    await uploadFile(image)
       .then((url) => {
-        user.profilePic = `https://storage.googleapis.com/${
-          String(url).split('gs://')[1]
-        }`;
+        user.profilePic = url;
+        console.log('upload success', url);
       })
       .catch((err) => {
         res.status(400);
@@ -212,6 +215,15 @@ const uploadProfilePic = asyncHandler(async (req, res) => {
       profilePic: user.profilePic,
       token: generateToken(updatedUser._id)
     });
+
+    //delete old profile pic
+    if (oldProfilePic) {
+      try {
+        await deleteFile(String(oldProfilePic).split('/')[4]);
+      } catch (err) {
+        //no file to delete
+      }
+    }
   } else {
     res.status(404);
     throw new Error('User not found');

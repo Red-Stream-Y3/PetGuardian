@@ -22,11 +22,7 @@ router
   .put(protect, updateUserProfile);
 router
   .route('/profilePic')
-  .post(
-    protect,
-    multermiddleware.fields([{ name: 'profile', maxCount: 1 }]),
-    uploadProfilePic
-  );
+  .post(protect, multermiddleware.single('profile'), uploadProfilePic);
 router.route('/:id').delete(protect, deleteUser).get(protect, getUserById);
 
 export default router;

@@ -18,17 +18,11 @@ if (process.env.NODE_ENV !== 'production') {
 //constants
 const GOOGLE_KEY = path.join(__dirname, `./${credentials}`);
 
-// Create cloud storage client
-let storageClient;
-
 const getStorageClient = () => {
-  if (!storageClient) {
-    storageClient = new Storage({
-      keyFilename: GOOGLE_KEY,
-      projectId: process.env.GOOGLE_PROJECT_ID
-    });
-  }
-  return storageClient;
+  return new Storage({
+    keyFilename: GOOGLE_KEY,
+    projectId: process.env.GOOGLE_PROJECT_ID
+  });
 };
 
 export default getStorageClient;

@@ -81,7 +81,6 @@ const ProfileContainer = ({ navigation }) => {
 
   const submitNewImage = async () => {
     if (!image) return;
-
     try {
       setSubmitting(true);
 
@@ -458,6 +457,7 @@ const ProfileContainer = ({ navigation }) => {
     flexRowCenter: {
       flexDirection: 'row',
       alignItems: 'center',
+      alignSelf: 'center',
     },
     flexRowStart: {
       flexDirection: 'row',
@@ -618,13 +618,15 @@ const ProfileContainer = ({ navigation }) => {
           <MaterialIcons name="add-a-photo" size={18} color={'black'} on />
         </TouchableOpacity>
       </View>
-      {image !== null && (
-        <ThemeButton
-          title={'Upload Image'}
-          onPress={submitNewImage}
-          loading={submitting}
-        />
-      )}
+      <View style={styles.flexRowCenter}>
+        {image !== null && (
+          <ThemeButton
+            title={'Upload Image'}
+            onPress={submitNewImage}
+            loading={submitting}
+          />
+        )}
+      </View>
 
       <ThemeCard>
         {/* username */}
