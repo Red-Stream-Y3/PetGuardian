@@ -19,10 +19,14 @@ const LostFoundHome = ({ navigation }) => {
     try {
       setLoading(true);
       const response = await getAllPosts(user.token);
-      const lostPosts = response.filter((post) => post.type === 'Lost');
+      const lostPosts = response.filter(
+        (post) => post.type === 'Lost' && post.status === 'open'
+      );
       setLostPosts(lostPosts);
 
-      const foundPosts = response.filter((post) => post.type === 'Found');
+      const foundPosts = response.filter(
+        (post) => post.type === 'Found' && post.status === 'open'
+      );
       setFoundPosts(foundPosts);
     } catch (error) {
       console.error('Error fetching posts:', error);
