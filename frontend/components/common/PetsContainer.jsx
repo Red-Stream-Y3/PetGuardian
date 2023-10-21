@@ -27,6 +27,16 @@ const PetsContainer = ({
     navigation.navigate(component);
   };
 
+  const findTitle = (content) => {
+    const petTypeRegex = /dog|cat|rabbit/gi;
+
+    const petTypeMatch = content.match(petTypeRegex);
+
+    const title = petTypeMatch ? `Found ${petTypeMatch[0]}` : 'New Post';
+
+    return title;
+  };
+
   const styles = StyleSheet.create({
     sectionContainer: {
       paddingHorizontal: 10,
@@ -95,9 +105,9 @@ const PetsContainer = ({
               <ImageItemCard
                 key={item._id}
                 uri={item.images[0]}
-                title={item.pet.name}
+                title={item.pet?.name ? item.pet.name : findTitle(item.content)}
                 width="45%"
-                sideTag={item.pet.age}
+                sideTag={item.pet?.age || ''}
                 subtitle={
                   item.location.split(' ').length > 4
                     ? `${item.location.split(' ').slice(0, 3).join(' ')} ...`

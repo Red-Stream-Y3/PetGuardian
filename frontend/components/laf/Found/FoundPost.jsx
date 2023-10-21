@@ -40,36 +40,20 @@ const FoundPost = () => {
     content: content,
   });
 
-  const date = new Date();
-  const formData = new FormData();
-
-  const uploadImages = (images) => {
-    images.forEach((image, index) => {
-      formData.append('images', {
-        uri: image,
-        name: `${index}${date.getFullYear()}${date.getMonth()}${date.getDate()}${date.getHours()}${date.getMinutes()}.jpeg`,
-        type: 'image/jpeg',
-      });
-    });
-  };
-
-  uploadImages(images);
-
   const foundPost = {
     user: user._id,
     date: input.selectedDate,
     content: input.content,
-    pet: '6522b7514d3b800a2ea76621',
+    pet: '653159d02df663a698d23f2a',
     location: markerTitle,
-    images: formData,
     type: 'Found',
   };
 
   const handleSave = async () => {
     try {
-      await createPost(foundPost, user.token);
+      await createPost(foundPost, images, user.token);
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.log('Error creating post:', error);
     }
   };
 
@@ -84,7 +68,11 @@ const FoundPost = () => {
         <Header title="New Post" onSavePress={handleSave} />
 
         <Suspense fallback={<ActivityIndicator />}>
-          <ImagePicker images={images} setImages={setImages} />
+          <ImagePicker
+            images={images}
+            title="Pet Images"
+            setImages={setImages}
+          />
           <View style={styles.container}>
             <View
               style={{
@@ -148,6 +136,9 @@ const FoundPost = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    marginVertical: 10,
+  },
   details: {
     fontSize: 15,
     fontWeight: 'bold',

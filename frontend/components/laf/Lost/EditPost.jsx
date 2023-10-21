@@ -8,7 +8,6 @@ import {
   StyleSheet,
   ScrollView,
   TextInput,
-  Pressable,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -43,7 +42,7 @@ const EditPost = () => {
       setEditedContent(response.content);
       setEditedDate(response.date);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.log('Error fetching posts:', error);
       setLoading(false);
     }
   };
@@ -117,9 +116,22 @@ const EditPost = () => {
     setIsEditing((prev) => !prev);
   };
 
+  const findTitle = (content) => {
+    const petTypeRegex = /dog|cat|rabbit/gi;
+
+    const petTypeMatch = content.match(petTypeRegex);
+
+    const title = petTypeMatch ? `Found ${petTypeMatch[0]}` : 'New Post';
+
+    return title;
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      <Header title={posts.pet.name} onSavePress={handleSave} />
+      <Header
+        title={posts.pet?.name ? posts.pet?.name : findTitle(posts.content)}
+        onSavePress={handleSave}
+      />
       <Suspense fallback={<ActivityIndicator />}>
         <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
           <View style={styles.container}>
@@ -166,14 +178,16 @@ const EditPost = () => {
                     </Text>
                   </TouchableOpacity>
                 )}
-                <Text
-                  style={[
-                    styles.detailText,
-                    { backgroundColor: getRandomColor() },
-                  ]}
-                >
-                  {posts.pet.age}
-                </Text>
+                {posts?.type === 'Lost' && (
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { backgroundColor: getRandomColor() },
+                    ]}
+                  >
+                    {posts.pet.age}
+                  </Text>
+                )}
                 {isEditing ? (
                   <TouchableOpacity
                     onPress={showDatePicker}
