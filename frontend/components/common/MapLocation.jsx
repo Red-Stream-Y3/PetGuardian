@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import * as Location from 'expo-location';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
@@ -18,7 +18,7 @@ const MapLocation = ({ onMarkerChange }) => {
     latitude: 6.9271,
     longitude: 79.8612,
     latitudeDelta: 0.02,
-    longitudeDelta: 0.02
+    longitudeDelta: 0.02,
   });
   const [markerCoordinate, setMarkerCoordinate] = useState(null);
   const [markerTitle, setMarkerTitle] = useState('');
@@ -32,7 +32,7 @@ const MapLocation = ({ onMarkerChange }) => {
       }
 
       const { coords } = await Location.getCurrentPositionAsync({
-        enableHighAccuracy: true
+        enableHighAccuracy: true,
       });
 
       const address = await Location.reverseGeocodeAsync(coords);
@@ -50,7 +50,7 @@ const MapLocation = ({ onMarkerChange }) => {
       setMapRegion({
         ...coords,
         latitudeDelta: 1.5,
-        longitudeDelta: 1.5
+        longitudeDelta: 1.5,
       });
 
       setMarkerCoordinate(coords);
@@ -60,7 +60,7 @@ const MapLocation = ({ onMarkerChange }) => {
       mapViewRef.current?.animateToRegion({
         ...coords,
         latitudeDelta: 0.02,
-        longitudeDelta: 0.02
+        longitudeDelta: 0.02,
       });
     } catch (error) {
       console.error(error);
@@ -90,7 +90,7 @@ const MapLocation = ({ onMarkerChange }) => {
       mapViewRef.current?.animateToRegion({
         ...coordinate,
         latitudeDelta: 0.02,
-        longitudeDelta: 0.02
+        longitudeDelta: 0.02,
       });
     } catch (error) {
       console.error(error);
@@ -110,7 +110,7 @@ const MapLocation = ({ onMarkerChange }) => {
       <Text
         style={{
           color: theme.colors.text,
-          ...styles.sectionHeader
+          ...styles.sectionHeader,
         }}
       >
         Location
@@ -148,34 +148,34 @@ const MapLocation = ({ onMarkerChange }) => {
 const styles = StyleSheet.create({
   container: {
     height: '32%',
-    padding: 10
+    padding: 10,
   },
   sectionHeader: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginLeft: 10
+    marginLeft: 10,
   },
   mapContainer: {
     flex: 1,
     margin: 10,
     borderRadius: 25,
     overflow: 'hidden',
-    borderColor: '#808080'
+    borderColor: '#808080',
   },
   map: {
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   gpsButtonContainer: {
     position: 'absolute',
     top: 10,
-    right: 10
+    right: 10,
   },
   gpsButton: {
     backgroundColor: 'white',
     borderRadius: 32,
-    padding: 8
-  }
+    padding: 8,
+  },
 });
 
 export default MapLocation;

@@ -16,7 +16,7 @@ import { getAppContext } from '../../../context/AppContext';
 import Header from '../../common/Header';
 import { getPostByUser, deletePost } from '../../../services/PostServices';
 
-const Profile = () => {
+const PostProfile = () => {
   const { theme } = getThemeContext();
   const { user } = getAppContext();
   const navigation = useNavigation();
@@ -29,7 +29,7 @@ const Profile = () => {
       const response = await getPostByUser(user._id, user.token);
       setPosts(response);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.log('Error fetching posts:', error);
     }
   };
 
@@ -59,8 +59,18 @@ const Profile = () => {
       await deletePost(postId, user.token);
       setPosts(posts.filter((post) => post._id !== postId));
     } catch (error) {
-      console.error('Error deleting post:', error);
+      console.log('Error deleting post:', error);
     }
+  };
+
+  const findTitle = (content) => {
+    const petTypeRegex = /dog|cat|rabbit/gi;
+
+    const petTypeMatch = content.match(petTypeRegex);
+
+    const title = petTypeMatch ? `Found ${petTypeMatch[0]}` : 'New Post';
+
+    return title;
   };
 
   const styles = StyleSheet.create({
@@ -178,7 +188,9 @@ const Profile = () => {
     <TouchableOpacity onPress={() => handleEditPost(item._id)}>
       <View style={styles.postItem}>
         <Image source={{ uri: item.images[0] }} style={styles.postImage} />
-        <Text style={styles.postName}>{item.pet.name}</Text>
+        <Text style={styles.postName}>
+          {item.pet?.name ? item.pet.name : findTitle(item.content)}
+        </Text>
         <TouchableOpacity
           onPress={() => removePost(item._id)}
           style={styles.removePostButton}
@@ -225,13 +237,13 @@ const Profile = () => {
                 style={styles.modalOption}
                 onPress={() => handleModalSelection('Lost')}
               >
-                <Text style={styles.modalOptionText}>Lost Post</Text>
+                <Text style={styles.modalOptionText}>Lost Pet</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.modalOption}
                 onPress={() => handleModalSelection('Found')}
               >
-                <Text style={styles.modalOptionText}>Found Post</Text>
+                <Text style={styles.modalOptionText}>Found Pet</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -248,4 +260,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default PostProfile;
