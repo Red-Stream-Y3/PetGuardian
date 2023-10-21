@@ -123,20 +123,19 @@ const uploadImagesToPost = asyncHandler(async (req, res) => {
   if (post) {
     let newImages = [];
 
-    if (req.files?.images?.length > 0) {
-      //upload images to cloud storage
-      const images = req.files.images;
+    const images = req.files?.images;
 
+    if (images.length > 0) {
+      //upload images to cloud storage
       for (let i = 0; i < images.length; i++) {
         const file = images[i];
         await uploadFile(file)
           .then((uri) => {
-            const publicUrl = `https://storage.googleapis.com/${
-              String(url).split('gs://')[1]
-            }`;
-            newImages.push(publicUrl);
+            console.log('image uploaded => ', uri);
+            newImages.push(uri);
           })
           .catch((err) => {
+            console.log(err);
             res.status(400);
             throw new Error(err);
           });
