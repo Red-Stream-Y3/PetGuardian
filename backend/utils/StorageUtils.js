@@ -1,6 +1,7 @@
 import getStorageClient from '../config/GoogleConfig.js';
 import findConfig from 'find-config';
 import dotenv from 'dotenv';
+import { format } from 'url';
 
 let BUCKET_NAME;
 
@@ -13,23 +14,24 @@ if (process.env.NODE_ENV !== 'production') {
 const client = getStorageClient();
 
 export const uploadFile = async (file) =>
-  new Promise((resolve, reject) => {
+  new Promise(async (resolve, reject) => {
     const bucket = client.bucket(BUCKET_NAME);
     const blob = bucket.file(file.originalname);
     const blobStream = blob.createWriteStream({
-      resumable: true
+      resumable: false
     });
 
-    blobStream.on('error', (err) => {
-      reject(err);
-    });
-
-    blobStream.on('finish', () => {
-      const publicUrl = `gs://${bucket.name}/${blob.name}`;
-      resolve(publicUrl);
-    });
-
-    blobStream.end(file.buffer);
+    blobStream
+      .on('finish', () => {
+        const publicUrl = format(
+          `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+        );
+        resolve(publicUrl);
+      })
+      .on('error', (err) => {
+        reject(err);
+      })
+      .end(file.buffer);
   });
 
 export const deleteFile = async (filename) =>
