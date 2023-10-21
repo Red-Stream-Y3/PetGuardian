@@ -60,7 +60,7 @@ const LostFoundHome = ({ navigation }) => {
             header="Lost Pets"
             btnText="See All"
             pairs={lostPetsPairs}
-            component="Profile"
+            component="FoundPost"
             screen="Post"
             fontSize={16}
             loading={loading}
