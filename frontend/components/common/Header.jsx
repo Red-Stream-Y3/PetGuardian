@@ -1,53 +1,67 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-
+import ThemebackButton from './ThemeBackButton';
 import getThemeContext from '../../context/ThemeContext';
 import PetFilter from './PetFilter';
 
-const Header = ({ title, onFilterPress, petTypes, onSavePress }) => {
+const Header = ({
+  title,
+  onFilterPress,
+  petTypes,
+  onSavePress,
+  navigation,
+}) => {
   const { theme } = getThemeContext();
-  const navigation = useNavigation();
+  const navigate = useNavigation();
 
   const handleBackPress = () => {
-    navigation.goBack();
+    navigate.goBack();
   };
 
   const handleSavePress = () => {
     onSavePress();
-    navigation.goBack();
+    navigate.goBack();
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
-          <Text>Back</Text>
-        </TouchableOpacity>
-        <View style={styles.titleContainer}>
-          <Text style={{ color: theme.colors.text, ...styles.title }}>
-            {title}
-          </Text>
+    <>
+      <ThemebackButton customBackAction={handleBackPress} top={1} />
+      <View style={styles.container}>
+        <View style={styles.header}>
+          {/* <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
+            <Text>Back</Text>
+          </TouchableOpacity> */}
+          <View style={styles.titleContainer}>
+            <Text style={{ color: theme.colors.text, ...styles.title }}>
+              {title}
+            </Text>
+          </View>
+          {onSavePress && (
+            <TouchableOpacity
+              onPress={handleSavePress}
+              style={styles.rightButton}
+            >
+              <Ionicons
+                name="md-send"
+                size={26}
+                color={theme.colors.lostPrimary}
+              />
+            </TouchableOpacity>
+          )}
         </View>
-        {onSavePress && (
-          <TouchableOpacity
-            onPress={handleSavePress}
-            style={styles.rightButton}
-          >
-            <Ionicons name="md-send" size={24} color={theme.colors.text} />
-          </TouchableOpacity>
+        {petTypes && (
+          <PetFilter petTypes={petTypes} onFilterPress={onFilterPress} />
         )}
       </View>
-      {petTypes && (
-        <PetFilter petTypes={petTypes} onFilterPress={onFilterPress} />
-      )}
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 15,
+    paddingVertical: 10,
   },
   header: {
     flexDirection: 'row',

@@ -4,17 +4,17 @@ import ThemeButton from './ThemeButton';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
 
-const ThemebackButton = ({ navigation, customBackAction }) => {
+const ThemebackButton = ({ navigation, customBackAction, top }) => {
   const { theme } = getThemeContext();
 
   const styles = StyleSheet.create({
     container: {
       position: 'absolute',
-      top: 10,
+      top: top ? top : 10,
       left: 10,
       zIndex: 100,
-      elevation: 50
-    }
+      elevation: 50,
+    },
   });
 
   return (
