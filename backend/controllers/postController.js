@@ -49,21 +49,54 @@ const getPostById = asyncHandler(async (req, res) => {
 // @access  Private
 
 const createPost = asyncHandler(async (req, res) => {
-  const { user, pet, type, content, images, date, location } = req.body;
+  const { user, pet, type, content, date, location, images } = req.body;
+
   try {
+    let newImages = [];
+
+    if (images && images._parts && images._parts.length > 0) {
+      for (const element of images._parts) {
+        const fileData = element[1];
+        const { uri, name } = fileData;
+
+        await uploadFile({ uri, originalname: name })
+          .then((url) => {
+            const publicUrl = `https://storage.googleapis.com/${
+              String(url).split('gs://')[1]
+            }`;
+            newImages.push(url);
+          })
+          .catch((err) => {
+            res
+              .status(400)
+              .json({ message: 'Error uploading file', error: err });
+            throw new Error(err);
+          });
+      }
+    } else {
+      res.status(400).json({ message: 'No file uploaded' });
+      console.log('No file uploaded');
+      return;
+    }
+
+    console.log(newImages + ' newImages');
+
     const post = await Post.create({
       user,
       pet,
       type,
       content,
-      images,
+      images: newImages,
       date,
       location
     });
+
     res.status(201).json(post);
   } catch (error) {
-    res.status(400);
-    throw new Error('Invalid post data');
+    console.error(error);
+    res
+      .status(400)
+      .json({ message: 'Invalid post data', error: error.message });
   }
 });
 
