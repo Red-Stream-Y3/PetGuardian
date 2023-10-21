@@ -22,10 +22,11 @@ const AdoptionDetails = ({ route, navigation }) => {
   const { theme, tabColor } = getThemeContext();
   const { user } = getAppContext();
 
-  //console.log(petData);
-
+  const handleBtnClick = () => {
+    navigation.navigate('AdoptionApplication', { petData });
+  };
   const styles = StyleSheet.create({
-    petNametxt: {
+    pageHeader: {
       marginTop: 18,
       color: theme.colors.text,
       fontSize: 22,
@@ -37,9 +38,23 @@ const AdoptionDetails = ({ route, navigation }) => {
       backgroundColor: theme.colors.background,
     },
     detailsOne: {
-      marginVertical: 20,
+      width: '90%', // 80% of the screen width
+      alignSelf: 'center', // Center the view horizontally
+      marginVertical: 10,
       flexDirection: 'row',
       justifyContent: 'space-around',
+      borderRadius: 10, // Border radius
+      borderWidth: 2, // Border width
+      borderColor: '#E1525F', // Border color
+      shadowColor: '#000', // Shadow color
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+      padding: 15, // Padding inside the view
     },
     columnStyle: {
       flexDirection: 'column',
@@ -49,6 +64,11 @@ const AdoptionDetails = ({ route, navigation }) => {
       fontWeight: 'bold',
       color: 'gray',
       marginBottom: 5,
+      color: theme.colors.text,
+    },
+    normalText: {
+      color: theme.colors.text,
+      fontSize: 16,
     },
     container2: {
       flexDirection: 'column',
@@ -62,27 +82,34 @@ const AdoptionDetails = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.petNametxt}>{petData?.name}</Text>
+        <Text style={styles.pageHeader}>{petData?.name}</Text>
       </View>
 
       <ThemebackButton navigation={navigation} />
 
       <Suspense fallback={<ActivityIndicator />}>
         <ScrollView style={{ width: '100%' }}>
-          <View style={{ width: '100%', alignItems: 'center', marginTop: 15 }}>
+          <View style={{ width: '100%', alignItems: 'center', marginTop: 20 }}>
             <ImageSlider images={petData?.image} />
           </View>
 
           <View style={styles.detailsOne}>
             <View style={styles.columnStyle}>
-              <Text style={{ fontSize: 20, fontWeight: '700' }}>
+              <Text
+                style={{
+                  color: theme.colors.text,
+                  fontSize: 20,
+                  fontWeight: '700',
+                }}
+              >
                 {petData?.name}
               </Text>
-              <Text style={{ fontSize: 16 }}>{petData?.breed}</Text>
+              <Text style={[styles.normalText, { marginTop: 6 }]}>
+                {petData?.breed}
+              </Text>
             </View>
-            <View style={{ flexDirection: 'column' }}>
-              <Text style={{ fontSize: 20, fontWeight: '700' }}></Text>
-              <Text style={{ fontSize: 16 }}>
+            <View style={styles.columnStyle}>
+              <Text style={[styles.normalText, { paddingTop: 12 }]}>
                 {`📍` +
                   petData?.location.split(',')[0] +
                   `, ` +
@@ -94,7 +121,12 @@ const AdoptionDetails = ({ route, navigation }) => {
           <View style={styles.detailsOne}>
             <View style={styles.columnStyle}>
               <Text style={styles.detailsHeader}>Age</Text>
-              <Text>
+              <Text
+                style={[
+                  styles.normalText,
+                  { marginTop: 6, alignSelf: 'center' },
+                ]}
+              >
                 {petData?.age +
                   ` ` +
                   (petData?.age === 1 ? 'year' : 'years') +
@@ -103,7 +135,12 @@ const AdoptionDetails = ({ route, navigation }) => {
             </View>
             <View style={styles.columnStyle}>
               <Text style={styles.detailsHeader}>Gender</Text>
-              <Text>
+              <Text
+                style={[
+                  styles.normalText,
+                  { marginTop: 6, alignSelf: 'center' },
+                ]}
+              >
                 {petData?.gender
                   ? petData.gender.charAt(0).toUpperCase() +
                     petData.gender.slice(1)
@@ -112,12 +149,19 @@ const AdoptionDetails = ({ route, navigation }) => {
             </View>
             <View style={styles.columnStyle}>
               <Text style={styles.detailsHeader}>Vaccinated</Text>
-              <Text>{petData?.vaccinated ? 'Yes' : 'No'}</Text>
+              <Text
+                style={[
+                  styles.normalText,
+                  { marginTop: 6, alignSelf: 'center' },
+                ]}
+              >
+                {petData?.vaccinated ? 'Yes' : 'No'}
+              </Text>
             </View>
           </View>
           <View style={styles.container2}>
             <Text style={styles.detailsHeader}>Description</Text>
-            <Text>{petData?.description}</Text>
+            <Text style={styles.normalText}>{petData?.description}</Text>
           </View>
 
           <View style={styles.container2}>
@@ -128,7 +172,7 @@ const AdoptionDetails = ({ route, navigation }) => {
                   petData.healthStatus.slice(1)
                 : ''}
             </Text>
-            <Text>{petData?.healthDescriptiopn}</Text>
+            <Text style={styles.normalText}>{petData?.healthDescriptiopn}</Text>
           </View>
 
           <View style={styles.container2}>
@@ -136,7 +180,11 @@ const AdoptionDetails = ({ route, navigation }) => {
           </View>
 
           <View style={styles.container2}>
-            <ThemeButton textSize={16} title="   Adopt   " onPress={() => {}} />
+            <ThemeButton
+              textSize={16}
+              title="   Adopt   "
+              onPress={handleBtnClick}
+            />
           </View>
         </ScrollView>
       </Suspense>

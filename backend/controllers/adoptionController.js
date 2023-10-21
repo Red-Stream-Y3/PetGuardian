@@ -203,8 +203,7 @@ const approveAdoptionRequest = asyncHandler(async (req, res) => {
 
 // create adoption request
 const createAdoptionRequest = asyncHandler(async (req, res) => {
-  //const status = 'pending';
-  const { pet, requester, status } = req.body;
+  const { pet, requester, experiencedPetOwner, houseHoldType } = req.body;
   try {
     const animal = await Adoption.findById(req.params.id);
 
@@ -212,7 +211,8 @@ const createAdoptionRequest = asyncHandler(async (req, res) => {
       const adoptionRequest = {
         pet,
         requester,
-        status
+        experiencedPetOwner,
+        houseHoldType
       };
       animal.adoptionRequests.push(adoptionRequest);
       const updatedAnimal = await animal.save();
@@ -247,10 +247,7 @@ const uploadImagesToAdoption = asyncHandler(async (req, res) => {
         const file = images[i];
         await uploadFile(file)
           .then((uri) => {
-            const publicUrl = `https://storage.googleapis.com/${
-              String(url).split('gs://')[1]
-            }`;
-            newImages.push(publicUrl);
+            newImages.push(uri);
           })
           .catch((err) => {
             res.status(400);
