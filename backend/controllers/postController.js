@@ -49,44 +49,13 @@ const getPostById = asyncHandler(async (req, res) => {
 // @access  Private
 
 const createPost = asyncHandler(async (req, res) => {
-  const { user, pet, type, content, date, location, images } = req.body;
-
+  const { user, pet, type, content, date, location } = req.body;
   try {
-    let newImages = [];
-
-    if (images && images._parts && images._parts.length > 0) {
-      for (const element of images._parts) {
-        const fileData = element[1];
-        const { uri, name } = fileData;
-
-        await uploadFile({ uri, originalname: name })
-          .then((url) => {
-            const publicUrl = `https://storage.googleapis.com/${
-              String(url).split('gs://')[1]
-            }`;
-            newImages.push(url);
-          })
-          .catch((err) => {
-            res
-              .status(400)
-              .json({ message: 'Error uploading file', error: err });
-            throw new Error(err);
-          });
-      }
-    } else {
-      res.status(400).json({ message: 'No file uploaded' });
-      console.log('No file uploaded');
-      return;
-    }
-
-    console.log(newImages + ' newImages');
-
     const post = await Post.create({
       user,
       pet,
       type,
       content,
-      images: newImages,
       date,
       location
     });
@@ -156,19 +125,17 @@ const uploadImagesToPost = asyncHandler(async (req, res) => {
   if (post) {
     let newImages = [];
 
-    const images = req.files?.images;
-
+    const images = req.files.images;
     if (images.length > 0) {
       //upload images to cloud storage
+
       for (let i = 0; i < images.length; i++) {
         const file = images[i];
         await uploadFile(file)
           .then((uri) => {
-            console.log('image uploaded => ', uri);
             newImages.push(uri);
           })
           .catch((err) => {
-            console.log(err);
             res.status(400);
             throw new Error(err);
           });
@@ -187,6 +154,23 @@ const uploadImagesToPost = asyncHandler(async (req, res) => {
   }
 });
 
+const searchPosts = asyncHandler(async (req, res) => {
+  const { searchTerm } = req.params;
+  try {
+    const posts = await Post.find({
+      $or: [
+        { content: { $regex: searchTerm, $options: 'i' } },
+        { type: { $regex: searchTerm, $options: 'i' } },
+        { location: { $regex: searchTerm, $options: 'i' } }
+      ]
+    }).populate('user pet');
+    res.json(posts);
+  } catch (error) {
+    res.status(404);
+    throw new Error('Posts not found');
+  }
+});
+
 export {
   getPosts,
   getPostsByUser,
@@ -194,5 +178,6 @@ export {
   createPost,
   updatePost,
   deletePost,
-  uploadImagesToPost
+  uploadImagesToPost,
+  searchPosts
 };

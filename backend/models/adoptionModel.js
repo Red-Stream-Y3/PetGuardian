@@ -16,6 +16,13 @@ const adoptionRequestSchema = mongoose.Schema(
       type: String,
       enum: ['pending', 'approved', 'rejected'],
       default: 'pending'
+    },
+    experiencedPetOwner: {
+      type: Boolean,
+      default: false
+    },
+    houseHoldType: {
+      type: String
     }
   },
   {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.8.101:9120';
+const BASE_URL = 'http://192.168.8.105:9120';
 
 export const getAvailablePets = async () => {
   const response = await axios.get(`${BASE_URL}/api/v1/adoption/`);
@@ -50,5 +50,16 @@ export const getOtherAnimals = async () => {
     return response.data;
   } catch (error) {
     throw new Error('Error fetching other animals');
+  }
+};
+export const createRequestForAdoption = async (id, adoptRequest) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/api/v1/adoption/request/${id}`,
+      adoptRequest
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating request:', error);
   }
 };

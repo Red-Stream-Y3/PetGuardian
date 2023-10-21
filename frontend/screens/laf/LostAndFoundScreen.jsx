@@ -10,7 +10,7 @@ import {
   LostPost,
   FoundPost,
   Post,
-  Profile,
+  PostProfile,
 } from '../../components';
 
 const LostFoundNavigator = createNativeStackNavigator();
@@ -35,7 +35,7 @@ const LostAndFoundScreen = ({ navigation }) => {
         <LostFoundNavigator.Screen name="FoundHome" component={FoundHome} />
         <LostFoundNavigator.Screen name="Post" component={Post} />
         <LostFoundNavigator.Screen name="EditPost" component={EditPost} />
-        <LostFoundNavigator.Screen name="Profile" component={Profile} />
+        <LostFoundNavigator.Screen name="PostProfile" component={PostProfile} />
         <LostFoundNavigator.Screen name="LostPost" component={LostPost} />
         <LostFoundNavigator.Screen name="FoundPost" component={FoundPost} />
       </LostFoundNavigator.Navigator>

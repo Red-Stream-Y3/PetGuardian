@@ -26,7 +26,7 @@ export { default as ImagePicker } from './common/ImagePicker';
 export { default as LostFoundHome } from './laf/LostFoundHome';
 export { default as AllPets } from './laf/common/AllPets';
 export { default as Post } from './laf/common/Post';
-export { default as Profile } from './laf/common/Profile';
+export { default as PostProfile } from './laf/common/PostProfile';
 export { default as LostHome } from './laf/Lost/LostHome';
 export { default as LostPost } from './laf/Lost/LostPost';
 export { default as EditPost } from './laf/Lost/EditPost';

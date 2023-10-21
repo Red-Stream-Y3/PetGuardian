@@ -36,9 +36,71 @@ const Post = ({ route }) => {
     );
   };
 
+  const findTitle = (content) => {
+    const petTypeRegex = /dog|cat|rabbit/gi;
+
+    const petTypeMatch = content.match(petTypeRegex);
+
+    const title = petTypeMatch ? `Found ${petTypeMatch[0]}` : 'New Post';
+
+    return title;
+  };
+
+  const styles = StyleSheet.create({
+    container: {
+      justifyContent: 'center',
+      padding: 20,
+    },
+    image: {
+      width: '100%',
+      aspectRatio: 1,
+      borderRadius: 30,
+    },
+    detailsContainer: {
+      marginTop: 10,
+    },
+    detailsRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 10,
+    },
+    detailText: {
+      marginVertical: 15,
+      marginRight: 4,
+      fontSize: 14,
+      fontWeight: 'bold',
+      padding: 10,
+      borderRadius: 15,
+      color: '#7D59B8',
+      marginLeft: petData.type === 'Found' ? 120 : 0,
+    },
+    description: {
+      fontSize: 16,
+      textAlign: 'left',
+      padding: 10,
+      borderRadius: 15,
+    },
+    imageContainer: {
+      position: 'relative',
+    },
+    carouselIcon: {
+      position: 'absolute',
+      bottom: 12,
+      right: 15,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      borderRadius: 20,
+      paddingHorizontal: 20,
+      paddingVertical: 2,
+    },
+  });
+
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      <Header title={petData.pet.name} />
+      <Header
+        title={
+          petData.pet?.name ? petData.pet?.name : findTitle(petData.content)
+        }
+      />
 
       <Suspense fallback={<ActivityIndicator />}>
         <ScrollView>
@@ -59,22 +121,26 @@ const Post = ({ route }) => {
             </View>
             <View style={styles.detailsContainer}>
               <View style={styles.detailsRow}>
-                <Text
-                  style={[
-                    styles.detailText,
-                    { backgroundColor: getRandomColor() },
-                  ]}
-                >
-                  {petData.pet.breed}
-                </Text>
-                <Text
-                  style={[
-                    styles.detailText,
-                    { backgroundColor: getRandomColor() },
-                  ]}
-                >
-                  {petData.pet.age}
-                </Text>
+                {petData.type === 'Lost' && (
+                  <>
+                    <Text
+                      style={[
+                        styles.detailText,
+                        { backgroundColor: getRandomColor() },
+                      ]}
+                    >
+                      {petData.pet?.breed ? `${petData.pet?.breed}` : ''}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.detailText,
+                        { backgroundColor: getRandomColor() },
+                      ]}
+                    >
+                      {petData.pet?.age ? `${petData.pet?.age}` : ''}
+                    </Text>
+                  </>
+                )}
                 <Text
                   style={[
                     styles.detailText,
@@ -110,52 +176,5 @@ const Post = ({ route }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    padding: 20,
-  },
-  image: {
-    width: '100%',
-    aspectRatio: 1,
-    borderRadius: 30,
-  },
-  detailsContainer: {
-    marginTop: 10,
-  },
-  detailsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  detailText: {
-    marginVertical: 15,
-    marginRight: 4,
-    fontSize: 14,
-    fontWeight: 'bold',
-    padding: 10,
-    borderRadius: 15,
-    color: '#7D59B8',
-  },
-  description: {
-    fontSize: 16,
-    textAlign: 'left',
-    padding: 10,
-    borderRadius: 15,
-  },
-  imageContainer: {
-    position: 'relative',
-  },
-  carouselIcon: {
-    position: 'absolute',
-    bottom: 12,
-    right: 15,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 2,
-  },
-});
 
 export default Post;
