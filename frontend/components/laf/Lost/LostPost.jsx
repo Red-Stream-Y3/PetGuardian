@@ -37,18 +37,27 @@ const LostPost = () => {
   });
   const [markerTitle, setMarkerTitle] = useState('');
   const [images, setImages] = useState([]);
+
   const handleMarkerChange = (title) => {
     setMarkerTitle(title);
   };
 
   const getPets = async () => {
-    const response = await getPetsByUser(user._id, user.token);
-    setPets(response);
+    try {
+      const response = await getPetsByUser(user._id, user.token);
+      setPets(response);
+    } catch (error) {
+      console.log('Error fetching pets:', error);
+    }
   };
 
   const getPetImages = async (petId) => {
-    const response = await getPetById(petId, user.token);
-    setImages(response.image);
+    try {
+      const response = await getPetById(petId, user.token);
+      setImages(response.image);
+    } catch (error) {
+      console.log('Error fetching pet images:', error);
+    }
   };
 
   useEffect(() => {
