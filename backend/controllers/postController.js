@@ -61,9 +61,6 @@ const createPost = asyncHandler(async (req, res) => {
 
         await uploadFile({ uri, originalname: name })
           .then((url) => {
-            const publicUrl = `https://storage.googleapis.com/${
-              String(url).split('gs://')[1]
-            }`;
             newImages.push(url);
           })
           .catch((err) => {
@@ -164,10 +161,7 @@ const uploadImagesToPost = asyncHandler(async (req, res) => {
         const file = images[i];
         await uploadFile(file)
           .then((uri) => {
-            const publicUrl = `https://storage.googleapis.com/${
-              String(url).split('gs://')[1]
-            }`;
-            newImages.push(publicUrl);
+            newImages.push(uri);
           })
           .catch((err) => {
             res.status(400);
