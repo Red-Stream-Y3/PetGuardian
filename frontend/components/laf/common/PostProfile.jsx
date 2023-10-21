@@ -13,6 +13,7 @@ import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import getThemeContext from '../../../context/ThemeContext';
 import { getAppContext } from '../../../context/AppContext';
+import PopupConfirm from '../../common/PopupConfirm';
 import Header from '../../common/Header';
 import { getPostByUser, deletePost } from '../../../services/PostServices';
 
@@ -21,6 +22,9 @@ const PostProfile = () => {
   const { user } = getAppContext();
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
+  const [confirmationModalVisible, setConfirmationModalVisible] =
+    useState(false);
+  const [postIdToRemove, setPostIdToRemove] = useState(null);
 
   const [posts, setPosts] = useState([]);
 
@@ -54,10 +58,16 @@ const PostProfile = () => {
     navigation.navigate('EditPost', { postId: postId });
   };
 
-  const removePost = async (postId) => {
+  const handleConfirmationModal = (postId) => {
+    setPostIdToRemove(postId);
+    setConfirmationModalVisible(true);
+  };
+
+  const removePost = async () => {
     try {
-      await deletePost(postId, user.token);
-      setPosts(posts.filter((post) => post._id !== postId));
+      await deletePost(postIdToRemove, user.token);
+      setPosts(posts.filter((post) => post._id !== postIdToRemove));
+      setConfirmationModalVisible(false);
     } catch (error) {
       console.log('Error deleting post:', error);
     }
@@ -192,7 +202,7 @@ const PostProfile = () => {
           {item.pet?.name ? item.pet.name : findTitle(item.content)}
         </Text>
         <TouchableOpacity
-          onPress={() => removePost(item._id)}
+          onPress={() => handleConfirmationModal(item._id)}
           style={styles.removePostButton}
         >
           <AntDesign name="closecircle" size={24} color="black" />
@@ -248,6 +258,20 @@ const PostProfile = () => {
             </View>
           </View>
         </Modal>
+
+        <PopupConfirm
+          confirmationModalVisible={confirmationModalVisible}
+          setConfirmationModalVisible={setConfirmationModalVisible}
+          title={'Do you want to remove this post?'}
+          action={removePost}
+          themeColor={theme.colors.lostPrimary}
+          yesBg={'red'}
+          yesBorder={'red'}
+          noBg={'grey'}
+          noBorder={'grey'}
+          noTextColor={'white'}
+          yesTextColor={'white'}
+        />
 
         <FlatList
           data={posts}
