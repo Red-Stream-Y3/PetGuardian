@@ -22,6 +22,7 @@ const LostPost = () => {
   const { theme } = getThemeContext();
   const { user } = getAppContext();
   const [pets, setPets] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedPetId, setSelectedPetId] = useState('');
   const [specialNotes, setSpecialNotes] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -46,6 +47,7 @@ const LostPost = () => {
     try {
       const response = await getPetsByUser(user._id, user.token);
       setPets(response);
+      setLoading(false);
     } catch (error) {
       console.log('Error fetching pets:', error);
     }
@@ -90,7 +92,7 @@ const LostPost = () => {
     try {
       await createPost(lostPost, user.token);
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.log('Error creating post:', error);
     }
   };
 
@@ -105,11 +107,12 @@ const LostPost = () => {
         <Header title="New Post" onSavePress={handleSave} />
 
         <Suspense fallback={<ActivityIndicator />}>
+          {loading && <ActivityIndicator />}
           <SelectPets
             header="Select your pet"
             pairs={petsPairs}
-            component="LostPost"
-            screen="PetProfile"
+            // component="LostPost"
+            // screen="PetProfile"
             fontSize={14}
             onSelectPet={setSelectedPetId}
           />
