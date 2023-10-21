@@ -32,6 +32,7 @@ const PetFilter = ({ petTypes, onFilterPress }) => {
     filterScrollContainer: {
       flexDirection: 'row',
       alignItems: 'center',
+      marginTop: 20,
     },
     filterButton: {
       alignItems: 'center',
@@ -95,8 +96,8 @@ const PetFilter = ({ petTypes, onFilterPress }) => {
         </View>
       </TouchableOpacity>
       {petTypes &&
-        petTypes.length > 0 &&
-        petTypes.map((petType) => (
+        petTypes?.length > 0 &&
+        petTypes?.map((petType) => (
           <TouchableOpacity
             key={petType}
             onPress={() => handleFilterPress(petType)}

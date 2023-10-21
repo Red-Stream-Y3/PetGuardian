@@ -21,6 +21,7 @@ export { default as CardWithProfile } from './common/CardWithProfile';
 export { default as HeaderWithFilter } from './common/HeaderWithFilter';
 export { default as ProfileContainer } from './common/ProfileContainer';
 export { default as ImagePicker } from './common/ImagePicker';
+export { default as PopupConfirm } from './common/PopupConfirm';
 
 // Lost and Found
 export { default as LostFoundHome } from './laf/LostFoundHome';
