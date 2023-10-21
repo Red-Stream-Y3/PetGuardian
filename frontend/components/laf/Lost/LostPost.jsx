@@ -15,7 +15,7 @@ import Header from '../../common/Header';
 import SelectPets from '../../common/SelectPets';
 import MapLocation from '../../common/MapLocation';
 import { getPetsByUser, getPetById } from '../../../services/PetServices';
-import { createPost } from '../../../services/PostServices';
+import { createLost } from '../../../services/PostServices';
 import ThemeTextInput from '../../common/ThemeTextInput';
 
 const LostPost = () => {
@@ -53,6 +53,10 @@ const LostPost = () => {
     }
   };
 
+  useEffect(() => {
+    getPets();
+  }, []);
+
   const getPetImages = async (petId) => {
     try {
       const response = await getPetById(petId, user.token);
@@ -61,11 +65,6 @@ const LostPost = () => {
       console.log('Error fetching pet images:', error);
     }
   };
-
-  useEffect(() => {
-    getPets();
-    getPetImages(selectedPetId);
-  }, []);
 
   const groupIntoPairs = (data) => {
     const pairs = [];
@@ -77,6 +76,10 @@ const LostPost = () => {
   };
 
   const petsPairs = groupIntoPairs(pets);
+
+  useEffect(() => {
+    getPetImages(selectedPetId);
+  }, [selectedPetId]);
 
   const lostPost = {
     user: user._id,
@@ -90,7 +93,7 @@ const LostPost = () => {
 
   const handleSave = async () => {
     try {
-      await createPost(lostPost, user.token);
+      await createLost(lostPost, user.token);
     } catch (error) {
       console.log('Error creating post:', error);
     }

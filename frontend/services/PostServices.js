@@ -32,6 +32,21 @@ export const getPostById = async (id, token) => {
   }
 };
 
+export const createLost = async (post, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const res = await axios.post(`${BASE_URL}/api/v1/posts`, post, config);
+    return res.data;
+  } catch (error) {
+    throw new Error('Error creating post');
+  }
+};
+
 export const createPost = async (post, images, token) => {
   const config = {
     headers: {
