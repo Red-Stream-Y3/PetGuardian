@@ -247,10 +247,7 @@ const uploadImagesToAdoption = asyncHandler(async (req, res) => {
         const file = images[i];
         await uploadFile(file)
           .then((uri) => {
-            const publicUrl = `https://storage.googleapis.com/${
-              String(url).split('gs://')[1]
-            }`;
-            newImages.push(publicUrl);
+            newImages.push(uri);
           })
           .catch((err) => {
             res.status(400);
