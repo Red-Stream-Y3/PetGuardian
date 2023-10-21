@@ -15,7 +15,7 @@ const AllPets = ({ title, data }) => {
     return pairs;
   };
 
-  const petTypes = [...new Set(data.map((pet) => pet.pet.type))]; // Get unique pet types
+  const petTypes = [...new Set(data.map((pet) => pet.pet?.type))]; // Get unique pet types
 
   const filteredPetsData = data.filter((pet) => {
     if (filter === 'All') {

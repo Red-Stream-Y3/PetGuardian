@@ -6,7 +6,8 @@ import {
   createPost,
   updatePost,
   deletePost,
-  uploadImagesToPost
+  uploadImagesToPost,
+  searchPosts
 } from '../controllers/postController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import multermiddleware from './../middleware/Multer.js';
@@ -14,6 +15,7 @@ import multermiddleware from './../middleware/Multer.js';
 const router = express.Router();
 
 router.route('/').get(getPosts, protect).post(createPost, protect);
+router.route('/search/:searchTerm').get(searchPosts);
 router.route('/user/:id').get(getPostsByUser, protect);
 router
   .route('/:id')

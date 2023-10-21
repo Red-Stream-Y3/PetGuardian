@@ -7,6 +7,7 @@ import ThemeCard from './ThemeCard';
 import ThemeButton from './ThemeButton';
 
 const ImagePicker = ({
+  title,
   images,
   setImages,
   variant,
@@ -61,8 +62,8 @@ const ImagePicker = ({
   const IMAGE_HEIGHT = imageHeight || Dimensions.get('window').width * 0.4;
 
   return (
-    <ThemeCard>
-      <ThemeButton title={'Pick Images'} onPress={pickImage}>
+    <ThemeCard marginHorizontal={20}>
+      <ThemeButton title={title ? title : 'Pick Images'} onPress={pickImage}>
         <MaterialCommunityIcons
           name="image-plus"
           size={24}

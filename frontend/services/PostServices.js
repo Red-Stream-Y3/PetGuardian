@@ -32,7 +32,7 @@ export const getPostById = async (id, token) => {
   }
 };
 
-export const createPost = async (post, token) => {
+export const createPost = async (post, images, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -40,7 +40,30 @@ export const createPost = async (post, token) => {
   };
 
   try {
-    const response = await axios.post(`${BASE_URL}/api/v1/posts`, post, config);
+    const res = await axios.post(`${BASE_URL}/api/v1/posts`, post, config);
+
+    const date = new Date();
+    const formData = new FormData();
+
+    const uploadImages = (images) => {
+      images.forEach((image, index) => {
+        formData.append('images', {
+          uri: image,
+          name: `${
+            res.data._id
+          }_post_${index}${date.getFullYear()}${date.getMonth()}${date.getDate()}${date.getHours()}${date.getMinutes()}${date.getSeconds()}.jpeg`,
+          type: 'image/jpeg',
+        });
+      });
+    };
+
+    uploadImages(images);
+
+    const response = await axios.post(
+      `${BASE_URL}/api/v1/posts/upload/${res.data._id}`,
+      formData,
+      config
+    );
     return response.data;
   } catch (error) {
     throw new Error('Error creating post');
@@ -126,5 +149,23 @@ export const uploadImagesToPost = async (id, images, token) => {
     return response.data;
   } catch (error) {
     throw new Error('Error uploading images');
+  }
+};
+
+export const searchPosts = async (searchTerm, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/v1/posts/search/${searchTerm}`,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error('Error searching posts');
   }
 };
