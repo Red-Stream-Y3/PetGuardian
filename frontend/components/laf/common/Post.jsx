@@ -96,7 +96,7 @@ const Post = ({ route }) => {
                   },
                 ]}
               >
-                {petData.pet.description}
+                {petData.content}
               </Text>
               <UserBox
                 name={`${petData.user.firstName} ${petData.user.lastName}`}
