@@ -49,7 +49,7 @@ const getPostById = asyncHandler(async (req, res) => {
 // @access  Private
 
 const createPost = asyncHandler(async (req, res) => {
-  const { user, pet, type, content, date, location } = req.body;
+  const { user, pet, type, content, date, location, images } = req.body;
   try {
     const post = await Post.create({
       user,
@@ -57,7 +57,8 @@ const createPost = asyncHandler(async (req, res) => {
       type,
       content,
       date,
-      location
+      location,
+      images
     });
 
     res.status(201).json(post);
