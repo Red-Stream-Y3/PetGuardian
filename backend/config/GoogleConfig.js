@@ -5,9 +5,8 @@ import { dirname } from 'path';
 import findConfig from 'find-config';
 import dotenv from 'dotenv';
 
-const __filename = fileURLToPath(import.meta.url);
+//const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
 let credentials;
 
 if (process.env.NODE_ENV !== 'production') {
