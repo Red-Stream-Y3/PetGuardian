@@ -22,7 +22,7 @@ const AdoptionApplication = ({ route, navigation }) => {
   const { petData } = route.params;
   const { theme, tabColor } = getThemeContext();
   const { user } = getAppContext();
-  const [isExperiencedPetOwner, setIsExperiencedPetOwner] = useState(true);
+  const [isExperiencedPetOwner, setIsExperiencedPetOwner] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
   const [houseType, setHouseType] = useState('');
 
@@ -54,7 +54,7 @@ const AdoptionApplication = ({ route, navigation }) => {
 
         // Wait for 2 seconds (or any desired duration) before navigating
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        navigation.navigate('Adoptions');
+        navigation.navigate('MyRequests');
       } else {
         // Handle the case where the response is empty or not as expected
         console.error('Error creating request: Invalid response');
@@ -95,12 +95,12 @@ const AdoptionApplication = ({ route, navigation }) => {
   }${state ? state + ', ' : ''}${country ? country : ''}`;
 
   const houseTypes = [
-    'Apartment',
-    'Condominium',
-    'House',
-    'Townhouse',
-    'Mobile Home',
-    'Other',
+    { name: 'Apartment' },
+    { name: 'Condominium' },
+    { name: 'House' },
+    { name: 'Townhouse' },
+    { name: 'Mobile Home' },
+    { name: 'Other' },
   ];
 
   const styles = StyleSheet.create({
@@ -214,7 +214,10 @@ const AdoptionApplication = ({ route, navigation }) => {
           </View>
 
           {/* Form */}
-          <KeyboardAvoidingView style={styles.formContainer}>
+          <KeyboardAvoidingView
+            style={styles.formContainer}
+            behavior={Platform.OS === 'ios' ? 'padding' : null}
+          >
             <ThemeTextInput
               title="Selected Pet"
               value={petData?.name}
@@ -238,6 +241,7 @@ const AdoptionApplication = ({ route, navigation }) => {
                 placeholder="Select type of residence"
                 options={houseTypes}
                 onPressItem={handleDropDownItenPress}
+                loading={false}
               />
             </View>
             <ThemeTextInput

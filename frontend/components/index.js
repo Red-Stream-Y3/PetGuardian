@@ -48,5 +48,9 @@ export { default as AdoptionHome } from './adoption/AdoptionHome';
 export { default as AdoptionList } from './adoption/AdoptionList';
 export { default as AdoptionDetails } from './adoption/AdoptionDetails';
 export { default as AdoptionApplication } from './adoption/AdoptionApplication';
+export { default as MyRequests } from './adoption/MyRequests';
+export { default as NewPetForAdopt } from './adoption/NewPetForAdopt';
+export { default as PetCard } from './adoption/PetCard';
+
 //playdate
 export { default as PlaydateHome } from './playdate/PlaydateHome';
