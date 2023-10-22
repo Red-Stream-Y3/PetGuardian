@@ -15,6 +15,11 @@ const client = getStorageClient();
 
 export const uploadFile = async (file) =>
   new Promise(async (resolve, reject) => {
+    if (!file) {
+      reject('No file to upload');
+      return;
+    }
+
     const bucket = client.bucket(BUCKET_NAME);
     const blob = bucket.file(file.originalname);
     const blobStream = blob.createWriteStream({
@@ -35,14 +40,19 @@ export const uploadFile = async (file) =>
   });
 
 export const deleteFile = async (filename) =>
-  new Promise((resolve, reject) => {
+  new Promise(async (resolve, reject) => {
+    if (!filename) {
+      reject('No file to delete');
+      return;
+    }
+
     const bucket = client.bucket(BUCKET_NAME);
     const blob = bucket.file(filename);
 
-    blob
+    await blob
       .delete()
       .then(() => {
-        resolve();
+        resolve('success');
       })
       .catch((err) => {
         reject(err);
