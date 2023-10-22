@@ -9,8 +9,8 @@ const CardWithProfile = ({
   profileImage,
   name,
   location,
-  icon,
-  onPress
+  type,
+  onPress,
 }) => {
   const { theme } = getThemeContext();
   return (
@@ -18,7 +18,7 @@ const CardWithProfile = ({
       style={[
         styles.cardContainer,
         { shadowColor: theme.colors.shadow },
-        { backgroundColor: theme.colors.surface }
+        { backgroundColor: theme.colors.surface },
       ]}
     >
       <Pressable onPress={onPress}>
@@ -43,7 +43,7 @@ const CardWithProfile = ({
             </View>
             <View style={styles.iconContainer}>
               <MaterialCommunityIcons
-                name={icon}
+                name={type.toLowerCase()}
                 size={40}
                 color={theme.colors.icon}
               />
@@ -62,43 +62,43 @@ const styles = StyleSheet.create({
     margin: 5,
     elevation: 3,
     borderRadius: 10,
-    marginBottom: 15
+    marginBottom: 15,
   },
   image: {
     width: '100%',
     height: 200,
     resizeMode: 'cover',
     borderTopLeftRadius: 10,
-    borderTopRightRadius: 10
+    borderTopRightRadius: 10,
   },
   contentContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10
+    padding: 10,
   },
   profileContainer: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   profileImage: {
     width: 40,
     height: 40,
-    borderRadius: 20
+    borderRadius: 20,
   },
   textContainer: {
     flexDirection: 'column',
-    marginLeft: 10
+    marginLeft: 10,
   },
   name: {
     fontWeight: 'bold',
-    fontSize: 16
+    fontSize: 16,
   },
   location: {
-    fontSize: 14
+    fontSize: 14,
   },
   iconContainer: {
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 });
 
 export default CardWithProfile;

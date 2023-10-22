@@ -6,9 +6,27 @@ import asyncHandler from 'express-async-handler';
 // @access  Public
 
 const getPlaydates = asyncHandler(async (req, res) => {
+  // return only playdates with _id, firstName, lastName, profilePic, location, pet image
+  // with latest date first
   try {
-    const playdates = await Playdate.find({});
-    res.json(playdates);
+    const playdates = await Playdate.find({})
+      .populate('user', 'firstName lastName profilePic')
+      .populate('pets', 'image type')
+      .select('_id user location pets')
+      .sort({ date: -1 });
+
+    // format of response
+    const response = playdates.map((playdate) => {
+      return {
+        _id: playdate._id,
+        profilePic: playdate.user.profilePic,
+        name: `${playdate.user.firstName} ${playdate.user.lastName}`,
+        location: playdate.location,
+        image: playdate.pets[0].image[0],
+        type: playdate.pets[0].type
+      };
+    });
+    res.json(response);
   } catch (error) {
     res.status(404);
     throw new Error('Playdates not found');
@@ -20,9 +38,50 @@ const getPlaydates = asyncHandler(async (req, res) => {
 // @access  Public
 
 const getPlaydateById = asyncHandler(async (req, res) => {
+  // return only playdates with playdate details, user details, pet details, request user details and request status
   try {
-    const playdate = await Playdate.findById(req.params.id);
-    res.json(playdate);
+    const playdate = await Playdate.findById(req.params.id)
+      .populate('user', 'firstName lastName profilePic address')
+      .populate('pets', 'name breed age weight image')
+      .populate('requests.user', 'firstName lastName profilePic')
+      .select('requests user pets date time location description');
+
+    // format of response
+    const response = {
+      _id: playdate._id,
+      date: playdate.date,
+      time: playdate.time,
+      location: playdate.location,
+      description: playdate.description,
+      user: {
+        _id: playdate.user._id,
+        profilePic: playdate.user.profilePic,
+        name: `${playdate.user.firstName} ${playdate.user.lastName}`,
+        country: playdate.user.address.country
+      },
+      pets: playdate.pets.map((pet) => {
+        return {
+          _id: pet._id,
+          name: pet.name,
+          breed: pet.breed,
+          age: pet.age,
+          weight: pet.weight,
+          image: pet.image[0]
+        };
+      }),
+      requests: playdate.requests.map((request) => {
+        return {
+          _id: request._id,
+          user: {
+            _id: request.user._id,
+            profilePic: request.user.profilePic,
+            name: `${request.user.firstName} ${request.user.lastName}`
+          },
+          status: request.status
+        };
+      })
+    };
+    res.json(response);
   } catch (error) {
     res.status(404);
     throw new Error('Playdate not found');

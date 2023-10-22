@@ -28,8 +28,8 @@ const LIGHT_THEME = {
     secondaryVariant: '#018786',
     background: '#ffffff',
     surface: '#ffffff',
-    error: '#b00020'
-  }
+    error: '#b00020',
+  },
 };
 
 const DARK_THEME = {
@@ -56,8 +56,8 @@ const DARK_THEME = {
     secondaryVariant: '#03dac6',
     background: '#121212',
     surface: 'rgb(40, 40, 40)',
-    error: '#cf6679'
-  }
+    error: '#cf6679',
+  },
 };
 
 export const ThemeProvider = ({ children }) => {

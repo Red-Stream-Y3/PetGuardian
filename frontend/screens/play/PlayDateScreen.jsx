@@ -2,7 +2,14 @@ import { StatusBar } from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { PlaydateHome } from '../../components';
+import {
+  PlaydateHome,
+  ViewPlaydate,
+  CreatePlaydate,
+  UpdatePlaydate,
+  CreateRequest,
+  UpdateRequest,
+} from '../../components';
 
 const PlaydateNavigator = createNativeStackNavigator();
 
@@ -18,6 +25,31 @@ const PlayDateScreen = () => {
         <PlaydateNavigator.Screen
           name="PlaydateHome"
           component={PlaydateHome}
+          options={{ headerShown: false }}
+        />
+        <PlaydateNavigator.Screen
+          name="ViewPlaydate"
+          component={ViewPlaydate}
+          options={{ headerShown: false }}
+        />
+        <PlaydateNavigator.Screen
+          name="CreatePlaydate"
+          component={CreatePlaydate}
+          options={{ headerShown: false }}
+        />
+        <PlaydateNavigator.Screen
+          name="UpdatePlaydate"
+          component={UpdatePlaydate}
+          options={{ headerShown: false }}
+        />
+        <PlaydateNavigator.Screen
+          name="CreateRequest"
+          component={CreateRequest}
+          options={{ headerShown: false }}
+        />
+        <PlaydateNavigator.Screen
+          name="UpdateRequest"
+          component={UpdateRequest}
           options={{ headerShown: false }}
         />
       </PlaydateNavigator.Navigator>
