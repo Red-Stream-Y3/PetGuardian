@@ -25,7 +25,7 @@ export const getPetByOwner = async (id) => {
     const response = await axios.get(`${BASE_URL}/api/v1/adoption/owner/${id}`);
     return response.data;
   } catch (error) {
-    throw new Error('Error fetching pet');
+    console.error('Error creating request:', error);
   }
 };
 export const getDogs = async () => {

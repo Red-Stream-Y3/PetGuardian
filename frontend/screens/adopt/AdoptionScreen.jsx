@@ -8,6 +8,7 @@ import {
   AdoptionApplication,
   MyRequests,
   NewPetForAdopt,
+  ApplicantList,
 } from '../../components';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -42,6 +43,10 @@ const AdoptionScreen = (navigation) => {
         <AdoptionNavigator.Screen
           name="NewPetForAdopt"
           component={NewPetForAdopt}
+        />
+        <AdoptionNavigator.Screen
+          name="ApplicantList"
+          component={ApplicantList}
         />
       </AdoptionNavigator.Navigator>
     </SafeAreaView>
