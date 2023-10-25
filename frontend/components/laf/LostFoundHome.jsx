@@ -1,5 +1,10 @@
 import React, { Suspense, useState, useEffect } from 'react';
-import { ActivityIndicator, ScrollView, View } from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  View,
+  RefreshControl,
+} from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
 import { getAppContext } from '../../context/AppContext';
 import Toast from 'react-native-toast-message';
@@ -17,6 +22,7 @@ const LostFoundHome = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [searching, setSearching] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const getPosts = async () => {
     try {
@@ -96,6 +102,12 @@ const LostFoundHome = ({ navigation }) => {
     }
   };
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    getPosts();
+    setRefreshing(false);
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <Search
@@ -106,7 +118,15 @@ const LostFoundHome = ({ navigation }) => {
         onChangeText={handleSearch}
       />
       <Suspense fallback={<ActivityIndicator />}>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[theme.colors.lostPrimary]}
+            />
+          }
+        >
           {lostPosts.length > 0 && (
             <PetsContainer
               header={searching ? 'Searching...' : 'Lost Pets'}
