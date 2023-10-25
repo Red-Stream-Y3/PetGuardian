@@ -57,6 +57,7 @@ const EditPost = () => {
       location: editedLocation,
       content: editedContent,
       date: editedDate,
+      pet: '653159d02df663a698d23f2a',
       status: 'open',
     };
     updatePost(updatedPost, user.token);
@@ -70,10 +71,11 @@ const EditPost = () => {
       location: editedLocation,
       content: editedContent,
       date: editedDate,
+      pet: '653159d02df663a698d23f2a',
       status: 'closed',
     };
     updatePost(updatedPost, user.token);
-    navigation.navigate('Profile');
+    navigation.navigate('PostProfile');
   };
 
   const showDatePicker = () => {
