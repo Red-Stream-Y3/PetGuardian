@@ -27,8 +27,8 @@ const __dirname = dirname(__filename);
 let dbUri;
 
 if (process.env.NODE_ENV !== 'production') {
-    dotenv.config({ path: findConfig('.env.dev') });
-    dbUri = process.env.MONGO_URI_DEV;
+  dotenv.config({ path: findConfig('.env.dev') });
+  dbUri = process.env.MONGO_URI_DEV;
 } else dbUri = process.env.MONGO_URI;
 
 connectDB(dbUri);
@@ -36,7 +36,9 @@ connectDB(dbUri);
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb', extended: true }));
+app.use(bodyParser.text({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/util', utilRoutes);
@@ -50,10 +52,10 @@ app.use('/api/v1/adoption', adoptionRoutes);
 //payment gateway
 app.use('/api/braintree', paymentRoutes);
 app.get(
-    '/braintree',
-    asyncHandler((req, res) => {
-        res.sendFile(path.join(__dirname, 'braintree.html'));
-    })
+  '/braintree',
+  asyncHandler((req, res) => {
+    res.sendFile(path.join(__dirname, 'braintree.html'));
+  })
 );
 
 app.use(notFound);
@@ -61,9 +63,9 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 if (process.env.NODE_ENV !== 'test') {
-    app.listen(PORT, () => {
-        console.log(`Server is running on port: ${PORT}`.yellow.bold);
-    });
+  app.listen(PORT, () => {
+    console.log(`Server is running on port: ${PORT}`.yellow.bold);
+  });
 }
 
 export default app;

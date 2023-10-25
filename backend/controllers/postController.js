@@ -1,5 +1,6 @@
 import Post from '../models/postModel.js';
 import asyncHandler from 'express-async-handler';
+import { uploadFile } from '../utils/StorageUtils.js';
 
 // @desc    Fetch all posts
 // @route   GET /api/posts
@@ -48,21 +49,24 @@ const getPostById = asyncHandler(async (req, res) => {
 // @access  Private
 
 const createPost = asyncHandler(async (req, res) => {
-  const { user, pet, type, content, images, date, location } = req.body;
+  const { user, pet, type, content, date, location, images } = req.body;
   try {
     const post = await Post.create({
       user,
       pet,
       type,
       content,
-      images,
       date,
-      location
+      location,
+      images
     });
+
     res.status(201).json(post);
   } catch (error) {
-    res.status(400);
-    throw new Error('Invalid post data');
+    console.error(error);
+    res
+      .status(400)
+      .json({ message: 'Invalid post data', error: error.message });
   }
 });
 
@@ -71,7 +75,7 @@ const createPost = asyncHandler(async (req, res) => {
 // @access  Private
 
 const updatePost = asyncHandler(async (req, res) => {
-  const { user, pet, type, content, images, date, location } = req.body;
+  const { user, pet, type, content, images, date, location, status } = req.body;
   try {
     const post = await Post.findById(req.params.id);
     if (post) {
@@ -82,6 +86,7 @@ const updatePost = asyncHandler(async (req, res) => {
       post.images = images;
       post.date = date;
       post.location = location;
+      post.status = status;
       const updatedPost = await post.save();
       res.json(updatedPost);
     } else {
@@ -100,10 +105,9 @@ const updatePost = asyncHandler(async (req, res) => {
 
 const deletePost = asyncHandler(async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findByIdAndDelete(req.params.id);
     if (post) {
-      await post.remove();
-      res.json({ message: 'Post removed' });
+      res.json({ message: 'Post deleted' });
     } else {
       res.status(404);
       throw new Error('Post not found');
@@ -114,11 +118,67 @@ const deletePost = asyncHandler(async (req, res) => {
   }
 });
 
+const uploadImagesToPost = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const post = await Post.findById(id);
+
+  if (post) {
+    let newImages = [];
+
+    const images = req.files.images;
+    if (images.length > 0) {
+      //upload images to cloud storage
+
+      for (let i = 0; i < images.length; i++) {
+        const file = images[i];
+        await uploadFile(file)
+          .then((uri) => {
+            newImages.push(uri);
+          })
+          .catch((err) => {
+            res.status(400);
+            throw new Error(err);
+          });
+      }
+    } else {
+      res.status(400);
+      throw new Error('No file uploaded');
+    }
+
+    post.images = newImages;
+    const updatedPost = await post.save();
+    res.json(updatedPost);
+  } else {
+    res.status(404);
+    throw new Error('Post not found');
+  }
+});
+
+const searchPosts = asyncHandler(async (req, res) => {
+  const { searchTerm } = req.params;
+  try {
+    const posts = await Post.find({
+      $or: [
+        { content: { $regex: searchTerm, $options: 'i' } },
+        { type: { $regex: searchTerm, $options: 'i' } },
+        { location: { $regex: searchTerm, $options: 'i' } }
+      ]
+    }).populate('user pet');
+    res.json(posts);
+  } catch (error) {
+    res.status(404);
+    throw new Error('Posts not found');
+  }
+});
+
 export {
   getPosts,
   getPostsByUser,
   getPostById,
   createPost,
   updatePost,
-  deletePost
+  deletePost,
+  uploadImagesToPost,
+  searchPosts
 };

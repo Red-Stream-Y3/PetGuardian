@@ -6,12 +6,12 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  Linking
+  Linking,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import getThemeContext from '../../context/ThemeContext';
 
-const UserBox = () => {
+const UserBox = ({ name, profilePic, phone }) => {
   const { theme } = getThemeContext();
 
   const getRandomColor = () => {
@@ -20,49 +20,39 @@ const UserBox = () => {
     return colors[randomIndex];
   };
 
-  const user = {
-    name: 'John Doe',
-    phone: '07778787878'
-  };
-
   return (
     <Suspense fallback={<ActivityIndicator />}>
       <View
         style={[
           styles.rowContainer,
           {
-            borderColor: getRandomColor()
-          }
+            borderColor: getRandomColor(),
+          },
         ]}
       >
-        <Image
-          source={{
-            uri: 'https://wallpaperbat.com/img/609256-anime-boy-power-up-wallpaper.jpg'
-          }}
-          style={styles.rowImage}
-        />
+        <Image source={{ uri: profilePic }} style={styles.rowImage} />
         <View style={styles.rowDetails}>
           <Text
             style={{
               color: theme.colors.text,
-              ...styles.name
+              ...styles.name,
             }}
           >
-            {user.name}
+            {name}
           </Text>
           <Text
             style={{
               color: theme.colors.text,
-              ...styles.phone
+              ...styles.phone,
             }}
           >
-            {user.phone}
+            {phone}
           </Text>
         </View>
         <TouchableOpacity
           style={styles.phoneIcon}
           onPress={() => {
-            const phoneNumber = user.phone;
+            const phoneNumber = { phone };
             const url = `tel:${phoneNumber}`;
             Linking.canOpenURL(url)
               .then((supported) => {
@@ -94,34 +84,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderWidth: 2,
-    borderRadius: 15
+    borderRadius: 15,
   },
   rowImage: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    marginRight: 10
+    marginRight: 10,
   },
   rowDetails: {
     flex: 1,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   name: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 12
+    marginBottom: 12,
   },
   phone: {
     fontSize: 14,
-    color: 'grey'
+    color: 'grey',
   },
   phoneIcon: {
     padding: 10,
     borderRadius: 10,
     backgroundColor: 'white',
     borderWidth: 2,
-    borderColor: 'blue'
-  }
+    borderColor: 'blue',
+  },
 });
 
 export default UserBox;

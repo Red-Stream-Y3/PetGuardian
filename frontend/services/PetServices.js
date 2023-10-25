@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.30.160:9120';
+const BASE_URL = 'https://pet-shop-backend-ukkxew3r5q-uc.a.run.app';
 
 export const getPetsByUser = async (id) => {
   try {

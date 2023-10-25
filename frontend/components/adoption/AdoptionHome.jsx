@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useEffect } from 'react';
 import Search from '../common/Search';
 import {
   StyleSheet,
@@ -7,20 +7,49 @@ import {
   View,
   ActivityIndicator,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
 import { getAppContext } from '../../context/AppContext';
 import ImageItemCard from '../common/ImageItemCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import PetsContainer from '../common/PetsContainer';
+import PetsContainer2 from './PetContainer2';
 import { ScrollView } from 'react-native-gesture-handler';
-import { lostPetsData } from '../laf/pets';
+import FloatingMenuButton from '../common/FloatingMenuButton';
+import { getAvailablePets } from '../../services/AdoptionServices';
+import Toast from 'react-native-toast-message';
+import ImageSlider from './ImageSlider';
 
 const AdoptionHome = ({ navigation }) => {
+  const { user } = getAppContext();
   const { theme } = getThemeContext();
-  const { SERVER_URL } = getAppContext();
+  const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [searching, setSearching] = useState(false);
+
+  const getPets = async () => {
+    try {
+      setLoading(true);
+      const response = await getAvailablePets();
+      setPets(response);
+      setLoading(false);
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2:
+          error?.response?.data?.message || //axios error
+          error.message || //js error
+          'Could not get service providers', //default
+      });
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getPets();
+  }, []);
 
   // Helper function to group data into pairs
   const groupIntoPairs = (data) => {
@@ -32,19 +61,53 @@ const AdoptionHome = ({ navigation }) => {
     return pairs;
   };
 
-  const featuredPets = groupIntoPairs(lostPetsData.slice(0, 6));
+  const featuredPets = groupIntoPairs(pets.slice(0, 6));
+
+  const images = [
+    'https://t3.ftcdn.net/jpg/03/06/37/22/360_F_306372291_8RtHL5R9ETkZadUdpp6PYrXSsmqRwqhv.jpg',
+    'https://t3.ftcdn.net/jpg/02/66/49/08/360_F_266490811_f2vXYFwnOs7hBmjr7aLXfPwttJOJNBYt.jpg',
+    'https://t3.ftcdn.net/jpg/02/52/38/76/360_F_252387654_zToUZrtt7OzYv50aJ4XRqHtRukI5M0XB.jpg',
+    'https://t4.ftcdn.net/jpg/02/52/38/69/360_F_252386958_uN7zXLnXDadR4iy0CfcwliZVaW48OwX8.jpg',
+  ];
+
+  const handleSearch = async (text) => {
+    setSearchText(text);
+
+    // if (text === '') {
+    //   await getProviders();
+    //   return;
+    // }
+
+    setSearching(true);
+    // try {
+    //   const response = await searchServiceProviders(text, user.token);
+    //   setProviders(response);
+    //   setSearching(false);
+    // } catch (error) {
+    //   Toast.show({
+    //     type: 'error',
+    //     text1: 'Error',
+    //     text2: 'Could not get service providers',
+    //   });
+    // }
+  };
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.background
-    }
+      backgroundColor: theme.colors.background,
+      alignItems: 'center',
+    },
   });
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Search navigation={navigation} />
-
+    <View style={styles.container}>
+      <Search
+        navigation={navigation}
+        text={searchText}
+        onChangeText={handleSearch}
+      />
+      <FloatingMenuButton navigation={navigation} />
       <Suspense fallback={<ActivityIndicator />}>
         <ScrollView
           style={{ width: '100%' }}
@@ -53,22 +116,21 @@ const AdoptionHome = ({ navigation }) => {
           {loading && (
             <ActivityIndicator size={50} color={theme.colors.servicesPrimary} />
           )}
-          <ImageItemCard
-            width={Dimensions.get('window').width * 0.9}
-            uri={'https://wallpapercave.com/wp/wp4928162.jpg'}
-          />
 
-          <PetsContainer
-            header="Find Your Next Buddy"
+          <ImageSlider images={images} />
+
+          <PetsContainer2
+            header="Find Your New Buddy"
             btnText="See All"
             pairs={featuredPets}
             component="AdoptionList"
-            screen="AdoptionList"
-            fontSize={18}
+            screen="AdoptionDetails"
+            fontSize={20}
+            loading={loading}
           />
         </ScrollView>
       </Suspense>
-    </SafeAreaView>
+    </View>
   );
 };
 

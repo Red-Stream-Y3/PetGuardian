@@ -15,10 +15,12 @@ const LostHome = () => {
     try {
       setLoading(true);
       const response = await getAllPosts(user.token);
-      const lostPosts = response.filter((post) => post.type === 'Lost');
+      const lostPosts = response.filter(
+        (post) => post.type === 'Lost' && post.status === 'open'
+      );
       setLostPosts(lostPosts);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.log('Error fetching posts:', error);
     }
     setLoading(false);
   };
