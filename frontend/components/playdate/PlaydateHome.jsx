@@ -25,7 +25,7 @@ const PlaydateHome = () => {
       setLoading(false);
     };
     fetchPlaydates();
-  }, []); // Add playdates to the dependency array
+  }, []);
 
   console.log('playdates', playdates);
   const handleNearMePress = () => {
@@ -71,11 +71,6 @@ const PlaydateHome = () => {
                   onPress={() => {
                     navigation.navigate('ViewPlaydate', { id: item._id });
                   }}
-                />
-                <ProfileCard
-                  name={item.name}
-                  location={item.location}
-                  profileImage={item.profilePic}
                 />
               </>
             ))}
