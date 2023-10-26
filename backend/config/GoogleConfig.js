@@ -5,7 +5,9 @@ import { dirname } from 'path';
 import findConfig from 'find-config';
 import dotenv from 'dotenv';
 
+//TODO: comment the following line when running image upload tests
 const __filename = fileURLToPath(import.meta.url);
+
 const __dirname = dirname(__filename);
 let credentials;
 
