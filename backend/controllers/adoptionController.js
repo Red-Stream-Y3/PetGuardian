@@ -287,15 +287,6 @@ const getRequesters = asyncHandler(async (req, res) => {
   }
 });
 
-// populate: {
-//   path: 'adoptionRequests',
-//   select: 'experiencedPetOwner houseHoldType createdAt status'
-// }
-
-// .populate(
-//   'adoptionRequests.requester',
-//   'firstName lastName phone profilePic'
-// )
 //upload Images to adoption
 const uploadImagesToAdoption = asyncHandler(async (req, res) => {
   const { id } = req.params;

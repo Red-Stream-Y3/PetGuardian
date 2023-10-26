@@ -82,10 +82,10 @@ export const deletePetForAdoption = async (id) => {
   }
 };
 
-export const getRequesters = async (id) => {
+export const getRequesters = async (petId) => {
   try {
     const response = await axios.get(
-      `${BASE_URL}/api/v1/adoption/requesters/${id}`
+      `${BASE_URL}/api/v1/adoption/requesters/${petId}`
     );
     return response.data;
   } catch (error) {
