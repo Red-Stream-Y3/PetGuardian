@@ -25,10 +25,11 @@ import getThemeContext from '../../context/ThemeContext';
 import { MaterialIcons } from '@expo/vector-icons';
 import { getAppContext } from '../../context/AppContext';
 import { useNavigationState } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 const HomeScreen = ({ navigation }) => {
   const { theme } = getThemeContext();
-  const { user, selectedTab, setSelectedTab } = getAppContext();
+  const { user, selectedTab, setSelectedTab, notifyUser } = getAppContext();
   const [scroll, setScroll] = useState(0);
   const heroScroll = useRef(null);
   const navigationState = useNavigationState((state) => state.index);
@@ -319,6 +320,18 @@ const HomeScreen = ({ navigation }) => {
               </ImageBackground>
             </View>
           </ThemeCard>
+
+          <ThemeButton
+            title={'test notification'}
+            onPress={() => {
+              notifyUser('test notification', 'test notification body');
+              Toast.show({
+                type: 'info',
+                text1: 'Hint',
+                text2: 'If you do not see it, try signing out and back in',
+              });
+            }}
+          />
         </ScrollView>
       </View>
     </SafeAreaView>
