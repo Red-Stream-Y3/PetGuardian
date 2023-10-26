@@ -14,7 +14,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const AdoptionNavigator = createNativeStackNavigator();
 
-const AdoptionScreen = (navigation) => {
+const AdoptionScreen = ({ navigation }) => {
   const { theme } = getThemeContext();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>

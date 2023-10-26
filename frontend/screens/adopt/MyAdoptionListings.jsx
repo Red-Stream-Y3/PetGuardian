@@ -28,6 +28,41 @@ const MyAdoptionListings = ({ navigation }) => {
 
   const id = user._id;
 
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      const response = await getPetByOwner(id);
+
+      if (response) {
+        // Sort the pets based on status
+        const sortedPets = response.sort((a, b) => {
+          if (a.status === 'approved' && b.status !== 'approved') {
+            return 1;
+          } else if (a.status !== 'approved' && b.status === 'approved') {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
+        setMyPets(sortedPets);
+      } else {
+        console.log('No pets found for user');
+      }
+    } catch (error) {
+      console.error(error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2:
+          error.response?.data?.message || //axios error
+          error.message || //js error
+          'Error getting profile', //fallback
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   //get Users pets
   useEffect(() => {
     setLoading(true);
@@ -36,7 +71,17 @@ const MyAdoptionListings = ({ navigation }) => {
         const response = await getPetByOwner(id);
         //console.log('response', response);
         if (response) {
-          setMyPets(response);
+          // Sort the pets based on status
+          const sortedPets = response.sort((a, b) => {
+            if (a.status === 'approved' && b.status !== 'approved') {
+              return 1;
+            } else if (a.status !== 'approved' && b.status === 'approved') {
+              return -1;
+            } else {
+              return 0;
+            }
+          });
+          setMyPets(sortedPets);
         } else {
           console.log('No pets found for user');
         }
@@ -57,56 +102,21 @@ const MyAdoptionListings = ({ navigation }) => {
     getMyPets();
   }, []);
 
-  // console.log('myPets', myPets);
+  //console.log('myPets', myPets);
 
-  const handleRefresh = async () => {
-    setLoading(true);
-    try {
-      const response = await getUserProfile(user.token);
-
-      if (response) {
-        setUser({
-          ...user,
-          profilePic: response.profilePic,
-        });
-        await storeUser({
-          ...user,
-          profilePic: response.profilePic,
-        });
-        setLoading(false);
-      }
-    } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2:
-          error.response?.data?.message || //axios error
-          error.message || //js error
-          'Error getting profile', //fallback
-      });
-      setLoading(false);
-    }
+  const handleViewReqs = (petId) => {
+    navigation.navigate('ApplicantList', { petId });
   };
 
-  const handleDelete = () => {
-    // Handle delete logic here
-    //console.log(`Deleting pet with ID: ${petId}`);
-  };
-
-  const handleToggleVisibility = () => {
-    // Handle toggle visibility logic here
-    //console.log(`Toggling visibility for pet with ID: ${petId}`);
-  };
-
-  const handleNavigateToApplicants = () => {
-    navigation.getParent().getParent().navigate('Applicants');
+  const handleAddPet = (pet) => {
+    navigation.navigate('NewPetForAdopt', { pet });
   };
 
   //styles
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      marginTop: StatusBar.currentHeight,
+      //arginTop: StatusBar.currentHeight,
       backgroundColor: theme.colors.background,
     },
     titleText: {
@@ -145,16 +155,16 @@ const MyAdoptionListings = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      <StatusBar
+      {/* <StatusBar
         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
         hidden={false}
-      />
+      /> */}
 
       <View style={styles.container}>
-        <FloatingMenuButton />
+        {/* <FloatingMenuButton /> */}
 
         <View style={styles.titleContainer}>
-          <ThemebackButton navigation={navigation} />
+          {/* <ThemebackButton navigation={navigation} /> */}
           <Text style={styles.titleText}>My Adoption Listings</Text>
         </View>
 
@@ -164,8 +174,8 @@ const MyAdoptionListings = ({ navigation }) => {
             renderItem={({ item }) => (
               <PetCard
                 petData={item}
-                onDelete={() => handleDelete()}
-                onToggleVisibility={() => handleToggleVisibility()}
+                handleView={handleViewReqs}
+                refreshFunc={handleRefresh}
               />
             )}
             keyExtractor={(item) => item._id.toString()}
@@ -174,7 +184,7 @@ const MyAdoptionListings = ({ navigation }) => {
             }
           />
         </View>
-        <TouchableOpacity style={styles.floatingButton}>
+        <TouchableOpacity style={styles.floatingButton} onPress={handleAddPet}>
           <MaterialIcons name="add" size={24} color="white" />
         </TouchableOpacity>
       </View>

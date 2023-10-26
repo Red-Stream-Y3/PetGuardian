@@ -5,7 +5,7 @@ import StackNavigator from './StackNavigator.jsx';
 import HireHistoryScreen from '../services/HireHistoryScreen.jsx';
 import { getAppContext } from '../../context/AppContext.jsx';
 import MyServiceScreen from '../services/MyServiceScreen.jsx';
-import MyAdoptionListings from '../adopt/MyAdoptionListings.jsx';
+import AdoptionSecondaryScreen from '../adopt/AdoptionSecondaryScreen.jsx';
 
 const Drawer = createDrawerNavigator();
 
@@ -46,7 +46,7 @@ const DrawerNavigator = () => {
       />
       <Drawer.Screen
         name="My Adoption Listings"
-        component={MyAdoptionListings}
+        component={AdoptionSecondaryScreen}
         options={{
           animation: 'fade',
         }}

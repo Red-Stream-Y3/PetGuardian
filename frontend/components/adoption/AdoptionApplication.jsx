@@ -20,8 +20,8 @@ import Toast from 'react-native-toast-message';
 
 const AdoptionApplication = ({ route, navigation }) => {
   const { petData } = route.params;
-  const { theme, tabColor } = getThemeContext();
-  const { user } = getAppContext();
+  const { theme } = getThemeContext();
+  const { user, tabColor } = getAppContext();
   const [isExperiencedPetOwner, setIsExperiencedPetOwner] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
   const [houseType, setHouseType] = useState('');
@@ -78,7 +78,6 @@ const AdoptionApplication = ({ route, navigation }) => {
   };
 
   const handleDropDownItenPress = (value) => {
-    console.log(value);
     if (houseTypes.find((item) => item === value)) return;
     setHouseType({});
   };
@@ -149,7 +148,7 @@ const AdoptionApplication = ({ route, navigation }) => {
       height: 22,
       borderRadius: 12,
       borderWidth: 2,
-      borderColor: '#E1525F',
+      borderColor: tabColor,
       justifyContent: 'center',
       alignItems: 'center',
       marginRight: 8,
@@ -263,7 +262,7 @@ const AdoptionApplication = ({ route, navigation }) => {
                     styles.radioCircle,
                     {
                       backgroundColor:
-                        isExperiencedPetOwner === true ? '#E1525F' : '#fff',
+                        isExperiencedPetOwner === true ? tabColor : '#fff',
                     },
                   ]}
                 />
@@ -278,7 +277,7 @@ const AdoptionApplication = ({ route, navigation }) => {
                     styles.radioCircle,
                     {
                       backgroundColor:
-                        isExperiencedPetOwner === false ? '#E1525F' : '#fff',
+                        isExperiencedPetOwner === false ? tabColor : '#fff',
                     },
                   ]}
                 />
@@ -290,7 +289,7 @@ const AdoptionApplication = ({ route, navigation }) => {
             <View style={styles.checkboxContainer}>
               <BouncyCheckbox
                 size={25}
-                fillColor="#E1525F"
+                fillColor={tabColor}
                 unfillColor="#FFFFFF"
                 iconStyle={{ borderColor: 'red' }}
                 innerIconStyle={{ borderWidth: 2 }}
@@ -311,7 +310,7 @@ const AdoptionApplication = ({ route, navigation }) => {
             <TouchableOpacity
               style={[
                 styles.button,
-                { backgroundColor: isChecked ? '#E1525F' : '#ccc' },
+                { backgroundColor: isChecked ? tabColor : '#ccc' },
               ]}
               disabled={!isChecked}
               onPress={createRequest}
