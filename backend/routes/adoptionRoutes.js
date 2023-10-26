@@ -12,6 +12,8 @@ import {
   getAvailablePets,
   deletePetForAdoption,
   approveAdoptionRequest,
+  rejectAdoptionRequest,
+  getRequesters,
   uploadImagesToAdoption
 } from '../controllers/adoptionController.js';
 import { protect } from '../middleware/authMiddleware.js';
@@ -28,6 +30,8 @@ router.route('/:id').get(getPetID).put(updatePet).delete(deletePetForAdoption);
 router.route('/owner/:id').get(getPetByUser);
 router.route('/request/:id').post(createAdoptionRequest);
 router.route('/approve/:id').put(approveAdoptionRequest);
+router.route('/reject/:id').put(rejectAdoptionRequest);
+router.route('/requesters/:id').get(getRequesters);
 router
   .route('/upload/:id')
   .post(

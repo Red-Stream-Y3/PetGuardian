@@ -117,8 +117,6 @@ const AdoptionHome = ({ navigation }) => {
             <ActivityIndicator size={50} color={theme.colors.servicesPrimary} />
           )}
 
-          <ImageSlider images={images} />
-
           <PetsContainer2
             header="Find Your New Buddy"
             btnText="See All"
