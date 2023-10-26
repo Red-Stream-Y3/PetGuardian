@@ -183,24 +183,6 @@ const deletePetForAdoption = asyncHandler(async (req, res) => {
   }
 });
 
-//mark adoption request as approved
-const approveAdoptionRequest = asyncHandler(async (req, res) => {
-  try {
-    const animal = await Adoption.findById(req.params.id);
-    if (animal) {
-      animal.status = 'approved';
-      const updatedAnimal = await animal.save();
-      res.status(201).json(updatedAnimal);
-    } else {
-      res.status(404);
-      throw new Error('Animal not found');
-    }
-  } catch (error) {
-    res.status(400);
-    throw new Error('Invalid request data');
-  }
-});
-
 // create adoption request
 const createAdoptionRequest = asyncHandler(async (req, res) => {
   const { pet, requester, experiencedPetOwner, houseHoldType } = req.body;
@@ -231,6 +213,90 @@ const createAdoptionRequest = asyncHandler(async (req, res) => {
 
 // delete adoption request
 
+//mark adoption request as approved
+const approveAdoptionRequest = async (req, res) => {
+  try {
+    const { adoptionId, requestId } = req.params;
+    const adoption = await Adoption.findById(adoptionId);
+
+    if (!adoption) {
+      return res.status(404).json({ message: 'Adoption not found' });
+    }
+
+    const request = adoption.adoptionRequests.id(requestId);
+
+    if (!request) {
+      return res.status(404).json({ message: 'Adoption request not found' });
+    }
+
+    request.status = 'approved';
+    await adoption.save();
+
+    res.status(200).json({ message: 'Adoption request approved' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+//mark adoption request as rejected
+const rejectAdoptionRequest = async (req, res) => {
+  const { adoptionRequestId } = req.params;
+
+  try {
+    const adoptionRequest = await Adoption.findOneAndUpdate(
+      {
+        'adoptionRequests._id': adoptionRequestId
+      },
+      {
+        $set: {
+          'adoptionRequests.$.status': 'rejected'
+        }
+      },
+      {
+        new: true
+      }
+    );
+
+    if (!adoptionRequest) {
+      return res.status(404).json({ error: 'Adoption request not found' });
+    }
+
+    return res.status(200).json(adoptionRequest);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+//get requesters for a pet
+const getRequesters = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const animal = await Adoption.findById(id).populate({
+    path: 'adoptionRequests',
+    populate: {
+      path: 'requester',
+      select: 'firstName lastName username phone profilePic'
+    }
+  });
+  if (animal) {
+    res.status(200).json(animal.adoptionRequests);
+  } else {
+    res.status(404);
+    throw new Error('Animal not found');
+  }
+});
+
+// populate: {
+//   path: 'adoptionRequests',
+//   select: 'experiencedPetOwner houseHoldType createdAt status'
+// }
+
+// .populate(
+//   'adoptionRequests.requester',
+//   'firstName lastName phone profilePic'
+// )
+//upload Images to adoption
 const uploadImagesToAdoption = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -280,5 +346,7 @@ export {
   createAdoptionRequest,
   deletePetForAdoption,
   approveAdoptionRequest,
+  rejectAdoptionRequest,
+  getRequesters,
   uploadImagesToAdoption
 };

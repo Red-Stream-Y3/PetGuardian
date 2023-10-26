@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.8.105:9120';
+const BASE_URL = 'http://192.168.8.101:9120';
 
 export const getAvailablePets = async () => {
   const response = await axios.get(`${BASE_URL}/api/v1/adoption/`);
@@ -25,7 +25,7 @@ export const getPetByOwner = async (id) => {
     const response = await axios.get(`${BASE_URL}/api/v1/adoption/owner/${id}`);
     return response.data;
   } catch (error) {
-    throw new Error('Error fetching pet');
+    console.error('Error creating request:', error);
   }
 };
 export const getDogs = async () => {
@@ -57,6 +57,35 @@ export const createRequestForAdoption = async (id, adoptRequest) => {
     const response = await axios.post(
       `${BASE_URL}/api/v1/adoption/request/${id}`,
       adoptRequest
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating request:', error);
+  }
+};
+
+export const postPetForAdoption = async (pet) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/api/v1/adoption`, pet);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating request:', error);
+  }
+};
+
+export const deletePetForAdoption = async (id) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/api/v1/adoption/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating request:', error);
+  }
+};
+
+export const getRequesters = async (id) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/v1/adoption/requesters/${id}`
     );
     return response.data;
   } catch (error) {

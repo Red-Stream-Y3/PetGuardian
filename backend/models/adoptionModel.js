@@ -92,8 +92,7 @@ const adoptionSchema = mongoose.Schema(
       default: 'healthy'
     },
     healthDescriptiopn: {
-      type: String,
-      default: ''
+      type: String
     }
   },
   {

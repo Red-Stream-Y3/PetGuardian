@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, { Suspense } from 'react';
-import FloatingMenuButton from '../common/FloatingMenuButton';
 import { getAppContext } from '../../context/AppContext';
 import { ScrollView } from 'react-native-gesture-handler';
 import getThemeContext from '../../context/ThemeContext';
