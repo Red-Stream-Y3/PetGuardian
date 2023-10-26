@@ -140,6 +140,12 @@ const MyServicesContainer = ({ navigation }) => {
         routes: [
           {
             name: 'Home',
+          },
+          {
+            name: 'My Services',
+          },
+          {
+            name: 'Home',
             state: {
               routes: [
                 {
