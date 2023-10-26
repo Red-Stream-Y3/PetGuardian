@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import getThemeContext from './ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { unregisterIndieDevice } from 'native-notify';
+import { registerIndieID, unregisterIndieDevice } from 'native-notify';
 import axios from 'axios';
 
 export const AppContext = createContext();
@@ -15,6 +15,14 @@ export const AppContextProvider = ({ children, value }) => {
   const [user, setUser] = useState(null);
   const SERVER_URL = 'https://pet-shop-backend-ukkxew3r5q-uc.a.run.app';
   const APP_NAME = 'Pet Guardian';
+
+  useEffect(() => {
+    try {
+      registerIndieID(user._id, 14016, 'SBCCyNEJCwfgYrkVTwmNut');
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   useEffect(() => {
     let color;
