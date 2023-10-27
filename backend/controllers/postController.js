@@ -79,16 +79,29 @@ const updatePost = asyncHandler(async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (post) {
-      post.user = user;
-      post.pet = pet;
-      post.type = type;
-      post.content = content;
-      post.images = images;
-      post.date = date;
-      post.location = location;
-      post.status = status;
-      const updatedPost = await post.save();
-      res.json(updatedPost);
+      if (type == 'found') {
+        post.user = user;
+        post.pet = '653159d02df663a698d23f2a';
+        post.type = type;
+        post.content = content;
+        post.images = images;
+        post.date = date;
+        post.location = location;
+        post.status = status;
+        const updatedPost = await post.save();
+        res.json(updatedPost);
+      } else {
+        post.user = user;
+        post.pet = pet;
+        post.type = type;
+        post.content = content;
+        post.images = images;
+        post.date = date;
+        post.location = location;
+        post.status = status;
+        const updatedPost = await post.save();
+        res.json(updatedPost);
+      }
     } else {
       res.status(404);
       throw new Error('Post not found');

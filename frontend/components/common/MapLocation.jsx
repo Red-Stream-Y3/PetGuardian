@@ -44,8 +44,7 @@ const MapLocation = ({ onMarkerChange }) => {
       const city = address[0]?.city ? `${address[0]?.city}, ` : '';
       const country = address[0]?.country ? `${address[0]?.country}, ` : '';
 
-      const formattedAddress =
-        `${streetNumber}${streetName}${city}${country}`.replace(/,\s*$/, '');
+      const formattedAddress = `${city}`.replace(/,\s*$/, '');
 
       setMapRegion({
         ...coords,
@@ -80,8 +79,7 @@ const MapLocation = ({ onMarkerChange }) => {
       const city = address[0]?.city ? `${address[0]?.city}, ` : '';
       const country = address[0]?.country ? `${address[0]?.country}, ` : '';
 
-      const formattedAddress =
-        `${streetNumber}${streetName}${city}${country}`.replace(/,\s*$/, '');
+      const formattedAddress = `${city}`.replace(/,\s*$/, '');
 
       setMarkerCoordinate(coordinate);
       onMarkerChange(formattedAddress);
