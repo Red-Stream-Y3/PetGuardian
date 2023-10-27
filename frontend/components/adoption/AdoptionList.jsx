@@ -56,7 +56,37 @@ const AdoptionList = ({ navigation }) => {
     try {
       setLoading(true);
       const response = await getDogs();
-      setDogs(response);
+      setPets(response);
+      setLoading(false);
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+      });
+      setLoading(false);
+    }
+  };
+
+  const fetchCats = async () => {
+    try {
+      setLoading(true);
+      const response = await getCats();
+      setPets(response);
+      setLoading(false);
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+      });
+      setLoading(false);
+    }
+  };
+
+  const fetchOther = async () => {
+    try {
+      setLoading(true);
+      const response = await getOtherAnimals();
+      setPets(response);
       setLoading(false);
     } catch (error) {
       Toast.show({
@@ -80,27 +110,6 @@ const AdoptionList = ({ navigation }) => {
     return pairs;
   };
   const allPets = groupIntoPairs(pets.slice(0, 6));
-  const handleSearch = async (text) => {
-    setSearchText(text);
-
-    // if (text === '') {
-    //   await getProviders();
-    //   return;
-    // }
-
-    setSearching(true);
-    // try {
-    //   const response = await searchServiceProviders(text, user.token);
-    //   setProviders(response);
-    //   setSearching(false);
-    // } catch (error) {
-    //   Toast.show({
-    //     type: 'error',
-    //     text1: 'Error',
-    //     text2: 'Could not get service providers',
-    //   });
-    // }
-  };
 
   const styles = StyleSheet.create({
     container: {
@@ -114,15 +123,6 @@ const AdoptionList = ({ navigation }) => {
       fontSize: 22,
       fontWeight: 'bold',
     },
-    // headerContainer: {
-    //   flexDirection: 'row',
-    //   alignItems: 'center',
-    //   justifyContent: 'space-between',
-    //   paddingHorizontal: 16,
-    //   height: 60, // Adjust the height according to your design
-
-    //   elevation: 4, // Add elevation/shadow if needed
-    // },
   });
 
   return (
@@ -147,10 +147,30 @@ const AdoptionList = ({ navigation }) => {
               marginVertical: 10,
             }}
           >
-            <ThemeChip text="All" active={true} />
-            <ThemeChip text="Dogs" />
-            <ThemeChip text="Cats" />
-            <ThemeChip text="Other" />
+            <ThemeChip
+              text="All"
+              active={true}
+              clickable={true}
+              onClick={getPets}
+            />
+            <ThemeChip
+              text="Dogs"
+              active={true}
+              clickable={true}
+              onClick={fetchDogs}
+            />
+            <ThemeChip
+              text="Cats"
+              active={true}
+              clickable={true}
+              onClick={fetchCats}
+            />
+            <ThemeChip
+              text="Other"
+              active={true}
+              clickable={true}
+              onClick={fetchOther}
+            />
           </View>
 
           <PetsContainer2

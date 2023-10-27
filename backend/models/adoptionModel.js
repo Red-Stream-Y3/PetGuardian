@@ -79,7 +79,7 @@ const adoptionSchema = mongoose.Schema(
     adoptionRequests: [adoptionRequestSchema],
     status: {
       type: String,
-      enum: ['pending', 'approved'],
+      enum: ['pending', 'adopted'],
       default: 'pending'
     },
     vaccinated: {

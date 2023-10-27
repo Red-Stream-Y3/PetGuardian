@@ -2,6 +2,7 @@ import Adoption from '../models/adoptionModel.js';
 import User from '../models/userModel.js';
 import asyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
+import { sendNotification } from '../utils/notificationUtils.js';
 
 // get all adoption animals
 const getAllAnimals = async (req, res) => {
@@ -212,60 +213,140 @@ const createAdoptionRequest = asyncHandler(async (req, res) => {
 // update adoption request
 
 // delete adoption request
+const deleteAdoptionRequest = asyncHandler(async (req, res) => {
+  try {
+    const requestId = req.params.id;
+
+    const adoption = await Adoption.findOne({
+      'adoptionRequests._id': requestId
+    });
+    if (!adoption) {
+      return res.status(404).json({ message: 'Pet not found' });
+    }
+    const request = adoption.adoptionRequests.find(
+      (request) => request._id.toString() === requestId
+    );
+    if (!request) {
+      return res.status(404).json({ message: 'Adoption request not found' });
+    }
+    //console.log(adoption);
+    adoption.adoptionRequests = adoption.adoptionRequests.filter(
+      (request) => request._id.toString() !== requestId
+    );
+    await adoption.save();
+    res.status(200).json({ message: 'Adoption request deleted' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 //mark adoption request as approved
-const approveAdoptionRequest = async (req, res) => {
+// const approveAdoptionRequest = asyncHandler(async (req, res) => {
+//   try {
+//     const requestId = req.params.id;
+
+//     const adoption = await Adoption.findOne({
+//       'adoptionRequests._id': requestId
+//     });
+//     if (!adoption) {
+//       return res.status(404).json({ message: 'Pet not found' });
+//     }
+//     const request = adoption.adoptionRequests.find(
+//       (request) => request._id.toString() === requestId
+//     );
+//     if (!request) {
+//       return res.status(404).json({ message: 'Adoption request not found' });
+//     }
+//     //console.log(adoption);
+//     adoption.status = 'adopted';
+//     request.status = 'approved';
+//     await adoption.save();
+//     res.status(200).json({ message: 'Adoption request approved' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
+
+const approveAdoptionRequest = asyncHandler(async (req, res) => {
   try {
-    const { adoptionId, requestId } = req.params;
-    const adoption = await Adoption.findById(adoptionId);
+    const requestId = req.params.id;
+
+    const adoption = await Adoption.findOne({
+      'adoptionRequests._id': requestId
+    }).populate('adoptionRequests.requester', '_id');
 
     if (!adoption) {
-      return res.status(404).json({ message: 'Adoption not found' });
+      return res.status(404).json({ message: 'Pet not found' });
     }
 
-    const request = adoption.adoptionRequests.id(requestId);
+    const request = adoption.adoptionRequests.find(
+      (request) => request._id.toString() === requestId
+    );
 
     if (!request) {
       return res.status(404).json({ message: 'Adoption request not found' });
     }
 
+    const requesterId = request.requester._id;
+
+    adoption.status = 'adopted';
     request.status = 'approved';
     await adoption.save();
 
-    res.status(200).json({ message: 'Adoption request approved' });
+    // send notification to requester
+    await sendNotification(
+      requesterId,
+      'Adoption Request Approved',
+      'Your adoption request has been approved.'
+    );
+
+    res.status(200).json({ message: 'Adoption request approved', requesterId });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
-};
+});
 
 //mark adoption request as rejected
 const rejectAdoptionRequest = async (req, res) => {
-  const { adoptionRequestId } = req.params;
-
   try {
-    const adoptionRequest = await Adoption.findOneAndUpdate(
-      {
-        'adoptionRequests._id': adoptionRequestId
-      },
-      {
-        $set: {
-          'adoptionRequests.$.status': 'rejected'
-        }
-      },
-      {
-        new: true
-      }
-    );
+    const requestId = req.params.id;
 
-    if (!adoptionRequest) {
-      return res.status(404).json({ error: 'Adoption request not found' });
+    const adoption = await Adoption.findOne({
+      'adoptionRequests._id': requestId
+    }).populate('adoptionRequests.requester', '_id');
+
+    if (!adoption) {
+      return res.status(404).json({ message: 'Pet not found' });
     }
 
-    return res.status(200).json(adoptionRequest);
+    const request = adoption.adoptionRequests.find(
+      (request) => request._id.toString() === requestId
+    );
+
+    if (!request) {
+      return res.status(404).json({ message: 'Adoption request not found' });
+    }
+
+    const requesterId = request.requester._id;
+
+    adoption.status = 'pending';
+    request.status = 'rejected';
+    await adoption.save();
+
+    // send notification to requester
+    await sendNotification(
+      requesterId,
+      'Adoption Request Rejected',
+      'Your adoption request has been rejected.'
+    );
+
+    res.status(200).json({ message: 'Adoption request rejected', requesterId });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -287,15 +368,16 @@ const getRequesters = asyncHandler(async (req, res) => {
   }
 });
 
-// populate: {
-//   path: 'adoptionRequests',
-//   select: 'experiencedPetOwner houseHoldType createdAt status'
-// }
+const getAdoptionRequestsByUser = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  const adoptionRequests = await Adoption.find({
+    'adoptionRequests.requester': userId
+  }).select(
+    'name status image currentOwner gender age breed adoptionRequests.$'
+  );
+  res.status(200).json(adoptionRequests);
+});
 
-// .populate(
-//   'adoptionRequests.requester',
-//   'firstName lastName phone profilePic'
-// )
 //upload Images to adoption
 const uploadImagesToAdoption = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -348,5 +430,7 @@ export {
   approveAdoptionRequest,
   rejectAdoptionRequest,
   getRequesters,
-  uploadImagesToAdoption
+  uploadImagesToAdoption,
+  deleteAdoptionRequest,
+  getAdoptionRequestsByUser
 };

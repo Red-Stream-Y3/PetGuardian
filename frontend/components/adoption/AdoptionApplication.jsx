@@ -78,8 +78,11 @@ const AdoptionApplication = ({ route, navigation }) => {
   };
 
   const handleDropDownItenPress = (value) => {
-    if (houseTypes.find((item) => item === value)) return;
-    setHouseType({});
+    if (houseTypes.find((item) => item.name === value.name)) {
+      setHouseType(value.name);
+      return;
+    }
+    setHouseType('');
   };
 
   //create full name
@@ -238,6 +241,7 @@ const AdoptionApplication = ({ route, navigation }) => {
               <ThemeDropDownInput
                 title="Household Information"
                 placeholder="Select type of residence"
+                value={houseType}
                 options={houseTypes}
                 onPressItem={handleDropDownItenPress}
                 loading={false}
