@@ -9,7 +9,12 @@ import {
   RefreshControl,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { getRequesters, getPetById } from '../../services/AdoptionServices';
+import {
+  getRequesters,
+  getPetById,
+  approveAdoptionRequest,
+  rejectAdoptionRequest,
+} from '../../services/AdoptionServices';
 import { getAppContext } from '../../context/AppContext';
 import getThemeContext from '../../context/ThemeContext';
 import Toast from 'react-native-toast-message';
@@ -49,21 +54,51 @@ const ApplicantList = ({ navigation, route }) => {
     }
   };
 
+  const handleApprove = async (requestId) => {
+    try {
+      await approveAdoptionRequest(requestId);
+      setDelConfirm(false);
+      Toast.show({
+        type: 'success',
+        text1: 'Adoption request approved',
+        text2: 'The requester has been notified.',
+        visibilityTime: 3000,
+      });
+      getRequestersFunc();
+    } catch (error) {
+      console.error('Error approving adoption request:', error);
+    }
+  };
+
+  const handleReject = async (requestId) => {
+    try {
+      await rejectAdoptionRequest(requestId);
+      setDelConfirm(false);
+      Toast.show({
+        type: 'success',
+        text1: 'Adoption request rejected',
+        text2: 'The requester has been notified.',
+        visibilityTime: 3000,
+      });
+      getRequestersFunc();
+    } catch (error) {
+      console.error('Error rejecting adoption request:', error);
+
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Something went wrong.',
+        visibilityTime: 3000,
+      });
+    }
+  };
+
   useEffect(() => {
     getPetFunc();
     getRequestersFunc(); // Call the async function
   }, [petId]); // Run effect whenever petId changes
 
-  // Determine the color based on the pet's status
-  if (adoptionRequests.status === 'rejected') {
-    statusColor = 'red';
-  } else if (adoptionRequests.status === 'approved') {
-    statusColor = 'green';
-  } else {
-    statusColor = tabColor;
-  }
-
-  //console.log('Requests', adoptionRequests);
+  console.log('Requests', adoptionRequests);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -144,13 +179,13 @@ const ApplicantList = ({ navigation, route }) => {
       height: 80,
       borderRadius: 40, // to make it a circle
     },
-    petName: {
-      fontSize: 22,
+    userName: {
+      fontSize: 20,
       fontWeight: 'bold',
       color: theme.colors.text,
     },
     petStatus: {
-      fontSize: 20,
+      fontSize: 16,
       fontWeight: 'bold',
       color: 'gray',
     },
@@ -191,8 +226,20 @@ const ApplicantList = ({ navigation, route }) => {
                   style={styles.image}
                 />
                 <View style={styles.detailsContainer}>
-                  <Text style={styles.petName}>{item.requester.username}</Text>
-                  <Text style={[styles.petStatus, { color: statusColor }]}>
+                  <Text style={styles.userName}>{item.requester.username}</Text>
+                  <Text
+                    style={[
+                      styles.petStatus,
+                      {
+                        color:
+                          item.status === 'rejected'
+                            ? 'red'
+                            : item.status === 'pending'
+                            ? tabColor
+                            : 'green',
+                      },
+                    ]}
+                  >
                     {item.status}
                   </Text>
                 </View>
@@ -288,12 +335,17 @@ const ApplicantList = ({ navigation, route }) => {
                       <ThemeButton
                         title="  Reject  "
                         textSize={16}
-                        //onPress={handleDelete}
+                        onPress={() => handleReject(item._id.toString())}
+                      />
+                      <ThemeButton
+                        title=" Close  "
+                        textSize={16}
+                        onPress={() => setDelConfirm(false)}
                       />
                       <ThemeButton
                         title="   Approve   "
                         textSize={16}
-                        onPress={() => setDelConfirm(false)}
+                        onPress={() => handleApprove(item._id.toString())}
                       />
                     </View>
                   </ThemeCard>
