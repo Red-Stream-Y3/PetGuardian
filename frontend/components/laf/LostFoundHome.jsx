@@ -132,7 +132,7 @@ const LostFoundHome = ({ navigation }) => {
               header={searching ? 'Searching...' : 'Lost Pets'}
               btnText="See All"
               pairs={lostPetsPairs}
-              component="PostProfile"
+              component="LostHome"
               screen="Post"
               fontSize={16}
               loading={loading}
