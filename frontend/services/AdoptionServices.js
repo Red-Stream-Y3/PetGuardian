@@ -93,3 +93,59 @@ export const getRequesters = async (petId) => {
     console.error('Error creating request:', error);
   }
 };
+
+export const approveAdoptionRequest = async (requestId) => {
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/api/v1/adoption/approve/${requestId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating request:', error);
+  }
+};
+
+export const rejectAdoptionRequest = async (requestId) => {
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/api/v1/adoption/reject/${requestId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating request:', error);
+  }
+};
+
+export const deleteAdoptionRequest = async (requestId) => {
+  try {
+    const response = await axios.delete(
+      `${BASE_URL}/api/v1/adoption/deleteReq/${requestId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating request:', error);
+  }
+};
+
+export const getAdoptionRequestsByUser = async (userId) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/v1/adoption/user/${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating request:', error);
+  }
+};
+
+export const updatePetForAdoption = async (petId, updatedPet) => {
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/api/v1/adoption/${petId}`,
+      updatedPet
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating request:', error);
+  }
+};

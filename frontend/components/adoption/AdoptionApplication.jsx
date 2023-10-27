@@ -25,6 +25,7 @@ const AdoptionApplication = ({ route, navigation }) => {
   const [isExperiencedPetOwner, setIsExperiencedPetOwner] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
   const [houseType, setHouseType] = useState('');
+  const [name, setName] = useState('');
 
   // useEffect(() => {
   //   console.log(isChecked);
@@ -77,7 +78,7 @@ const AdoptionApplication = ({ route, navigation }) => {
     setIsChecked((prev) => !prev);
   };
 
-  const handleDropDownItenPress = (value) => {
+  const handleDropDownItemPress = (value) => {
     if (houseTypes.find((item) => item.name === value.name)) {
       setHouseType(value.name);
       return;
@@ -225,11 +226,13 @@ const AdoptionApplication = ({ route, navigation }) => {
               value={petData?.name}
               width="80%"
               disabled={true}
+              //onChange={(text) => setName(text)}
             />
             <ThemeTextInput
               title="Requester's Name"
               value={fullNames}
               width="80%"
+              onChange={(text) => setName(text)}
             />
             <ThemeTextInput
               title="Contact Number"
@@ -243,16 +246,16 @@ const AdoptionApplication = ({ route, navigation }) => {
                 placeholder="Select type of residence"
                 value={houseType}
                 options={houseTypes}
-                onPressItem={handleDropDownItenPress}
+                onPressItem={handleDropDownItemPress}
                 loading={false}
               />
             </View>
-            <ThemeTextInput
+            {/* <ThemeTextInput
               title="Address"
               value={addressString}
               width="80%"
               editable={true}
-            />
+            /> */}
 
             {/* Radio Button */}
             <Text style={styles.radioLabel}>Have you owned a pet before?</Text>

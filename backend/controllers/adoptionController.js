@@ -60,7 +60,10 @@ const getOtherAnimals = async (req, res) => {
 // get animal by ID
 const getPetID = async (req, res) => {
   try {
-    const animal = await Adoption.findById(req.params.id);
+    const animal = await Adoption.findById(req.params.id).populate({
+      path: 'currentOwner',
+      select: 'username phone'
+    });
     if (!animal) {
       return res.status(404).json({ message: 'Animal not found' });
     }
@@ -102,7 +105,7 @@ const postPetForAdoption = async (req, res) => {
       currentOwner,
       vaccinated,
       healthStatus,
-      healthDescriptiopn
+      healthDescription
     } = req.body;
     const pet = await Adoption.create({
       name,
@@ -116,7 +119,7 @@ const postPetForAdoption = async (req, res) => {
       currentOwner,
       vaccinated,
       healthStatus,
-      healthDescriptiopn
+      healthDescription
     });
     res.status(201).json(pet);
   } catch (err) {

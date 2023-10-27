@@ -84,6 +84,11 @@ const MyAdoptionListings = ({ navigation }) => {
           setMyPets(sortedPets);
         } else {
           console.log('No pets found for user');
+          Toast.show({
+            type: 'info',
+            text1: 'No pets found for user',
+            text2: 'Add a pet to get started',
+          });
         }
       } catch (error) {
         console.error(error);
@@ -106,6 +111,10 @@ const MyAdoptionListings = ({ navigation }) => {
 
   const handleViewReqs = (petId) => {
     navigation.navigate('ApplicantList', { petId });
+  };
+
+  const handleNavigateToEdit = (petId) => {
+    navigation.navigate('EditAdoptionPet', { petId });
   };
 
   const handleAddPet = (pet) => {
@@ -176,6 +185,7 @@ const MyAdoptionListings = ({ navigation }) => {
                 petData={item}
                 handleView={handleViewReqs}
                 refreshFunc={handleRefresh}
+                handleEdit={handleNavigateToEdit}
               />
             )}
             keyExtractor={(item) => item._id.toString()}

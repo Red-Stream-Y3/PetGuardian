@@ -52,7 +52,7 @@ export { default as MyRequests } from './adoption/MyRequests';
 export { default as NewPetForAdopt } from './adoption/NewPetForAdopt';
 export { default as PetCard } from './adoption/PetCard';
 export { default as ApplicantList } from './adoption/ApplicantList';
-//export { default as MyAdoptionListings } from '../screens/adopt/MyAdoptionListings';
+export { default as EditAdoptionPet } from './adoption/EditAdoptionPet';
 
 //playdate
 export { default as PlaydateHome } from './playdate/PlaydateHome';

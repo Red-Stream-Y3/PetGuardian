@@ -15,12 +15,16 @@ import { ScrollView } from 'react-native-gesture-handler';
 import getThemeContext from '../../context/ThemeContext';
 import ThemebackButton from '../common/ThemeBackButton';
 import ThemeDropDownInput from '../common/ThemeDropDownInput';
-import { postPetForAdoption } from '../../services/AdoptionServices';
+import {
+  updatePetForAdoption,
+  getPetById,
+} from '../../services/AdoptionServices';
 import Toast from 'react-native-toast-message';
 import ImagePicker from '../common/ImagePicker';
 import ThemeButton from '../common/ThemeButton';
 
-const NewPetForAdopt = ({ navigation }) => {
+const EditAdoptionPet = ({ route, navigation }) => {
+  const { petId } = route.params;
   const { theme } = getThemeContext();
   const { user, tabColor } = getAppContext();
   const [name, setName] = useState('');
@@ -31,77 +35,108 @@ const NewPetForAdopt = ({ navigation }) => {
   const [location, setLocation] = useState('');
   const [healthStatus, setHealthStatus] = useState('');
   const [images, setImages] = useState([]);
-  const [age, setAge] = useState('');
+  const [age, setAge] = useState();
   const [gender, setGender] = useState('');
   const [description, setDescription] = useState('');
+  const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  // const pet = {
-  //   name: 'Leo',
-  //   species: 'dog',
-  //   breed: 'Golden Retriever',
-  //   age: 3,
-  //   gender: 'male',
-  //   description: 'Friendly and playful dog looking for a loving home.',
-  //   location: 'Colombo, Sri Lanka',
-  //   image: ['https://example.com/image1.jpg', 'https://example.com/image2.jpg'],
-  //   currentOwner: user._id,
-  //   vaccinated: true,
-  //   healthStatus: 'healthy',
-  //   healthDescription: 'No known health issues.',
-  // };
-  // name: name,
-  // species: speciesOptions,
-  // breed: breed,
-  // age: age,
-  // gender: gender,
-  // description: description,
-  // location: location,
-  // image: images,
-  // currentOwner: user._id,
-  // vaccinated: vaccinated,
-  // healthStatus: healthStatus,
-  // healthDescription: healthNotes,
-  const createPet = async () => {
+  //get pet data
+  const getPetData = async () => {
+    setLoading(true);
     try {
-      const pet = {
-        name: 'Leo',
-        species: 'dog',
-        breed: 'Golden Retriever',
-        age: 3,
-        gender: 'male',
-        description: 'Friendly dog',
-        location: 'Colombo',
-        image: images,
-        currentOwner: user._id,
-        vaccinated: true,
-        healthStatus: 'healthy',
-        healthDescription: 'No issues.',
-      };
-      console.log(pet);
-      const response = await postPetForAdoption(pet);
+      const response = await getPetById(petId);
+      if (response) {
+        setName(response.name);
+        setBreed(response.breed);
+        setSpecies(response.species);
+        setVaccinated(response.vaccinated);
+        setHealthNotes(response.healthDescriptiopn);
+        setLocation(response.location);
+        setHealthStatus(response.healthStatus);
+        setImages(response.image);
+        setAge(response.age);
+        console.log(typeof response.age);
+        setDescription(response.description);
+        setGender(response.gender);
+        setStatus(response.status);
+      } else {
+        console.log('No pets found');
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'No pets found',
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2:
+          error.response?.data?.message || //axios error
+          error.message || //js error
+          'Error getting profile', //fallback
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //update pet
+  const updatePet = async () => {
+    setLoading(true);
+    const updatedPet = {
+      name: name,
+      species: species,
+      breed: breed,
+      age: age,
+      gender: gender,
+      description: description,
+      location: location,
+      image: images,
+      currentOwner: user._id,
+      status: status,
+      vaccinated: vaccinated,
+      healthStatus: healthStatus,
+      healthDescriptiopn: healthNotes,
+    };
+    try {
+      const response = await updatePetForAdoption(petId, updatedPet);
       if (response) {
         Toast.show({
           type: 'success',
           text1: 'Success',
-          text2: 'Pet Saved Successfully!',
+          text2: 'Pet has been updated',
         });
         await new Promise((resolve) => setTimeout(resolve, 1000));
         navigation.navigate('MyAdoptionListings');
       } else {
-        console.error('Error creating request: Invalid response');
+        console.log('No pets found');
         Toast.show({
           type: 'error',
-          text1: 'Error creating request: Invalid response',
+          text1: 'Error',
+          text2: 'No pets found',
         });
       }
     } catch (error) {
-      console.error('Error creating request: ', error);
+      console.error(error);
       Toast.show({
         type: 'error',
-        text1: 'Error creating request: ' + error,
+        text1: 'Error',
+        text2:
+          error.response?.data?.message || //axios error
+          error.message || //js error
+          'Error getting profile', //fallback
       });
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    getPetData();
+  }, []);
 
   const genderOptions = [{ name: 'male' }, { name: 'female' }];
 
@@ -207,7 +242,6 @@ const NewPetForAdopt = ({ navigation }) => {
       marginTop: 20,
     },
   });
-
   return (
     <ScrollView style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <KeyboardAvoidingView
@@ -250,22 +284,23 @@ const NewPetForAdopt = ({ navigation }) => {
                 value={breed}
                 onChange={(text) => setBreed(text)}
               />
-
-              <ThemeTextInput
-                title={'Describe the pet'}
-                placeholder="Enter Description"
-                value={description}
-                onChange={(text) => setDescription(text)}
-              />
-
-              <ThemeTextInput
-                title={'Age'}
-                placeholder="Age"
-                value={age}
-                keyboardType={'numeric'}
-                onChange={(text) => setAge(text)}
-              />
-
+              <View style={{ marginVertical: 10 }}>
+                <ThemeTextInput
+                  title={'Describe the pet'}
+                  placeholder="Enter Description"
+                  value={description}
+                  onChange={(text) => setDescription(text)}
+                />
+              </View>
+              <View style={{ marginVertical: 10 }}>
+                <ThemeTextInput
+                  title={'Age'}
+                  placeholder="Age"
+                  value={age}
+                  keyboardType={'numeric'}
+                  onChange={(text) => setAge(text)}
+                />
+              </View>
               <ThemeDropDownInput
                 title="Gender"
                 placeholder="Gender"
@@ -322,28 +357,31 @@ const NewPetForAdopt = ({ navigation }) => {
                   <Text style={styles.radioText}>No</Text>
                 </TouchableOpacity>
               </View>
-              <ThemeTextInput
-                title={''}
-                placeholder="Special Health Requirements"
-                value={healthNotes}
-                multiline={true}
-                onChange={(text) => setHealthNotes(text)}
-              />
+              <View style={{ marginVertical: 10 }}>
+                <ThemeTextInput
+                  title={'Health Notes'}
+                  placeholder="Special Health Requirements"
+                  value={healthNotes}
+                  multiline={true}
+                  onChange={(text) => setHealthNotes(text)}
+                />
+              </View>
 
               <ThemeTextInput
                 title={'Location'}
                 placeholder="Enter Location"
                 value={location}
-                multiline={true}
                 onChange={(text) => setLocation(text)}
               />
             </View>
-            <ThemeButton
-              title={'        Save        '}
-              padding={12}
-              textSize={16}
-              onPress={createPet}
-            />
+            <View style={{ marginTop: 20 }}>
+              <ThemeButton
+                title={'        Update        '}
+                padding={12}
+                textSize={20}
+                onPress={updatePet}
+              />
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -351,4 +389,4 @@ const NewPetForAdopt = ({ navigation }) => {
   );
 };
 
-export default NewPetForAdopt;
+export default EditAdoptionPet;

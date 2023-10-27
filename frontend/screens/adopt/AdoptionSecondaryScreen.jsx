@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   ApplicantList,
   NewPetForAdopt,
-  AdoptionDetails,
+  EditAdoptionPet,
 } from '../../components';
 import MyAdoptionListings from './MyAdoptionListings';
 
@@ -41,8 +41,8 @@ const AdoptionSecondaryScreen = ({ navigation }) => {
             component={NewPetForAdopt}
           />
           <MyAdoptionStack.Screen
-            name="AdoptionDetails"
-            component={AdoptionDetails}
+            name="EditAdoptionPet"
+            component={EditAdoptionPet}
           />
         </MyAdoptionStack.Navigator>
       </View>

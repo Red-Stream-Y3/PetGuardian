@@ -36,9 +36,18 @@ const ApplicantList = ({ navigation, route }) => {
       return;
     }
   };
+
   const getRequestersFunc = async () => {
     try {
       const data = await getRequesters(petId);
+      if (data.length === 0) {
+        Toast.show({
+          type: 'info',
+          text1: 'No applicants found',
+          text2: 'There are no adoption requests for this pet.',
+          visibilityTime: 3000,
+        });
+      }
       setAdoptionRequests(data);
     } catch (error) {
       console.error('Error fetching requesters:', error);
@@ -98,7 +107,7 @@ const ApplicantList = ({ navigation, route }) => {
     getRequestersFunc(); // Call the async function
   }, [petId]); // Run effect whenever petId changes
 
-  console.log('Requests', adoptionRequests);
+  //console.log('Requests', adoptionRequests);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -195,7 +204,7 @@ const ApplicantList = ({ navigation, route }) => {
       justifyContent: 'space-between',
       alignSelf: 'center',
       marginVertical: 30,
-      gap: 20,
+      gap: 16,
     },
   });
   return (
@@ -338,7 +347,7 @@ const ApplicantList = ({ navigation, route }) => {
                         onPress={() => handleReject(item._id.toString())}
                       />
                       <ThemeButton
-                        title=" Close  "
+                        title="  Close  "
                         textSize={16}
                         onPress={() => setDelConfirm(false)}
                       />
