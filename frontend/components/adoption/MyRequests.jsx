@@ -18,6 +18,7 @@ import {
 } from '../../services/AdoptionServices';
 import FloatingMenuButton from '../common/FloatingMenuButton';
 import { ThemeButton, ThemeCard, ThemeOverlay } from '../../components';
+import ThemebackButton from '../common/ThemeBackButton';
 import Toast from 'react-native-toast-message';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -80,6 +81,10 @@ const MyRequests = ({ navigation }) => {
     await getMyRequests();
   };
 
+  // const viewPet = (petId) => {
+  //   navigation.navigate('AdoptionDetails', { petId });
+  // };
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -112,7 +117,7 @@ const MyRequests = ({ navigation }) => {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: 20,
+      marginTop: 28,
     },
     button: {
       marginHorizontal: 10,
@@ -181,9 +186,8 @@ const MyRequests = ({ navigation }) => {
 
       <View style={styles.container}>
         <FloatingMenuButton />
-
+        <ThemebackButton navigation={navigation} />
         <View style={styles.titleContainer}>
-          {/* <ThemebackButton navigation={navigation} /> */}
           <Text style={styles.titleText}>My Requests</Text>
         </View>
 

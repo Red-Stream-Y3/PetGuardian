@@ -7,11 +7,10 @@ import {
   getPetByOwner,
 } from '../../services/AdoptionServices';
 import Toast from 'react-native-toast-message';
-import ThemeButton from '../../components/common/ThemeButton.jsx';
-import ThemeCard from '../../components/common/ThemeCard.jsx';
-import ThemeOverlay from '../../components/common/ThemeOverlay.jsx';
+import { ThemeButton, ThemeCard, ThemeOverlay } from '../../components';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const PetCard = ({ petData, handleView, refreshFunc }) => {
+const PetCard = ({ petData, handleView, refreshFunc, handleEdit }) => {
   const { theme } = getThemeContext();
   const { tabColor } = getAppContext();
   const [delConfirm, setDelConfirm] = useState(false);
@@ -63,7 +62,9 @@ const PetCard = ({ petData, handleView, refreshFunc }) => {
     handleView(petId);
   };
 
-  // onPress={() => handleView(id)}
+  const handleNavigateToEdit = () => {
+    handleEdit(petId);
+  };
 
   const styles = StyleSheet.create({
     button: {
@@ -126,10 +127,7 @@ const PetCard = ({ petData, handleView, refreshFunc }) => {
   });
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      //onPress={handleNavigateToApplicants}
-    >
+    <TouchableOpacity style={styles.container} onPress={handleNavigateToEdit}>
       <Image source={{ uri: petData.image[0] }} style={styles.image} />
 
       <View style={styles.detailsContainer}>
@@ -138,10 +136,15 @@ const PetCard = ({ petData, handleView, refreshFunc }) => {
           {petData.status}
         </Text>
       </View>
+      <TouchableOpacity style={styles.button} onPress={onViewRequests}>
+        <Text style={{ color: theme.colors.text, fontWeight: 'bold' }}>
+          Requests
+        </Text>
+      </TouchableOpacity>
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleDelete}>
-          <Text style={{ color: 'red', fontWeight: 'bold' }}>Delete</Text>
+          <MaterialIcons name="delete" size={24} color="red" />
         </TouchableOpacity>
 
         <ThemeOverlay
@@ -166,12 +169,6 @@ const PetCard = ({ petData, handleView, refreshFunc }) => {
             </View>
           </ThemeCard>
         </ThemeOverlay>
-
-        <TouchableOpacity style={styles.button} onPress={onViewRequests}>
-          <Text style={{ color: theme.colors.text, fontWeight: 'bold' }}>
-            Requests
-          </Text>
-        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );

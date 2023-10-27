@@ -137,3 +137,15 @@ export const getAdoptionRequestsByUser = async (userId) => {
     console.error('Error creating request:', error);
   }
 };
+
+export const updatePetForAdoption = async (petId, updatedPet) => {
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/api/v1/adoption/${petId}`,
+      updatedPet
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating request:', error);
+  }
+};
