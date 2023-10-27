@@ -32,7 +32,7 @@ const postSchema = mongoose.Schema(
     },
     location: {
       type: String,
-      default: '',
+      default: 'Malabe',
       required: true
     },
     status: {

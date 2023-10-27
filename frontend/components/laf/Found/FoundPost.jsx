@@ -15,10 +15,11 @@ import { getAppContext } from '../../../context/AppContext';
 import ThemeTextInput from '../../common/ThemeTextInput';
 import MapLocation from '../../common/MapLocation';
 import { createPost } from '../../../services/PostServices';
+import Toast from 'react-native-toast-message';
 
 const FoundPost = () => {
   const { theme } = getThemeContext();
-  const { user } = getAppContext();
+  const { user, notifyUser } = getAppContext();
   const [images, setImages] = useState([]);
   const [content, setContent] = useState('');
   const [markerTitle, setMarkerTitle] = useState('');
@@ -52,6 +53,12 @@ const FoundPost = () => {
   const handleSave = async () => {
     try {
       await createPost(foundPost, images, user.token);
+      notifyUser(`Found post created!`, 'Found a pet in your area!');
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Found post created!',
+      });
     } catch (error) {
       console.log('Error creating post:', error);
     }

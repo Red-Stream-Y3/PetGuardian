@@ -17,10 +17,11 @@ import MapLocation from '../../common/MapLocation';
 import { getPetsByUser, getPetById } from '../../../services/PetServices';
 import { createLost } from '../../../services/PostServices';
 import ThemeTextInput from '../../common/ThemeTextInput';
+import Toast from 'react-native-toast-message';
 
 const LostPost = () => {
   const { theme } = getThemeContext();
-  const { user } = getAppContext();
+  const { user, notifyUser } = getAppContext();
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPetId, setSelectedPetId] = useState('');
@@ -93,6 +94,15 @@ const LostPost = () => {
 
   const handleSave = async () => {
     try {
+      notifyUser(
+        `Pet lost at ${lostPost.location}`,
+        'In your area has been lost a pet'
+      );
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Lost post created successfully',
+      });
       await createLost(lostPost, user.token);
     } catch (error) {
       console.log('Error creating post:', error);
