@@ -6,6 +6,7 @@ import HireHistoryScreen from '../services/HireHistoryScreen.jsx';
 import { getAppContext } from '../../context/AppContext.jsx';
 import MyServiceScreen from '../services/MyServiceScreen.jsx';
 import AdoptionSecondaryScreen from '../adopt/AdoptionSecondaryScreen.jsx';
+import { PostProfile } from '../../components/index.js';
 
 const Drawer = createDrawerNavigator();
 
@@ -47,6 +48,13 @@ const DrawerNavigator = () => {
       <Drawer.Screen
         name="My Adoption Listings"
         component={AdoptionSecondaryScreen}
+        options={{
+          animation: 'fade',
+        }}
+      />
+      <Drawer.Screen
+        name="My Posts"
+        component={PostProfile}
         options={{
           animation: 'fade',
         }}

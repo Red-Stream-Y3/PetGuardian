@@ -1,5 +1,7 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import {
+  SafeAreaView,
+  StatusBar,
   ActivityIndicator,
   TouchableOpacity,
   View,
@@ -8,6 +10,7 @@ import {
   StyleSheet,
   FlatList,
   Modal,
+  RefreshControl,
 } from 'react-native';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -16,6 +19,7 @@ import { getAppContext } from '../../../context/AppContext';
 import PopupConfirm from '../../common/PopupConfirm';
 import Header from '../../common/Header';
 import { getPostByUser, deletePost } from '../../../services/PostServices';
+import Toast from 'react-native-toast-message';
 
 const PostProfile = () => {
   const { theme } = getThemeContext();
@@ -25,6 +29,7 @@ const PostProfile = () => {
   const [confirmationModalVisible, setConfirmationModalVisible] =
     useState(false);
   const [postIdToRemove, setPostIdToRemove] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   const [posts, setPosts] = useState([]);
 
@@ -40,6 +45,12 @@ const PostProfile = () => {
   useEffect(() => {
     getPosts();
   }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    getPosts();
+    setRefreshing(false);
+  };
 
   const handleNew = () => {
     setModalVisible(true);
@@ -66,6 +77,11 @@ const PostProfile = () => {
   const removePost = async () => {
     try {
       await deletePost(postIdToRemove, user.token);
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Post removed successfully',
+      });
       setPosts(posts.filter((post) => post._id !== postIdToRemove));
       setConfirmationModalVisible(false);
     } catch (error) {
@@ -212,75 +228,94 @@ const PostProfile = () => {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      <Header title="My Profile" />
+    <SafeAreaView
+      style={{
+        flex: 1,
+        marginTop: StatusBar.currentHeight,
+        backgroundColor: theme.colors.background,
+      }}
+    >
+      <StatusBar
+        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        hidden={false}
+      />
+      <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+        <Header title="My Profile" />
 
-      <Suspense fallback={<ActivityIndicator />}>
-        <View style={styles.container}>
-          <Image
-            source={{
-              uri: user.profilePic,
-            }}
-            style={styles.profileImage}
-          />
-          <Text style={styles.name}>
-            {user.firstName} {user.lastName}
-          </Text>
-        </View>
-        <View style={styles.postsHeaderContainer}>
-          <Text style={styles.postsHeader}>Posts</Text>
-          <TouchableOpacity style={styles.newPostButton} onPress={handleNew}>
-            <FontAwesome name="plus" size={15} color="white" />
-            <Text style={styles.newPostButtonText}>New</Text>
-          </TouchableOpacity>
-        </View>
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <TouchableOpacity
-                style={styles.modalOption}
-                onPress={() => handleModalSelection('Lost')}
-              >
-                <Text style={styles.modalOptionText}>Lost Pet</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.modalOption}
-                onPress={() => handleModalSelection('Found')}
-              >
-                <Text style={styles.modalOptionText}>Found Pet</Text>
-              </TouchableOpacity>
-            </View>
+        <Suspense fallback={<ActivityIndicator />}>
+          <View style={styles.container}>
+            <Image
+              source={{
+                uri: user.profilePic,
+              }}
+              style={styles.profileImage}
+            />
+            <Text style={styles.name}>
+              {user.firstName} {user.lastName}
+            </Text>
           </View>
-        </Modal>
+          <View style={styles.postsHeaderContainer}>
+            <Text style={styles.postsHeader}>Posts</Text>
+            <TouchableOpacity style={styles.newPostButton} onPress={handleNew}>
+              <FontAwesome name="plus" size={15} color="white" />
+              <Text style={styles.newPostButtonText}>New</Text>
+            </TouchableOpacity>
+          </View>
 
-        <PopupConfirm
-          confirmationModalVisible={confirmationModalVisible}
-          setConfirmationModalVisible={setConfirmationModalVisible}
-          title={'Do you want to remove this post?'}
-          action={removePost}
-          themeColor={theme.colors.lostPrimary}
-          yesBg={'red'}
-          yesBorder={'red'}
-          noBg={'grey'}
-          noBorder={'grey'}
-          noTextColor={'white'}
-          yesTextColor={'white'}
-        />
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity
+                  style={styles.modalOption}
+                  onPress={() => handleModalSelection('Lost')}
+                >
+                  <Text style={styles.modalOptionText}>Lost Pet</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalOption}
+                  onPress={() => handleModalSelection('Found')}
+                >
+                  <Text style={styles.modalOptionText}>Found Pet</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
 
-        <FlatList
-          data={posts}
-          keyExtractor={(item) => item._id}
-          renderItem={renderItem}
-          style={styles.postsContainer}
-        />
-      </Suspense>
-    </View>
+          <PopupConfirm
+            confirmationModalVisible={confirmationModalVisible}
+            setConfirmationModalVisible={setConfirmationModalVisible}
+            title={'Do you want to remove this post?'}
+            action={removePost}
+            themeColor={theme.colors.lostPrimary}
+            yesBg={'red'}
+            yesBorder={'red'}
+            noBg={'grey'}
+            noBorder={'grey'}
+            noTextColor={'white'}
+            yesTextColor={'white'}
+          />
+
+          <FlatList
+            data={posts}
+            keyExtractor={(item) => item._id}
+            renderItem={renderItem}
+            style={styles.postsContainer}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={[theme.colors.lostPrimary]}
+              />
+            }
+          />
+        </Suspense>
+      </View>
+    </SafeAreaView>
   );
 };
 
