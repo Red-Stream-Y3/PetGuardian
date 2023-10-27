@@ -79,7 +79,7 @@ const updatePost = asyncHandler(async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (post) {
-      if (type == 'found') {
+      if (type === 'Found') {
         post.user = user;
         post.pet = '653159d02df663a698d23f2a';
         post.type = type;
