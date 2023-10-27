@@ -32,13 +32,7 @@ const MyRequests = ({ navigation }) => {
   const getMyRequests = async () => {
     try {
       const response = await getAdoptionRequestsByUser(user._id);
-      if (response.length === 0) {
-        Toast.show({
-          type: 'info',
-          text1: 'No Requests',
-          text2: 'You do not have any adoption requests',
-        });
-      }
+
       setMyRequests(response);
     } catch (error) {
       console.error(error);
