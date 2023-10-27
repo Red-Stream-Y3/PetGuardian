@@ -23,7 +23,7 @@ export const AppContextProvider = ({ children, value }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     let color;
