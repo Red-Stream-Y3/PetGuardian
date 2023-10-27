@@ -19,9 +19,10 @@ import FloatingMenuButton from '../common/FloatingMenuButton';
 import { getAvailablePets } from '../../services/AdoptionServices';
 import Toast from 'react-native-toast-message';
 import ImageSlider from './ImageSlider';
+import ThemeButton from '../common/ThemeButton';
 
 const AdoptionHome = ({ navigation }) => {
-  const { user } = getAppContext();
+  const { user, tabColor } = getAppContext();
   const { theme } = getThemeContext();
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -92,6 +93,21 @@ const AdoptionHome = ({ navigation }) => {
     // }
   };
 
+  const MyRequestsButton = () => {
+    const handlePress = () => {
+      navigation.navigate('MyRequests');
+    };
+
+    return (
+      <ThemeButton
+        title="                  My Adoption Requests                  "
+        textSize={18}
+        onPress={handlePress}
+        padding={12}
+      />
+    );
+  };
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -116,7 +132,7 @@ const AdoptionHome = ({ navigation }) => {
           {loading && (
             <ActivityIndicator size={50} color={theme.colors.servicesPrimary} />
           )}
-
+          <MyRequestsButton />
           <PetsContainer2
             header="Find Your New Buddy"
             btnText="See All"
