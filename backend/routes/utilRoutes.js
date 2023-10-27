@@ -2,6 +2,7 @@ import express from 'express';
 import User from '../models/userModel.js';
 import HireRequest from '../models/hireRequestModel.js';
 import mongoose from 'mongoose';
+import { sendNotification } from '../utils/notificationUtils.js';
 
 const router = express.Router();
 
@@ -73,6 +74,11 @@ router.route('/hire/:id').get(async (req, res) => {
   ])
     .explain()
     .then((users) => res.json(users));
+});
+
+router.route('/notify/:id').get(async (req, res) => {
+  sendNotification(req.params.id, 'Test', 'Test backend notification');
+  res.json('Notification sent');
 });
 
 export default router;

@@ -155,7 +155,6 @@ const HomeScreen = ({ navigation }) => {
           <ScrollView
             ref={heroScroll}
             horizontal={true}
-            scrollEnabled={false}
             pagingEnabled={true}
             showsHorizontalScrollIndicator={false}
             style={styles.scrollStyle}
@@ -320,18 +319,6 @@ const HomeScreen = ({ navigation }) => {
               </ImageBackground>
             </View>
           </ThemeCard>
-
-          <ThemeButton
-            title={'test notification'}
-            onPress={() => {
-              notifyUser('test notification', 'test notification body');
-              Toast.show({
-                type: 'info',
-                text1: 'Hint',
-                text2: 'If you do not see it, try signing out and back in',
-              });
-            }}
-          />
         </ScrollView>
       </View>
     </SafeAreaView>
