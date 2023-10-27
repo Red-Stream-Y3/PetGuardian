@@ -334,7 +334,7 @@ const MyServicesContainer = ({ navigation }) => {
           },
         ]}
       >
-        My Hire Requests
+        Recieved Requests
       </Text>
       <FlatList
         data={history}
