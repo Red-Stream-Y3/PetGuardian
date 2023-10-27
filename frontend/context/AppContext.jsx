@@ -18,7 +18,8 @@ export const AppContextProvider = ({ children, value }) => {
 
   useEffect(() => {
     try {
-      registerIndieID(user._id, 14016, 'SBCCyNEJCwfgYrkVTwmNut');
+      if (user?._id && user?.token)
+        registerIndieID(user._id, 14016, 'SBCCyNEJCwfgYrkVTwmNut');
     } catch (error) {
       console.log(error);
     }
