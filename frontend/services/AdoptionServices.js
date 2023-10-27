@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const BASE_URL = 'http://192.168.8.101:9120';
+// const BASE_URL = 'https://pet-shop-backend-ukkxew3r5q-uc.a.run.app';
 
 export const getAvailablePets = async () => {
   const response = await axios.get(`${BASE_URL}/api/v1/adoption/`);

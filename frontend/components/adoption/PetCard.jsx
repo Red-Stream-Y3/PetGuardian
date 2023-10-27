@@ -7,7 +7,9 @@ import {
   getPetByOwner,
 } from '../../services/AdoptionServices';
 import Toast from 'react-native-toast-message';
-import { ThemeButton, ThemeCard, ThemeOverlay } from '../../components';
+import ThemeButton from '../../components/common/ThemeButton.jsx';
+import ThemeCard from '../../components/common/ThemeCard.jsx';
+import ThemeOverlay from '../../components/common/ThemeOverlay.jsx';
 
 const PetCard = ({ petData, handleView, refreshFunc }) => {
   const { theme } = getThemeContext();

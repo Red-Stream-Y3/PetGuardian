@@ -106,14 +106,14 @@ const hireProvider = asyncHandler(async (req, res) => {
 
   try {
     const createdHireRequest = await hireRequest.save();
-    res.status(201).json({ message: 'Hire request created' });
-
     // Send notification to service provider
     sendNotification(
       serviceProvider,
       'New Hire Request',
       'You have a new hire request! Please check your dashboard for more details.'
     );
+
+    res.status(201).json({ message: 'Hire request created' });
   } catch (error) {
     res.json({ error: error.message });
   }
