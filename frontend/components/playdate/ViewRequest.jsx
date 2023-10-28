@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import ProfileCard from '../common/ProfileCard';
-import PetCard from '../common/PetCard';
+import PetCardPlay from '../common/PetCardPlay';
 import {
   getPlayDateByIdFullDetails,
   deleteJoinRequest,
@@ -75,7 +75,7 @@ const ViewRequest = ({ route }) => {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View>
               {request.pets.map((pet, index) => (
-                <PetCard
+                <PetCardPlay
                   key={index}
                   image={pet.image}
                   name={pet.name}

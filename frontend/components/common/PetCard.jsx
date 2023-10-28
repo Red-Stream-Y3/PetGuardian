@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
 import getThemeContext from '../../context/ThemeContext';
 
-const PetCard = ({ image, name, breed, age, weight }) => {
+const PetCardPlay = ({ image, name, breed, age, weight }) => {
   const { theme } = getThemeContext();
   return (
     <View style={styles.cardContainer}>
@@ -58,4 +58,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PetCard;
+export default PetCardPlay;

@@ -19,7 +19,7 @@ export { default as ThemeOverlay } from './common/ThemeOverlay';
 export { default as FloatingMenuButton } from './common/FloatingMenuButton';
 export { default as CardWithProfile } from './common/CardWithProfile';
 export { default as ProfileCard } from './common/ProfileCard';
-export { default as PetCard } from './common/PetCard';
+export { default as PetCardPlay } from './common/PetCardPlay';
 export { default as HeaderWithFilter } from './common/HeaderWithFilter';
 export { default as ProfileContainer } from './common/ProfileContainer';
 export { default as ImagePicker } from './common/ImagePicker';
