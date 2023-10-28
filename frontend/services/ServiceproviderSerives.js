@@ -307,7 +307,8 @@ export const completeHireRequest = async (id, token) => {
 
 export const getPetsByUser = async (id, token) => {
   try {
-    const response = await axios.get(`${BASE_URL}/api/v1/pets/user/${id}`);
+    const response = await axios.get(`${BASE}/api/v1/pets/user/${id}`);
+
     return response.data;
   } catch (error) {
     throw new Error('Error fetching pets');
