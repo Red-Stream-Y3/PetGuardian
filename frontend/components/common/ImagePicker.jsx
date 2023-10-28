@@ -75,36 +75,37 @@ const ImagePicker = ({
         style={styles.scrollStyle}
         contentContainerStyle={styles.scrollContentContainer}
       >
-        {images.map((image, index) => (
-          <ImageItemCard
-            key={index}
-            uri={image}
-            width={WIDTH}
-            height={HEIGHT}
-            imageHeight={IMAGE_HEIGHT}
-            padding={0}
-            style={variant === 'vertical' ? 'side' : 'fill'}
-            body={
-              <View style={styles.itemContainer}>
-                <ThemeButton
-                  title={'Remove'}
-                  variant={'clear'}
-                  onPress={() => {
-                    let newImages = [...images];
-                    newImages.splice(index, 1);
-                    setImages(newImages);
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name="delete"
-                    size={24}
-                    color={theme.colors.icon}
-                  />
-                </ThemeButton>
-              </View>
-            }
-          />
-        ))}
+        {images !== undefined &&
+          images.map((image, index) => (
+            <ImageItemCard
+              key={index}
+              uri={image}
+              width={WIDTH}
+              height={HEIGHT}
+              imageHeight={IMAGE_HEIGHT}
+              padding={0}
+              style={variant === 'vertical' ? 'side' : 'fill'}
+              body={
+                <View style={styles.itemContainer}>
+                  <ThemeButton
+                    title={'Remove'}
+                    variant={'clear'}
+                    onPress={() => {
+                      let newImages = [...images];
+                      newImages.splice(index, 1);
+                      setImages(newImages);
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="delete"
+                      size={24}
+                      color={theme.colors.icon}
+                    />
+                  </ThemeButton>
+                </View>
+              }
+            />
+          ))}
       </ScrollView>
     </ThemeCard>
   );

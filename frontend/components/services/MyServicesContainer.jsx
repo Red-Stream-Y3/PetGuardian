@@ -140,6 +140,12 @@ const MyServicesContainer = ({ navigation }) => {
         routes: [
           {
             name: 'Home',
+          },
+          {
+            name: 'My Services',
+          },
+          {
+            name: 'Home',
             state: {
               routes: [
                 {
@@ -328,7 +334,7 @@ const MyServicesContainer = ({ navigation }) => {
           },
         ]}
       >
-        My Hire Requests
+        Recieved Requests
       </Text>
       <FlatList
         data={history}

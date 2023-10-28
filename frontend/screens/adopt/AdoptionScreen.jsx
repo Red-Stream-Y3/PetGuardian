@@ -6,12 +6,15 @@ import {
   AdoptionList,
   AdoptionDetails,
   AdoptionApplication,
+  MyRequests,
+  NewPetForAdopt,
+  ApplicantList,
 } from '../../components';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const AdoptionNavigator = createNativeStackNavigator();
 
-const AdoptionScreen = (navigation) => {
+const AdoptionScreen = ({ navigation }) => {
   const { theme } = getThemeContext();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
@@ -35,6 +38,15 @@ const AdoptionScreen = (navigation) => {
         <AdoptionNavigator.Screen
           name="AdoptionApplication"
           component={AdoptionApplication}
+        />
+        <AdoptionNavigator.Screen name="MyRequests" component={MyRequests} />
+        <AdoptionNavigator.Screen
+          name="NewPetForAdopt"
+          component={NewPetForAdopt}
+        />
+        <AdoptionNavigator.Screen
+          name="ApplicantList"
+          component={ApplicantList}
         />
       </AdoptionNavigator.Navigator>
     </SafeAreaView>

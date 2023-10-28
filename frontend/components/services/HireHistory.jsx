@@ -253,7 +253,7 @@ const HireHistory = ({ navigation }) => {
                   setSelected(item);
                   setShowSelected(true);
                 }}
-                uri={item.profilePic}
+                uri={item.serviceProvider.profilePic}
                 highlight={true}
                 highlightColor={
                   item.status === 'pending'

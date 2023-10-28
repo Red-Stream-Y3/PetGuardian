@@ -37,7 +37,7 @@ const adoptionSchema = mongoose.Schema(
       required: true
     },
     age: {
-      type: Number,
+      type: String,
       required: true
     },
     species: {
@@ -64,7 +64,6 @@ const adoptionSchema = mongoose.Schema(
     },
     image: {
       type: [String],
-      required: true,
       default: []
     },
     currentOwner: {
@@ -79,7 +78,7 @@ const adoptionSchema = mongoose.Schema(
     adoptionRequests: [adoptionRequestSchema],
     status: {
       type: String,
-      enum: ['pending', 'approved'],
+      enum: ['pending', 'adopted'],
       default: 'pending'
     },
     vaccinated: {
@@ -91,9 +90,8 @@ const adoptionSchema = mongoose.Schema(
       enum: ['healthy', 'sick', 'injured'],
       default: 'healthy'
     },
-    healthDescriptiopn: {
-      type: String,
-      default: ''
+    healthDescription: {
+      type: String
     }
   },
   {

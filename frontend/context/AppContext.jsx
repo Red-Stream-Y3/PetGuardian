@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import getThemeContext from './ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import { registerIndieID, unregisterIndieDevice } from 'native-notify';
+import axios from 'axios';
 
 export const AppContext = createContext();
 
@@ -13,6 +15,15 @@ export const AppContextProvider = ({ children, value }) => {
   const [user, setUser] = useState(null);
   const SERVER_URL = 'https://pet-shop-backend-ukkxew3r5q-uc.a.run.app';
   const APP_NAME = 'Pet Guardian';
+
+  useEffect(() => {
+    try {
+      if (user?._id && user?.token)
+        registerIndieID(user._id, 14016, 'SBCCyNEJCwfgYrkVTwmNut');
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   useEffect(() => {
     let color;
@@ -76,6 +87,10 @@ export const AppContextProvider = ({ children, value }) => {
 
   const removeUser = async () => {
     try {
+      //unregister for push notifications
+      unregisterIndieDevice(user._id, 14016, 'SBCCyNEJCwfgYrkVTwmNut');
+
+      //remove user data from storage
       await AsyncStorage.removeItem('user');
       setUser(null);
       Toast.show({
@@ -90,6 +105,16 @@ export const AppContextProvider = ({ children, value }) => {
         text2: 'Could not remove user data',
       });
     }
+  };
+
+  const notifyUser = async (title, message) => {
+    await axios.post(`https://app.nativenotify.com/api/indie/notification`, {
+      subID: user._id,
+      appId: 14016,
+      appToken: 'SBCCyNEJCwfgYrkVTwmNut',
+      title: title || 'put your push notification title here as a string',
+      message: message || 'put your push notification message here as a string',
+    });
   };
 
   useEffect(() => {
@@ -109,6 +134,7 @@ export const AppContextProvider = ({ children, value }) => {
         setLoadingUser,
         storeUser,
         removeUser,
+        notifyUser,
         APP_NAME,
       }}
     >

@@ -18,6 +18,7 @@ import axios from 'axios';
 import getThemeContext from '../../context/ThemeContext';
 import { getAppContext } from '../../context/AppContext';
 import Animated, { FadeInUp, FadeOutUp } from 'react-native-reanimated';
+import { registerIndieID } from 'native-notify';
 
 const LoginScreen = ({ navigation }) => {
   const { theme } = getThemeContext();
@@ -50,6 +51,9 @@ const LoginScreen = ({ navigation }) => {
 
       if (response) {
         await storeUser(response.data);
+
+        //register for push notifications
+        registerIndieID(response.data._id, 14016, 'SBCCyNEJCwfgYrkVTwmNut');
       }
 
       setLoading(false);

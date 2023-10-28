@@ -25,10 +25,11 @@ import getThemeContext from '../../context/ThemeContext';
 import { MaterialIcons } from '@expo/vector-icons';
 import { getAppContext } from '../../context/AppContext';
 import { useNavigationState } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 const HomeScreen = ({ navigation }) => {
   const { theme } = getThemeContext();
-  const { user, selectedTab, setSelectedTab } = getAppContext();
+  const { user, selectedTab, setSelectedTab, notifyUser } = getAppContext();
   const [scroll, setScroll] = useState(0);
   const heroScroll = useRef(null);
   const navigationState = useNavigationState((state) => state.index);
@@ -154,7 +155,6 @@ const HomeScreen = ({ navigation }) => {
           <ScrollView
             ref={heroScroll}
             horizontal={true}
-            scrollEnabled={false}
             pagingEnabled={true}
             showsHorizontalScrollIndicator={false}
             style={styles.scrollStyle}

@@ -17,6 +17,7 @@ import { getAppContext } from '../../../context/AppContext';
 import Header from '../../common/Header';
 import UserBox from '../../common/UserBox';
 import { getPostById, updatePost } from '../../../services/PostServices';
+import Toast from 'react-native-toast-message';
 
 const EditPost = () => {
   const { theme } = getThemeContext();
@@ -60,6 +61,11 @@ const EditPost = () => {
       status: 'open',
     };
     updatePost(updatedPost, user.token);
+    Toast.show({
+      type: 'success',
+      text1: 'Post updated',
+      text2: 'Your post has been updated successfully',
+    });
 
     setIsEditing(false);
   };
@@ -73,7 +79,12 @@ const EditPost = () => {
       status: 'closed',
     };
     updatePost(updatedPost, user.token);
-    navigation.navigate('Profile');
+    Toast.show({
+      type: 'success',
+      text1: 'Post closed',
+      text2: 'Your post has been closed successfully',
+    });
+    navigation.navigate('PostProfile');
   };
 
   const showDatePicker = () => {
