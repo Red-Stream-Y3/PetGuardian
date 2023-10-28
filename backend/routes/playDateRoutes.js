@@ -7,8 +7,13 @@ import {
   updatePlaydate,
   deletePlaydate,
   createRequest,
+  getRequestById,
   updateRequest,
-  deleteRequest
+  deleteRequest,
+  getPlaydateByIdFullDetails,
+  approveRequest,
+  rejectRequest,
+  searchPlaydates
 } from '../controllers/playDateController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -24,7 +29,12 @@ router.route('/user/:id').get(getPlaydatesByUser);
 router.route('/:id/request').post(createRequest);
 router
   .route('/:id/request/:requestId')
+  .get(getRequestById)
   .patch(updateRequest)
   .delete(deleteRequest);
+router.route('/:id/fullRequest/:requestId').get(getPlaydateByIdFullDetails);
+router.route('/:id/request/:requestId/approve').patch(approveRequest);
+router.route('/:id/request/:requestId/reject').patch(rejectRequest);
+router.route('/search/:searchTerm').get(searchPlaydates);
 
 export default router;

@@ -7,6 +7,7 @@ import { getAppContext } from '../../context/AppContext.jsx';
 import MyServiceScreen from '../services/MyServiceScreen.jsx';
 import AdoptionSecondaryScreen from '../adopt/AdoptionSecondaryScreen.jsx';
 import { PostProfile } from '../../components/index.js';
+import PetsScreen from './PetsScreen.jsx';
 
 const Drawer = createDrawerNavigator();
 
@@ -31,6 +32,7 @@ const DrawerNavigator = () => {
     >
       <Drawer.Screen name="Home" component={StackNavigator} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen name="My Pets" component={PetsScreen} />
       <Drawer.Screen
         name="Hire History"
         component={HireHistoryScreen}

@@ -18,9 +18,9 @@ const LIGHT_THEME = {
     buttonText: '#ffffff',
     servicesPrimary: 'rgb(0, 137, 123)',
     lostPrimary: 'rgb(107, 127, 215)',
-    homePrimary: 'rgb(0, 142, 255)',
+    homePrimary: '#003554',
     adoptPrimary: 'rgb(225, 82, 95)',
-    playPrimary: 'rgb(227, 181, 5)',
+    playPrimary: '#71a5de',
     ripple: 'rgba(0, 0, 0, 0.1)',
     icon: '#000000',
 
@@ -28,8 +28,8 @@ const LIGHT_THEME = {
     secondaryVariant: '#018786',
     background: '#ffffff',
     surface: '#ffffff',
-    error: '#b00020'
-  }
+    error: '#b00020',
+  },
 };
 
 const DARK_THEME = {
@@ -46,9 +46,9 @@ const DARK_THEME = {
     buttonText: '#ffffff',
     servicesPrimary: 'rgb(0, 137, 123)',
     lostPrimary: 'rgb(107, 127, 215)',
-    homePrimary: 'rgb(157, 2, 196)',
+    homePrimary: '#003554',
     adoptPrimary: 'rgb(225, 82, 95)',
-    playPrimary: 'rgb(227, 181, 5)',
+    playPrimary: '#71a5de',
     ripple: 'rgba(255, 255, 255, 0.1)',
     icon: '#ffffff',
 
@@ -56,8 +56,8 @@ const DARK_THEME = {
     secondaryVariant: '#03dac6',
     background: '#121212',
     surface: 'rgb(40, 40, 40)',
-    error: '#cf6679'
-  }
+    error: '#cf6679',
+  },
 };
 
 export const ThemeProvider = ({ children }) => {
