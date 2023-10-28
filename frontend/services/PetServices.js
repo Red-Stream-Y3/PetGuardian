@@ -58,3 +58,30 @@ export const deletePet = async (id) => {
     throw new Error('Error deleting pet');
   }
 };
+
+export const uploadPetImage = async (id, images, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const date = new Date();
+    const formData = new FormData();
+    formData.append('images', {
+      type: 'image/jpeg',
+      name: `${index}${date.getFullYear()}${date.getMonth()}${date.getDate()}${date.getHours()}${date.getMinutes()}.jpeg`,
+      uri: images,
+    });
+
+    const response = await axios.post(
+      `${BASE_URL}/api/v1/pets/upload/${id}`,
+      formData,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error('Error uploading images');
+  }
+};

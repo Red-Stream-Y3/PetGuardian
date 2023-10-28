@@ -5,6 +5,7 @@ import StackNavigator from './StackNavigator.jsx';
 import HireHistoryScreen from '../services/HireHistoryScreen.jsx';
 import { getAppContext } from '../../context/AppContext.jsx';
 import MyServiceScreen from '../services/MyServiceScreen.jsx';
+import PetsScreen from './PetsScreen.jsx';
 
 const Drawer = createDrawerNavigator();
 
@@ -24,23 +25,24 @@ const DrawerNavigator = () => {
         headerShown: false,
         drawerPosition: 'right',
         drawerActiveTintColor: '#fff',
-        drawerActiveBackgroundColor: tabColor
+        drawerActiveBackgroundColor: tabColor,
       }}
     >
       <Drawer.Screen name="Home" component={StackNavigator} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen name="My Pets" component={PetsScreen} />
       <Drawer.Screen
         name="Hire History"
         component={HireHistoryScreen}
         options={{
-          animation: 'fade'
+          animation: 'fade',
         }}
       />
       <Drawer.Screen
         name="My Services"
         component={MyServiceScreen}
         options={{
-          animation: 'fade'
+          animation: 'fade',
         }}
       />
       {/* <Drawer.Screen name="Settings" component={SettingsScreen} /> */}

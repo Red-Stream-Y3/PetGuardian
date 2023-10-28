@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.8.102:9120';
+const BASE_URL = 'https://pet-shop-backend-ukkxew3r5q-uc.a.run.app';
 
 export const getAllPlayDates = async () => {
   try {
@@ -29,13 +29,17 @@ export const createPlayDate = async (playdate) => {
   }
 };
 
-export const updatePlayDate = async (playdate) => {
+export const updatePlayDate = async (id, playdate) => {
   try {
     const response = await axios.patch(
-      `${BASE_URL}/api/v1/playdates/${playdate._id}`,
+      `${BASE_URL}/api/v1/playdates/${id}`,
       playdate
     );
-    return response.data;
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error('Error updating playdates');
+    }
   } catch (error) {
     throw new Error('Error updating playdate');
   }
@@ -59,7 +63,7 @@ export const getPlayDatesByUser = async (id) => {
   }
 };
 
-export const createRequest = async (id, request) => {
+export const joinRequest = async (id, request) => {
   try {
     const response = await axios.post(
       `${BASE_URL}/api/v1/playdates/${id}/request`,
@@ -71,7 +75,7 @@ export const createRequest = async (id, request) => {
   }
 };
 
-export const updateRequest = async (id, requestId, request) => {
+export const updateJoinRequest = async (id, requestId, request) => {
   try {
     const response = await axios.patch(
       `${BASE_URL}/api/v1/playdates/${id}/request/${requestId}`,
@@ -83,7 +87,7 @@ export const updateRequest = async (id, requestId, request) => {
   }
 };
 
-export const deleteRequest = async (id, requestId) => {
+export const deleteJoinRequest = async (id, requestId) => {
   try {
     const response = await axios.delete(
       `${BASE_URL}/api/v1/playdates/${id}/request/${requestId}`
@@ -91,5 +95,62 @@ export const deleteRequest = async (id, requestId) => {
     return response.data;
   } catch (error) {
     throw new Error('Error deleting request');
+  }
+};
+
+export const getJoinRequestById = async (id, requestId) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/v1/playdates/${id}/request/${requestId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error('Error fetching request');
+  }
+};
+
+export const getPlayDateByIdFullDetails = async (id, requestId) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/v1/playdates/${id}/fullRequest/${requestId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error('Error fetching playdate');
+  }
+};
+
+export const approveJoinRequest = async (id, requestId, request) => {
+  try {
+    const response = await axios.patch(
+      `${BASE_URL}/api/v1/playdates/${id}/request/${requestId}/approve`,
+      request
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error('Error approving request');
+  }
+};
+
+export const rejectJoinRequest = async (id, requestId, request) => {
+  try {
+    const response = await axios.patch(
+      `${BASE_URL}/api/v1/playdates/${id}/request/${requestId}/reject`,
+      request
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error('Error rejecting request');
+  }
+};
+
+export const searchPlayDates = async (searchTerm) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/v1/playdates/search/${searchTerm}`
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error('Error searching playdates');
   }
 };

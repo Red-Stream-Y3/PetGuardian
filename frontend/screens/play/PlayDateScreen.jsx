@@ -9,6 +9,8 @@ import {
   UpdatePlaydate,
   CreateRequest,
   UpdateRequest,
+  ViewRequest,
+  MyPlaydates,
 } from '../../components';
 
 const PlaydateNavigator = createNativeStackNavigator();
@@ -48,8 +50,18 @@ const PlayDateScreen = () => {
           options={{ headerShown: false }}
         />
         <PlaydateNavigator.Screen
+          name="ViewRequest"
+          component={ViewRequest}
+          options={{ headerShown: false }}
+        />
+        <PlaydateNavigator.Screen
           name="UpdateRequest"
           component={UpdateRequest}
+          options={{ headerShown: false }}
+        />
+        <PlaydateNavigator.Screen
+          name="MyPlaydates"
+          component={MyPlaydates}
           options={{ headerShown: false }}
         />
       </PlaydateNavigator.Navigator>

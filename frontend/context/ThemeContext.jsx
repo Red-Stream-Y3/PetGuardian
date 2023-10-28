@@ -18,9 +18,9 @@ const LIGHT_THEME = {
     buttonText: '#ffffff',
     servicesPrimary: 'rgb(0, 137, 123)',
     lostPrimary: 'rgb(107, 127, 215)',
-    homePrimary: 'rgb(0, 142, 255)',
+    homePrimary: '#003554',
     adoptPrimary: 'rgb(225, 82, 95)',
-    playPrimary: 'rgb(227, 181, 5)',
+    playPrimary: '#71a5de',
     ripple: 'rgba(0, 0, 0, 0.1)',
     icon: '#000000',
 
@@ -46,9 +46,9 @@ const DARK_THEME = {
     buttonText: '#ffffff',
     servicesPrimary: 'rgb(0, 137, 123)',
     lostPrimary: 'rgb(107, 127, 215)',
-    homePrimary: 'rgb(157, 2, 196)',
+    homePrimary: '#003554',
     adoptPrimary: 'rgb(225, 82, 95)',
-    playPrimary: 'rgb(227, 181, 5)',
+    playPrimary: '#71a5de',
     ripple: 'rgba(255, 255, 255, 0.1)',
     icon: '#ffffff',
 

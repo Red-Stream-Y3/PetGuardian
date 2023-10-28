@@ -20,14 +20,28 @@ const SelectPets = ({
   screen,
   fontSize,
   onSelectPet,
+  selectedId,
 }) => {
   const { theme } = getThemeContext();
   const navigation = useNavigation();
   const [selectedPost, setSelectedPost] = useState(null);
 
-  onSelectPet(selectedPost);
+  console.log('selectedId', selectedId);
 
+  const handleSelectPet = (postId) => {
+    setSelectedPost(postId);
+    onSelectPet(postId);
+  };
   const handleSeeAllPress = () => {};
+
+  const isSelected = (itemId) => {
+    if (component === 'create') {
+      return selectedPost === itemId;
+    } else if (component === 'update') {
+      return selectedId === itemId;
+    }
+    return false;
+  };
 
   const styles = StyleSheet.create({
     sectionContainer: {
@@ -103,7 +117,7 @@ const SelectPets = ({
             {pair.map((item) => (
               <TouchableOpacity
                 key={item._id}
-                onPress={() => setSelectedPost(item._id)}
+                onPress={() => handleSelectPet(item._id)}
                 activeOpacity={0.7}
               >
                 <ImageItemCard
@@ -121,11 +135,9 @@ const SelectPets = ({
                 />
 
                 <FontAwesome
-                  name={
-                    selectedPost === item._id ? 'check-square-o' : 'square-o'
-                  }
+                  name={isSelected(item._id) ? 'check-square-o' : 'square-o'}
                   size={24}
-                  color={selectedPost === item._id ? 'black' : 'gray'}
+                  color={isSelected(item._id) ? 'black' : 'gray'}
                   style={styles.checkbox}
                 />
               </TouchableOpacity>

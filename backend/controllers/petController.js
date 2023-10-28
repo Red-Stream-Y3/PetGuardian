@@ -103,4 +103,45 @@ const deletePet = asyncHandler(async (req, res) => {
   }
 });
 
-export { getPetsByUser, getPetById, createPet, updatePet, deletePet };
+const uploadPetImage = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const pet = await Pet.findById(id);
+
+  if (pet) {
+    let newImages = [];
+
+    const images = req.files.images;
+    if (images.length > 0) {
+      for (let i = 0; i < images.length; i++) {
+        const file = images[i];
+        await uploadFile(file)
+          .then((uri) => {
+            newImages.push(uri);
+          })
+          .catch((err) => {
+            res.status(400);
+            throw new Error(err);
+          });
+      }
+    } else {
+      res.status(400);
+      throw new Error('No images found');
+    }
+    pet.image = newImages;
+    const updatedPet = await pet.save();
+    res.json(updatedPet);
+  } else {
+    res.status(404);
+    throw new Error('Pet not found');
+  }
+});
+
+export {
+  getPetsByUser,
+  getPetById,
+  createPet,
+  updatePet,
+  deletePet,
+  uploadPetImage
+};

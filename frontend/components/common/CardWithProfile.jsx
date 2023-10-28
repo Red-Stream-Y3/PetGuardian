@@ -45,7 +45,7 @@ const CardWithProfile = ({
               <MaterialCommunityIcons
                 name={type.toLowerCase()}
                 size={40}
-                color={theme.colors.icon}
+                color="grey"
               />
             </View>
           </View>

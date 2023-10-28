@@ -118,6 +118,7 @@ const LostPost = () => {
             // screen="PetProfile"
             fontSize={14}
             onSelectPet={setSelectedPetId}
+            component="create"
           />
 
           <View style={styles.container}>

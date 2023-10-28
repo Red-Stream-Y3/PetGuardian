@@ -7,7 +7,11 @@ const ProfileCard = ({ profileImage, name, location }) => {
 
   return (
     <View
-      style={[styles.cardContainer, { backgroundColor: theme.colors.surface }]}
+      style={[
+        styles.cardContainer,
+        { backgroundColor: theme.colors.surface },
+        { borderColor: theme.colors.playPrimary },
+      ]}
     >
       <View style={styles.profileContainer}>
         <Image style={styles.profileImage} source={{ uri: profileImage }} />
@@ -26,10 +30,9 @@ const ProfileCard = ({ profileImage, name, location }) => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    width: '97%',
+    width: '100%',
     maxWidth: 500,
-    margin: 5,
-    elevation: 3,
+    borderWidth: 1,
     borderRadius: 10,
     marginBottom: 15,
     paddingHorizontal: 10,
